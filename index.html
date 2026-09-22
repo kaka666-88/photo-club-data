@@ -720,7 +720,8 @@ const API = {
   },
 
   async _writeRemote() {
-    if (!this._isConfigured() || !this._hasToken()) return false;
+    if (!this._isConfigured()) return false;
+    if (!this._hasToken()) { console.warn('No GitHub token, skipping remote write'); return false; }
     const cfg = this._getGithubConfig();
     try {
       let sha = null;
@@ -763,7 +764,9 @@ const API = {
         this._remoteSha = result.content.sha;
         return true;
       }
-      console.error('GitHub write failed:', putResp.status);
+      const errText = await putResp.text();
+      console.error('GitHub write failed:', putResp.status, errText);
+      showToast('云端同步失败: ' + putResp.status, true);
       return false;
     } catch(e) {
       console.error('GitHub write error:', e);
@@ -2308,6 +2311,14 @@ async function saveSettings() {
   const clubName = $('setClubName').value.trim();
   const clubDesc = $('setClubDesc').value.trim();
   if (!adminUser || !adminPass) { showToast('账号和密码不能为空', true); return; }
+  // 确保 GitHub token 存在（从设置页 token 输入框取，或保留已有的）
+  const ghToken = $('setGhToken').value.trim();
+  if (ghToken) {
+    let gh = {};
+    try { gh = JSON.parse(localStorage.getItem('photoClubGithub') || '{}'); } catch(e) {}
+    gh.token = ghToken;
+    localStorage.setItem('photoClubGithub', JSON.stringify(gh));
+  }
   try {
     await API.updateSettings({
       admin_user: adminUser, admin_pass: adminPass, guest_code: guestCode,
@@ -2317,7 +2328,12 @@ async function saveSettings() {
     // 同步更新记住的管理员密码
     localStorage.setItem('photoClubAdminUser', adminUser);
     localStorage.setItem('photoClubAdminPass', adminPass);
-    showToast('设置已保存');
+    // 强制立即同步到云端（不等2秒防抖）
+    API._writeRemote().then((ok) => {
+      showToast(ok ? '设置已保存并同步到云端' : '设置已保存（云端同步失败，请检查Token）', !ok);
+    }).catch(() => {
+      showToast('设置已保存（云端同步失败）', true);
+    });
   } catch(e) {
     showToast(e.message, true);
   }
