@@ -675,6 +675,7 @@ const API = {
   _pollTimer: null,
   _writeTimer: null,
   _savingFromRemote: false,
+  _skipNextSync: false,
   _lastSync: 0,
 
   _getGithubConfig() { return ghCfg(); },
@@ -710,9 +711,23 @@ const API = {
   async _readRemote() {
     if (!this._isConfigured()) return null;
     try {
-      const resp = await fetch(this._rawUrl());
-      if (!resp.ok) return null;
-      const text = await resp.text();
+      // 有 token 时用 API 读取（无缓存），无 token 时用 raw URL
+      let text;
+      if (this._hasToken()) {
+        const cfg = this._getGithubConfig();
+        const apiReadUrl = this._apiUrl() + '?ref=' + cfg.branch + '&t=' + Date.now();
+        const resp = await fetch(apiReadUrl, {
+          headers: { 'Authorization': 'Bearer ' + cfg.token, 'Accept': 'application/vnd.github.v3+json' }
+        });
+        if (!resp.ok) return null;
+        const fileData = await resp.json();
+        text = atob(fileData.content.replace(/\n/g, ''));
+        this._remoteSha = fileData.sha;
+      } else {
+        const resp = await fetch(this._rawUrl());
+        if (!resp.ok) return null;
+        text = await resp.text();
+      }
       if (!text || text.trim().startsWith('<')) return null;
       return JSON.parse(text);
     } catch(e) {
@@ -763,6 +778,8 @@ const API = {
       if (putResp.ok) {
         const result = await putResp.json();
         this._remoteSha = result.content.sha;
+        this._skipNextSync = true;
+        this._lastSync = Date.now();
         return true;
       }
       const errText = await putResp.text();
@@ -781,6 +798,11 @@ const API = {
   },
 
   async _syncFromRemote() {
+    if (this._skipNextSync) {
+      this._skipNextSync = false;
+      this._lastSync = Date.now();
+      return false;
+    }
     const remote = await this._readRemote();
     if (!remote) return false;
 
