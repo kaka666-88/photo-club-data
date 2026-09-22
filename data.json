@@ -8,24 +8,6 @@
   },
   "members": [
     {
-      "id": 10,
-      "name": "柴津玲",
-      "role": "member",
-      "join_date": "2026-09-22",
-      "contact": "",
-      "points": 0,
-      "created_at": "2026-09-22T10:31:55.416Z"
-    },
-    {
-      "id": 9,
-      "name": "吴巍",
-      "role": "member",
-      "join_date": "2026-09-22",
-      "contact": "",
-      "points": 0,
-      "created_at": "2026-09-22T10:31:47.208Z"
-    },
-    {
       "id": 1,
       "name": "社长",
       "role": "core",
