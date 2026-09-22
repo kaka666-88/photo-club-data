@@ -574,7 +574,7 @@ tbody tr:last-child td { border-bottom: none; }
       <div class="login-error" id="adminError"></div>
     </div>
     <div id="guestLoginForm" style="display:none">
-      <input type="text" id="guestCode" placeholder="输入邀请码" onkeydown="if(event.key==='Enter')guestLogin()">
+      <p style="color:var(--text-sec);font-size:13px;margin-bottom:16px;">无需邀请码，直接进入浏览模式</p>
       <button class="btn-login" onclick="guestLogin()">进 入 浏 览</button>
       <div class="login-error" id="guestError"></div>
     </div>
@@ -845,15 +845,11 @@ const API = {
     return Promise.reject(new Error("账号或密码错误"));
   },
 
-  guestLogin(code) {
-    const s = this._data.settings;
-    if (code === s.guest_code) {
-      const token = "guest_" + Date.now() + "_" + Math.random().toString(36).slice(2);
-      this._data.sessions[token] = { role: "guest", user: "访客" };
-      this._save();
-      return Promise.resolve({ token, role: "guest", user: "访客" });
-    }
-    return Promise.reject(new Error("邀请码无效"));
+  guestLogin() {
+    const token = "guest_" + Date.now() + "_" + Math.random().toString(36).slice(2);
+    this._data.sessions[token] = { role: "guest", user: "访客" };
+    this._save();
+    return Promise.resolve({ token, role: "guest", user: "访客" });
   },
 
   getPublicSettings() {
@@ -1169,6 +1165,8 @@ async function adminLogin() {
     const res = await API.adminLogin(user, pass);
     API.token = res.token;
     localStorage.setItem('photoClubToken', res.token);
+    localStorage.setItem('photoClubAdminUser', user);
+    localStorage.setItem('photoClubAdminPass', pass);
     state.role = 'admin';
     state.user = res.user;
     await store.loadAll();
@@ -1179,10 +1177,8 @@ async function adminLogin() {
 }
 
 async function guestLogin() {
-  const code = $('guestCode').value.trim();
-  if (!code) { $('guestError').textContent = '请输入邀请码'; return; }
   try {
-    const res = await API.guestLogin(code);
+    const res = await API.guestLogin();
     API.token = res.token;
     localStorage.setItem('photoClubToken', res.token);
     state.role = 'guest';
@@ -1206,6 +1202,8 @@ function enterApp() {
 function logout() {
   API.token = '';
   localStorage.removeItem('photoClubToken');
+  localStorage.removeItem('photoClubAdminUser');
+  localStorage.removeItem('photoClubAdminPass');
   state = { role: null, user: null, currentPage: 'dashboard',
     filter: { knowledge: 'all', news: 'all', tips: 'all' },
     search: { knowledge: '', news: '', tips: '' }, detailId: null };
@@ -2309,7 +2307,7 @@ async function saveSettings() {
   const guestCode = $('setGuestCode').value.trim();
   const clubName = $('setClubName').value.trim();
   const clubDesc = $('setClubDesc').value.trim();
-  if (!adminUser || !adminPass || !guestCode) { showToast('账号、密码、邀请码不能为空', true); return; }
+  if (!adminUser || !adminPass) { showToast('账号和密码不能为空', true); return; }
   try {
     await API.updateSettings({
       admin_user: adminUser, admin_pass: adminPass, guest_code: guestCode,
@@ -2422,6 +2420,21 @@ async function tryRestoreSession() {
   setInterval(() => { updateSyncStatus(); }, 30000);
   const restored = await tryRestoreSession();
   if (!restored) {
+    // 尝试用记住的管理员账号自动登录
+    const savedUser = localStorage.getItem('photoClubAdminUser');
+    const savedPass = localStorage.getItem('photoClubAdminPass');
+    if (savedUser && savedPass) {
+      try {
+        const res = await API.adminLogin(savedUser, savedPass);
+        API.token = res.token;
+        localStorage.setItem('photoClubToken', res.token);
+        state.role = 'admin';
+        state.user = res.user;
+        await store.loadAll();
+        enterApp();
+        return;
+      } catch(e) { /* 凭证已变更，显示登录页 */ }
+    }
     try {
       const s = await API.getPublicSettings();
       store.data.settings = normalizeSettings(s);
