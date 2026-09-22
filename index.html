@@ -1,0 +1,2434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>光影社 - 摄影社团管理系统</title>
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg-primary: #0a0a0b;
+  --bg-secondary: #141416;
+  --bg-tertiary: #1c1c1f;
+  --bg-card: #1e1e22;
+  --bg-hover: #26262b;
+  --border: #2a2a30;
+  --text-primary: #e8e8e8;
+  --text-secondary: #9a9aa0;
+  --text-muted: #5c5c62;
+  --accent: #c8a44e;
+  --accent-hover: #d8b45e;
+  --accent-dim: rgba(200,164,78,0.12);
+  --green: #5cb85c;
+  --red: #d4574e;
+  --blue: #4a90d9;
+  --radius: 8px;
+  --radius-sm: 5px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.4);
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+html { font-size: 14px; }
+body {
+  font-family: var(--font);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+a { color: var(--accent); text-decoration: none; }
+button { font-family: var(--font); cursor: pointer; border: none; border-radius: var(--radius-sm); }
+input, textarea, select {
+  font-family: var(--font);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+  font-size: 13px;
+}
+input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+textarea { resize: vertical; min-height: 80px; }
+
+/* ===== Login Screen ===== */
+#loginScreen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  background-image: radial-gradient(circle at 30% 20%, rgba(200,164,78,0.06) 0%, transparent 50%),
+                    radial-gradient(circle at 70% 80%, rgba(74,144,217,0.04) 0%, transparent 50%);
+}
+.login-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px;
+  width: 380px;
+  max-width: 90vw;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.login-card .logo {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  background: var(--accent);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #1a1a1a;
+}
+.login-card h1 { font-size: 20px; margin-bottom: 4px; }
+.login-card .subtitle { color: var(--text-secondary); font-size: 12px; margin-bottom: 28px; }
+.login-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+}
+.login-tabs button {
+  flex: 1;
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 8px;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+.login-tabs button.active {
+  background: var(--accent);
+  color: #1a1a1a;
+  font-weight: 600;
+}
+.login-card input { margin-bottom: 12px; }
+.login-card .btn-login {
+  width: 100%;
+  background: var(--accent);
+  color: #1a1a1a;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 4px;
+  transition: background 0.2s;
+}
+.login-card .btn-login:hover { background: var(--accent-hover); }
+.login-error {
+  color: var(--red);
+  font-size: 12px;
+  margin-top: 8px;
+  min-height: 18px;
+}
+.login-hint {
+  color: var(--text-muted);
+  font-size: 11px;
+  margin-top: 20px;
+  line-height: 1.5;
+}
+
+/* ===== Main App Layout ===== */
+#app { display: none; }
+#app.active { display: flex; min-height: 100vh; }
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+  overflow-y: auto;
+}
+.sidebar-header {
+  padding: 20px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-header .logo {
+  width: 36px;
+  height: 36px;
+  background: var(--accent);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #1a1a1a;
+  flex-shrink: 0;
+}
+.sidebar-header .title { font-size: 15px; font-weight: 600; }
+.sidebar-header .subtitle { font-size: 10px; color: var(--text-muted); }
+.nav-list { flex: 1; padding: 12px 8px; }
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.15s;
+  margin-bottom: 2px;
+}
+.nav-item:hover { background: var(--bg-hover); color: var(--text-primary); }
+.nav-item.active { background: var(--accent-dim); color: var(--accent); font-weight: 500; }
+.nav-item .icon { width: 20px; text-align: center; font-size: 16px; flex-shrink: 0; }
+.nav-item .badge {
+  margin-left: auto;
+  background: var(--accent);
+  color: #1a1a1a;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.sidebar-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.sidebar-footer .role-tag {
+  display: inline-block;
+  background: var(--bg-tertiary);
+  color: var(--accent);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  margin-bottom: 6px;
+}
+.sidebar-footer .logout-btn {
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 11px;
+  background: none;
+  padding: 0;
+}
+.sidebar-footer .logout-btn:hover { color: var(--red); }
+
+/* Main Content */
+.main {
+  flex: 1;
+  margin-left: 220px;
+  padding: 24px 32px;
+  max-width: calc(100vw - 220px);
+}
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.page-header h2 { font-size: 22px; font-weight: 600; }
+.page-header .actions { display: flex; gap: 8px; }
+
+/* Buttons */
+.btn {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  border: 1px solid var(--border);
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn:hover { background: var(--bg-hover); border-color: var(--text-muted); }
+.btn-primary {
+  background: var(--accent);
+  color: #1a1a1a;
+  border-color: var(--accent);
+  font-weight: 500;
+}
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+.btn-danger { color: var(--red); }
+.btn-danger:hover { background: rgba(212,87,78,0.1); border-color: var(--red); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.card-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+}
+.stat-card .stat-icon { font-size: 22px; margin-bottom: 8px; }
+.stat-card .stat-value { font-size: 28px; font-weight: 700; }
+.stat-card .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+/* Table */
+.table-wrap {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead { background: var(--bg-secondary); }
+th {
+  text-align: left;
+  padding: 10px 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 12px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+tbody tr:hover { background: var(--bg-hover); }
+tbody tr:last-child td { border-bottom: none; }
+
+/* Badges & Tags */
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.tag-green { background: rgba(92,184,92,0.15); color: var(--green); }
+.tag-blue { background: rgba(74,144,217,0.15); color: var(--blue); }
+.tag-amber { background: var(--accent-dim); color: var(--accent); }
+.tag-red { background: rgba(212,87,78,0.15); color: var(--red); }
+.tag-gray { background: var(--bg-tertiary); color: var(--text-muted); }
+
+/* Status dots */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+.status-dot.active { background: var(--green); }
+.status-dot.pending { background: var(--accent); }
+.status-dot.done { background: var(--blue); }
+.status-dot.cancelled { background: var(--text-muted); }
+
+/* Modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.active { display: flex; }
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  width: 520px;
+  max-width: 90vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.modal h3 { font-size: 18px; margin-bottom: 20px; }
+.modal .form-group { margin-bottom: 16px; }
+.modal .form-group label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; }
+.modal .form-row { display: flex; gap: 12px; }
+.modal .form-row .form-group { flex: 1; }
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--text-muted);
+}
+.empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+.empty-state .text { font-size: 14px; }
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.search-bar input { max-width: 320px; }
+.search-bar select { max-width: 160px; }
+
+/* Content List */
+.content-list { display: flex; flex-direction: column; gap: 12px; }
+.content-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  transition: border-color 0.15s;
+}
+.content-item:hover { border-color: var(--text-muted); }
+.content-item .item-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.content-item .item-title { font-size: 15px; font-weight: 600; }
+.content-item .item-meta { font-size: 12px; color: var(--text-muted); display: flex; gap: 12px; flex-wrap: wrap; }
+.content-item .item-body { font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-top: 6px; }
+.content-item .item-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+/* Leaderboard */
+.leaderboard-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+.leaderboard-row:last-child { border-bottom: none; }
+.rank {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.rank-1 { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #1a1a1a; }
+.rank-2 { background: linear-gradient(135deg, #c0c0c0, #999); color: #1a1a1a; }
+.rank-3 { background: linear-gradient(135deg, #cd7f32, #a0522d); color: #fff; }
+.rank-other { background: var(--bg-tertiary); color: var(--text-muted); }
+.lb-name { flex: 1; font-weight: 500; }
+.lb-points { font-size: 16px; font-weight: 700; color: var(--accent); }
+
+/* Filter Tabs */
+.filter-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.filter-tab {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid transparent;
+}
+.filter-tab:hover { color: var(--text-primary); }
+.filter-tab.active { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+
+/* Toast */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--green);
+  border-radius: var(--radius-sm);
+  padding: 12px 20px;
+  font-size: 13px;
+  z-index: 2000;
+  box-shadow: var(--shadow);
+  transform: translateX(400px);
+  transition: transform 0.3s;
+}
+.toast.show { transform: translateX(0); }
+.toast.error { border-left-color: var(--red); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 60px;
+    overflow: hidden;
+  }
+  .sidebar-header .title, .sidebar-header .subtitle,
+  .nav-item span:not(.icon), .nav-item .badge,
+  .sidebar-footer { display: none; }
+  .sidebar-header { justify-content: center; }
+  .nav-item { justify-content: center; }
+  .main { margin-left: 60px; max-width: calc(100vw - 60px); padding: 16px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .modal { width: 95vw; }
+  .modal .form-row { flex-direction: column; }
+  .page-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .search-bar { flex-direction: column; }
+  .search-bar input, .search-bar select { max-width: 100%; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { min-width: 500px; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* Detail View */
+.detail-view {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.detail-view h3 { font-size: 18px; margin-bottom: 8px; }
+.detail-view .detail-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; display: flex; gap: 16px; flex-wrap: wrap; }
+.detail-view .detail-body { font-size: 14px; line-height: 1.8; color: var(--text-secondary); white-space: pre-wrap; }
+
+/* Points History */
+.points-history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.points-history-item:last-child { border-bottom: none; }
+.points-delta { font-weight: 700; }
+.points-delta.positive { color: var(--green); }
+.points-delta.negative { color: var(--red); }
+
+/* Mobile menu toggle */
+.menu-toggle {
+  display: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 200;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 18px;
+}
+@media (max-width: 768px) {
+  .menu-toggle { display: block; }
+  .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+  .sidebar.open { transform: translateX(0); width: 200px; }
+  .sidebar.open .title, .sidebar.open .subtitle,
+  .sidebar.open .nav-item span:not(.icon), .sidebar.open .nav-item .badge,
+  .sidebar.open .sidebar-footer { display: block; }
+  .sidebar.open .nav-item { justify-content: flex-start; }
+  .sidebar.open .sidebar-header { justify-content: flex-start; }
+  .main { margin-left: 0; max-width: 100vw; padding-top: 50px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Login Screen ===== -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="logo">&#128247;</div>
+    <h1>光影社</h1>
+    <p class="subtitle">摄影社团管理系统</p>
+    <div class="login-tabs">
+      <button id="tabAdmin" class="active" onclick="switchLoginTab('admin')">管理员登录</button>
+      <button id="tabGuest" onclick="switchLoginTab('guest')">访客进入</button>
+    </div>
+    <div id="adminLoginForm">
+      <input type="text" id="adminUser" placeholder="管理员账号" onkeydown="if(event.key==='Enter')document.getElementById('adminPass').focus()">
+      <input type="password" id="adminPass" placeholder="管理密码" onkeydown="if(event.key==='Enter')adminLogin()">
+      <button class="btn-login" onclick="adminLogin()">进 入 系 统</button>
+      <div class="login-error" id="adminError"></div>
+    </div>
+    <div id="guestLoginForm" style="display:none">
+      <input type="text" id="guestCode" placeholder="输入邀请码" onkeydown="if(event.key==='Enter')guestLogin()">
+      <button class="btn-login" onclick="guestLogin()">进 入 浏 览</button>
+      <div class="login-error" id="guestError"></div>
+    </div>
+    <div class="login-hint" id="loginHint">默认管理员账号: admin / 密码: admin123<br>可在登录后修改</div>
+  </div>
+</div>
+
+<!-- ===== Main App ===== -->
+<div id="app">
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">&#128247;</div>
+      <div>
+        <div class="title">光影社</div>
+        <div class="subtitle">摄影社团管理</div>
+      </div>
+    </div>
+    <nav class="nav-list" id="navList">
+      <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
+        <span class="icon">&#128202;</span><span>概览</span>
+      </div>
+      <div class="nav-item" data-page="members" onclick="navigate('members')">
+        <span class="icon">&#128101;</span><span>成员管理</span>
+      </div>
+      <div class="nav-item" data-page="points" onclick="navigate('points')">
+        <span class="icon">&#127942;</span><span>积分排行</span>
+      </div>
+      <div class="nav-item" data-page="activities" onclick="navigate('activities')">
+        <span class="icon">&#128197;</span><span>活动任务</span>
+      </div>
+      <div class="nav-item" data-page="knowledge" onclick="navigate('knowledge')">
+        <span class="icon">&#128218;</span><span>知识库</span>
+      </div>
+      <div class="nav-item" data-page="news" onclick="navigate('news')">
+        <span class="icon">&#128240;</span><span>行业资讯</span>
+      </div>
+      <div class="nav-item" data-page="tips" onclick="navigate('tips')">
+        <span class="icon">&#128294;</span><span>摄影技巧</span>
+      </div>
+      <div class="nav-item" data-page="settings" onclick="navigate('settings')" id="navSettings" style="display:none">
+        <span class="icon">&#9881;</span><span>系统设置</span>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="role-tag" id="roleTag">管理员</div>
+      <div id="currentUser"></div>
+      <br>
+      <button class="logout-btn" onclick="logout()">退出登录</button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main" id="mainContent">
+    <!-- Pages rendered here -->
+  </div>
+</div>
+
+<!-- ===== Modal ===== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<!-- ===== Toast ===== -->
+<div class="toast" id="toast"></div>
+
+<!-- ===== Mobile Menu Toggle ===== -->
+<button class="menu-toggle" onclick="toggleSidebar()">&#9776;</button>
+
+<script>
+
+/* ============================================================
+   光影社 - 摄影社团管理系统
+   API 层 + 内存缓存 + 渲染层
+   ============================================================ */
+
+const SEED_DATA = {"settings":{"admin_user":"admin","admin_pass":"admin123","guest_code":"PHOTO2026","club_name":"光影社","club_desc":"用镜头记录世界，用光影讲述故事"},"sessions":{},"members":[{"id":1,"name":"社长","role":"core","join_date":"2026-01-01","contact":"微信联系","points":0,"created_at":"2026-01-01T00:00:00.000Z"}],"pointsHistory":[],"activities":[],"knowledge":[{"title":"曝光三要素：光圈、快门与ISO的完整指南","category":"曝光控制","tags":"光圈,快门,ISO,曝光三角","content":"曝光是摄影的核心技术基础，由光圈、快门、ISO三个要素共同决定。\n\n一、光圈（Aperture）\n光圈控制镜头进光孔的大小，用f值表示（f/1.4、f/2.8、f/8等）。\n- f值越小=光圈越大=进光越多=景深越浅（背景虚化更强）\n- f值越大=光圈越小=进光越少=景深越大（前后都清晰）\n- 人像常用 f/1.8-f/2.8 虚化背景；风光常用 f/8-f/11 保证全景清晰\n- 避坑：光圈太大（如f/1.2）可能导致对焦不准，新手建议用f/2.8\n\n二、快门速度（Shutter Speed）\n快门控制传感器曝光时间，用秒或分之一秒表示。\n- 快速快门（1/500s以上）：凝固运动瞬间，适合体育、鸟类\n- 中速快门（1/60s-1/250s）：日常拍摄，手持最低1/60秒防抖\n- 慢速快门（1秒以上）：记录运动轨迹，如车流光轨、丝滑水流\n- 避坑：手持拍摄快门不低于1/60秒（广角可放宽至1/30秒），更慢需三脚架\n\n三、感光度（ISO）\nISO控制传感器对光的敏感度。\n- ISO 100-200：画质最干净，适合白天、光线充足场景\n- ISO 400-800：弱光环境，画质仍可接受\n- ISO 1600以上：暗光应急，噪点明显增加\n- 原则：优先用低ISO，通过光圈和快门调整曝光，ISO作为最后手段提升\n\n四、曝光三要素的互易关系\n三者可以互相补偿：缩小一档光圈（进光减半），可以放慢一档快门或提高一档ISO来补偿。理解这个互易律，就能在任何光线条件下灵活组合参数。\n\n五、白加黑减原则\n拍摄浅色主体时需增加曝光补偿（+0.3到+1EV），深色主体时减少补偿。因为相机测光系统以18%灰为基准，会自动把白色拍灰、黑色也拍灰。"},{"title":"构图法则大全：从三分法到极简构图","category":"构图技巧","tags":"三分法,引导线,框架构图,对角线,极简","content":"构图是摄影的骨架，决定照片的视觉结构和叙事效果。\n\n一、三分法（九宫格构图）\n最经典、最稳妥的构图法。打开手机网格线，画面分成九宫格，将重要元素放在交叉点或线条上。\n- 人像：眼睛放在上1/3交叉点，视线方向留出空间\n- 风景：地平线放在上1/3（突出地面）或下1/3（突出天空），避免放正中间\n- 建筑：主体沿左1/3或右1/3竖线排列\n\n二、引导线构图\n利用道路、河流、走廊、栏杆等有方向性的线条引导观众视线。\n- 低角度拍道路，近大远小的透视感最强\n- S型曲线（河流、山路）柔美自然\n- 多条线汇聚的消失点最有冲击力\n\n三、框架构图\n用门窗、拱廊、树枝作为前景框架，主体被框在中间，增加层次感和代入感。\n\n四、对角线构图\n将主体沿对角线排列，制造动感和张力。倾斜幅度5-15度最容易出效果。\n\n五、极简构图（留白艺术）\n找到干净的墙、天空或水面，只放一个主体。背景越干净，主体越突出。\n\n六、构图减法三原则\n1. 裁剪减法：通过取景裁掉杂乱元素\n2. 景深减法：用大光圈虚化干扰背景\n3. 阻挡减法：用前景遮挡不想要的部分"},{"title":"人像摄影全攻略：从景别到用光到摆姿","category":"人像摄影","tags":"人像,景别,用光,摆姿,构图","content":"人像摄影的核心是突出人物、表达情绪、避免僵硬。\n\n一、人像景别选择\n- 远景（全身+环境）：交待环境故事，适合旅拍\n- 全景（全身）：展示服装和姿态\n- 中景（膝盖以上）：日常交流距离，自然亲切\n- 近景（胸部以上）：突出面部表情\n- 特写（面部/局部）：强调眼神、嘴唇、手部细节\n\n二、人像构图要点\n- 眼睛放在上1/3交叉点\n- 视线方向留白占画面2/3\n- 避免裁切到关节（脖子、腰、膝盖）\n\n三、人像用光\n- 顺光：色彩鲜艳、皮肤干净，但缺乏立体感\n- 侧光（45度）：立体感最强，五官轮廓深邃，最推荐\n- 逆光：发丝发光、氛围感强，需对脸部点测光+增加0.7-1EV曝光补偿\n- 顶光（正午）：面部阴影重，尽量避开\n- 阴天：天然柔光箱，皮肤细腻，不挑角度\n\n四、摆姿引导\n- 侧身30度+下巴微收：显瘦显高\n- 回眸抓拍：自然有动感\n- 走路抓拍：手臂自然摆动\n- 借道具互动：帽子、咖啡杯、围巾\n\n五、常见避坑\n- 脸色暗沉：携带小型反光板或手机手电筒补光\n- 正午光斑：找树荫下拍摄\n- 僵硬站姿：让模特走动、转身、低头看景，抓拍自然瞬间"},{"title":"风光摄影实战：山景、水景、日出日落","category":"风光摄影","tags":"风光,山景,水景,日出,日落,黄金时刻","content":"风光摄影拼的是前期策划、光线判断和器材运用的综合能力。\n\n一、黄金时刻与蓝调时刻\n- 黄金时刻：日出后1小时、日落前1小时，光线柔和温暖\n- 蓝调时刻：日落后天黑前约10-15分钟，天空呈深邃蓝色\n\n二、山景拍摄\n- 夶大前景增加深度：用广角镜头贴近前景岩石或花草\n- 表现山峰层次与细节：用长焦压缩透视\n- 日照金山：日出日落时山尖被金色阳光照亮\n\n三、水景拍摄\n- 慢门水流效果：快门1-5秒拍出丝绸质感，需三脚架+ND滤镜\n- 波光粼粼水面：快门1/250s以上凝固光斑\n- 水面倒影：无风时拍摄最清晰\n\n四、林木拍摄\n- 寻找延伸线条增强空间感\n- 林间光影：清晨雾气中丁达尔效应\n\n五、冰雪拍摄\n- 适当增加曝光补偿+0.3-1EV\n- 冷暖搭配：蓝色阴影与金色暖光的对比"},{"title":"测光模式详解：评价测光、点测光、中央重点测光","category":"曝光控制","tags":"测光,点测光,曝光补偿,直方图","content":"测光决定了相机如何计算曝光值，选对测光模式是准确曝光的关键。\n\n一、评价测光（矩阵测光）\n将画面分成多个区域综合计算，最安全，大多数场景不会严重失误。\n\n二、点测光\n仅测量画面中心约2-8%区域，适合逆光人像、舞台摄影。逆光人像时对准面部点测光+增加0.7-1EV曝光补偿。\n\n三、中央重点平均测光\n以画面中央约60-75%区域为主，兼顾边缘。适合主体在中心的肖像。\n\n四、曝光补偿\n- 白加黑减原则\n- 逆光人像：+0.7到+2EV\n- 雪景：+0.3到+1EV\n\n五、直方图判断\n- 波形靠左=欠曝\n- 波形靠右=过曝\n- 理想：集中在中间偏右，不贴墙壁"},{"title":"景深控制完全指南：如何拍出背景虚化","category":"曝光控制","tags":"景深,虚化,光圈,焦距","content":"景深是指照片中清晰成像的范围。\n\n一、影响景深的三个因素\n1. 光圈：光圈越大（f值越小），景深越浅\n2. 焦距：焦距越长，景深越浅\n3. 拍摄距离：离主体越近，景深越浅\n\n二、实现最大虚化四步法\n1. 开大光圈（f/1.8-f/2.8）\n2. 使用长焦镜头（85mm以上）\n3. 靠近主体拍摄\n4. 让主体远离背景\n\n三、风光摄影最大清晰范围\n1. 缩小光圈（f/8-f/11）\n2. 使用广角镜头\n3. 对焦在画面下1/3处（超焦距）\n4. 使用三脚架"},{"title":"白平衡与色彩管理","category":"曝光控制","tags":"白平衡,色温,色彩","content":"白平衡决定照片整体色调。\n\n一、色温与画面效果\n- 低色温（2700K-3200K）：偏黄暖色调，温馨\n- 中色温（5000K-5500K）：标准日光，色彩自然\n- 高色温（6500K以上）：偏蓝冷色调，清冷\n\n二、场景设置\n- 城市冷调夜景：3200K-3800K\n- 暖调夜景：4500K-5000K\n- 不确定时锁定4000K\n- 人像肤色：4500K-5500K\n\n三、创意白平衡\n- 日落暖调：设高色温6000K+\n- 蓝调夜景：设低色温2500-3200K"},{"title":"后期处理标准流程：从RAW到成片","category":"后期修图","tags":"RAW,Lightroom,修图,调色","content":"后期是影像的第二次生命。\n\n一、RAW格式优势\n- 保留12-14档动态范围\n- 后期可无损调整曝光、白平衡\n\n二、标准流程\n第一步：镜头校正+裁剪二次构图\n第二步：全局调色（白平衡→曝光→高光-20至-40→阴影+20至+40）\n第三步：HSL色彩精调（红色饱和度-15保护肤色，橙色明度+15提亮面部）\n第四步：局部调整（径向滤镜、渐变滤镜、调整画笔）\n第五步：风格化（色调分离、颗粒、暗角）\n\n三、手机修图公式\n提暗不提亮：增加曝光→拉高阴影→降低高光→黑色色阶右移→增加清晰度"}],"news":[{"title":"2026上海国际摄影器材和数码影像展览会圆满闭幕","category":"展览活动","source":"央广网","content":"2026年7月23-26日，第27届上海国际摄影器材和数码影像展览会在上海世博展览馆举行。展会以视觉无界·影像未来为主题，5万平方米展区，300余个品牌。富士、佳能、索尼、尼康四大头部企业集中发布新品。AI智能构图、虚拟影棚、数字人影像等技术集中落地。国货品牌光学镜头、影视灯光、无线传输设备集中亮相。","url":"http://m.toutiao.com/group/7667035723421205033/"},{"title":"第27届中国国际照相机械影像器材博览会（CHINA P&E 2026）在京开幕","category":"展览活动","source":"中国摄影家协会","content":"2026年5月15-18日，CHINA P&E 2026在北京展览馆举办。120余个影像品牌，20000平方米。佳能、索尼、尼康、富士等主流品牌新品首发。行业趋势：AI深度赋能、视频化需求爆发、本土产业链成熟、便携化一体化成主流。同期举办华龙奖评选和家乡烟火气影像大赛。","url":"https://m.cpanet.org.cn/detail_news_143006.html"},{"title":"富士胶片携相机新品亮相2026影像展","category":"器材发布","source":"央广网","content":"富士胶片以1046平米展台亮相P&I SHANGHAI 2026。GFX100 II、GFX100S II、GFX100RF三款亿像素中画幅相机，X-H2S、X-T5、X100VI等热门无反机型。GFX ETERNA 55电影机作为IMAX认证成员引人注目。QuickSnap 40周年纪念版一次性胶片相机发布。未来镜头投票区让观众决定下一款新镜方向。","url":"http://www.cnr.cn/shanghai/tt/20260729/t20260729_527735602.shtml"},{"title":"2026深圳国际数码相机博览会启幕","category":"展览活动","source":"东方摄影","content":"SIDC Expo在深圳会展中心举行，22000平方米。全画幅微单、中画幅相机、电影摄影机、航拍设备、AI智能拍摄系统集中展示。行业风向：全画幅视频微单成消费主流，国产光学配件技术快速突破，自动对焦镜头、影视灯光、无线传输设备逐步自主化。","url":"https://www.ea360.com/contents/23/37485.html"},{"title":"富士GFX Challenge Grant Program 2025作品展将在东京举办","category":"赛事信息","source":"FUJIFILM","content":"2026年10月16-26日，富士胶片与T3 PHOTO FESTIVAL TOKYO 2026合作，在东京京桥EDOGRAND举办GFX Challenge Grant Program 2025受赏者作品展。15个来自不同国家的故事，涵盖纪录片、人像、珠峰登顶作品等。巡回展首站，之后将前往大阪及世界各地。","url":"https://www.fujifilm-x.com/hu-hu/news/exhibition-of-the-gfx-challenge-grant-program-2025-at-t3-photo-festival-tokyo/"},{"title":"AI技术深度赋能影像产业：2026年核心趋势","category":"行业动态","source":"综合报道","content":"2026年影像器材行业从功能满足向体验引领跃迁。四大趋势：1. AI深度赋能（AI对焦、场景识别、智能图像优化）；2. 视频化需求爆发（4K/8K高速视频、电影镜头）；3. 本土产业链成熟（国产镜头光学素质和自动对焦突破）；4. 便携化一体化成主流。AI不会取代摄影师，但会用AI的摄影师将取代不用AI的摄影师。","url":""}],"tips":[{"title":"手机摄影构图五法：3天从游客照到高赞大片","category":"构图技巧","content":"1. 三分法：眼睛放在上1/3交叉点，地平线放上1/3或下1/3\n2. 引导线：利用道路、河流引导视线，低角度透视感最强\n3. 框架构图：用门窗、树枝做前景框架，增加层次感\n4. 对角线构图：主体沿对角线排列，倾斜5-15度出效果\n5. 极简构图：干净背景+单一主体，少即是多\n\n每日练习：拍20张照片，强制使用三种构图法。"},{"title":"夜景拍摄完全指南","category":"曝光控制","content":"一、最佳时段：日落后15-25分钟蓝调时刻\n二、相机参数：ISO 100-200，快门1/10至2秒，三脚架必备\n三、手机夜景：超级夜景模式保持静止3-5秒，专业模式ISO 400快门1/2秒\n四、测光：点测光对准主体，逆光+1至+2EV\n五、长曝光：车流1-5秒，星轨15-30秒\n六、后期：提暗不提亮，拉高阴影降低高光"},{"title":"夜景人像封神指南","category":"人像摄影","content":"一、相机参数：光圈f/1.8-2.8，快门1/60秒以上，ISO 800以内\n二、手机：专业模式f/1.8快门1/50秒ISO 400\n三、补光：LED棒灯或手机闪光灯+白纸柔化，侧光45度最佳\n四、创意：车流光轨背景（快门2-4秒），霓虹灯街拍，雨夜情绪片\n五、避坑：直闪用柔光罩，让模特微微抬头打亮发丝"},{"title":"黄金时刻与蓝调时刻","category":"风光摄影","content":"黄金时刻：日出后1小时、日落前1小时，光线柔和温暖\n蓝调时刻：日落后10-25分钟，天空深蓝+城市灯光\n正午硬光：避开人像，适合建筑几何和黑白\n阴天柔光：天然柔光箱，拍人像皮肤细腻\n\n时间表：\n5:00-6:00 蓝调（清晨）\n6:00-7:00 黄金（日出）\n16:00-18:00 黄金（日落前）\n18:00-18:25 蓝调（傍晚）"},{"title":"手机后期三步修图法","category":"后期修图","content":"第一步：基础调整\n裁剪二次构图→提亮阴影+20至+40→压低高光-20至-30→黑色色阶右移\n第二步：色彩控制\n色温微调（偏黄温暖/偏蓝清新）→降低饱和度-5至-15→增加清晰度+10至+20\n第三步：风格滤镜\n胶片风：VSCO CP200+颗粒感15%\n日系风：提亮暗部+降对比+偏冷色温\n电影风：压暗高光+偏暖色温+暗角"},{"title":"手机摄影六大常见错误","category":"手机摄影","content":"错误1：从不点屏幕对焦→点击主体对焦，长按锁定\n错误2：常年开AI美颜→关闭AI美颜保留原始画质\n错误3：用16:9比例→改用4:3获得最大画质\n错误4：数码变焦放大→不用数码变焦，后期裁剪\n错误5：不开网格线→打开网格线用三分法\n错误6：夜间无脑开夜景模式→日常弱光用普通模式即可"},{"title":"红枫人像拍摄全攻略","category":"人像摄影","content":"一、时段：清晨7-9点、黄金时刻16-18点、蓝调时刻\n二、穿搭：白色米色毛衣、驼色风衣、深蓝连衣裙；避免红色系\n三、构图：逆光侧逆光打透枫叶，极简构图三种元素以内，框架构图用枫枝\n四、摆姿：整理围巾、原地转圈、向镜头走来、手捧落叶特写\n五、调色：日系风提亮暗部+偏冷色温+红色饱和度-15；电影风压暗高光+偏暖+暗角"},{"title":"压光技巧：用闪光灯压出天空层次","category":"曝光控制","content":"原理：快门压制背景光+闪光灯补亮主体\n\n步骤：\n1. M档小光圈f/8-f/16+高快门1/250-1/2000s压暗环境\n2. 闪光灯功率1/4-1/1色温5600K补亮人脸\n\n注意：快门超1/250s需开HSS高速同步；功率不够拉近距离开全功率；人脸过曝减闪光补偿\n\n光圈效果：F2.0极暗环境，F2.8平衡，F4.0灯光星芒效果"}]};
+
+const CLOUD_CONFIG = {"owner":"kaka666-88","repo":"photo-club-data","branch":"main"};
+
+function ghCfg() {
+  let c = {};
+  try { c = JSON.parse(localStorage.getItem('photoClubGithub') || '{}'); } catch(e) {}
+  if (CLOUD_CONFIG) {
+    c.owner = c.owner || CLOUD_CONFIG.owner;
+    c.repo = c.repo || CLOUD_CONFIG.repo;
+    c.branch = c.branch || CLOUD_CONFIG.branch;
+  }
+  return c;
+}
+
+const API = {
+  token: localStorage.getItem("photoClubToken") || "",
+  _data: null,
+  _nextId: 1,
+  _remoteSha: null,
+  _pollTimer: null,
+  _writeTimer: null,
+  _savingFromRemote: false,
+  _lastSync: 0,
+
+  _getGithubConfig() { return ghCfg(); },
+
+  _isConfigured() {
+    const cfg = this._getGithubConfig();
+    return !!(cfg.owner && cfg.repo && cfg.branch);
+  },
+
+  _hasToken() {
+    const cfg = this._getGithubConfig();
+    return !!(cfg.token);
+  },
+
+  _rawUrl() {
+    const cfg = this._getGithubConfig();
+    return 'https://raw.githubusercontent.com/' + cfg.owner + '/' + cfg.repo + '/' + cfg.branch + '/data.json?t=' + Date.now();
+  },
+
+  _apiUrl() {
+    const cfg = this._getGithubConfig();
+    return 'https://api.github.com/repos/' + cfg.owner + '/' + cfg.repo + '/contents/data.json';
+  },
+
+  _encodeBase64(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+  },
+
+  _decodeBase64(b64) {
+    return decodeURIComponent(escape(atob(b64)));
+  },
+
+  async _readRemote() {
+    if (!this._isConfigured()) return null;
+    try {
+      const resp = await fetch(this._rawUrl());
+      if (!resp.ok) return null;
+      const text = await resp.text();
+      if (!text || text.trim().startsWith('<')) return null;
+      return JSON.parse(text);
+    } catch(e) {
+      return null;
+    }
+  },
+
+  async _writeRemote() {
+    if (!this._isConfigured() || !this._hasToken()) return false;
+    const cfg = this._getGithubConfig();
+    try {
+      let sha = this._remoteSha;
+      if (!sha) {
+        try {
+          const getResp = await fetch(this._apiUrl(), {
+            headers: { 'Authorization': 'Bearer ' + cfg.token, 'Accept': 'application/vnd.github.v3+json' }
+          });
+          if (getResp.ok) {
+            const fileData = await getResp.json();
+            sha = fileData.sha;
+            this._remoteSha = sha;
+          }
+        } catch(e) { /* file may not exist yet */ }
+      }
+
+      const dataToSync = JSON.parse(JSON.stringify(this._data));
+      delete dataToSync.sessions;
+
+      const content = this._encodeBase64(JSON.stringify(dataToSync, null, 2));
+      const body = JSON.stringify({
+        message: 'Update ' + new Date().toISOString(),
+        content: content,
+        sha: sha || undefined,
+        branch: cfg.branch
+      });
+
+      const putResp = await fetch(this._apiUrl(), {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + cfg.token,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: body
+      });
+
+      if (putResp.ok) {
+        const result = await putResp.json();
+        this._remoteSha = result.content.sha;
+        return true;
+      }
+      console.error('GitHub write failed:', putResp.status);
+      return false;
+    } catch(e) {
+      console.error('GitHub write error:', e);
+      return false;
+    }
+  },
+
+  _scheduleWrite() {
+    if (this._writeTimer) clearTimeout(this._writeTimer);
+    this._writeTimer = setTimeout(() => { this._writeRemote(); }, 2000);
+  },
+
+  async _syncFromRemote() {
+    const remote = await this._readRemote();
+    if (!remote) return false;
+
+    const localSessions = this._data.sessions || {};
+    this._data = remote;
+    this._data.sessions = localSessions;
+
+    const all = [
+      ...(this._data.members || []),
+      ...(this._data.activities || []),
+      ...(this._data.knowledge || []),
+      ...(this._data.news || []),
+      ...(this._data.tips || [])
+    ];
+    this._nextId = Math.max(0, ...all.map(x => x.id || 0)) + 1;
+
+    this._savingFromRemote = true;
+    this._save();
+    this._savingFromRemote = false;
+
+    this._lastSync = Date.now();
+
+    if (state.role && typeof renderPage === 'function') {
+      await store.loadAll();
+      renderPage(state.currentPage);
+    }
+    return true;
+  },
+
+  startPolling() {
+    if (this._pollTimer) clearInterval(this._pollTimer);
+    this._pollTimer = setInterval(() => { this._syncFromRemote(); }, 30000);
+  },
+
+  _init() {
+    const stored = localStorage.getItem("photoClubData");
+    if (stored) {
+      this._data = JSON.parse(stored);
+    } else {
+      this._data = JSON.parse(JSON.stringify(SEED_DATA));
+      this._data.knowledge.forEach((k, i) => { k.id = i + 1; k.created_at = new Date().toISOString(); });
+      this._data.tips.forEach((t, i) => { t.id = i + 1; t.created_at = new Date().toISOString(); });
+      this._data.news.forEach((n, i) => { n.id = i + 1; n.created_at = new Date().toISOString(); });
+      this._data.sessions = {};
+      this._nextId = 100;
+      this._save();
+    }
+    if (!this._data.sessions) this._data.sessions = {};
+  },
+
+  _save() {
+    localStorage.setItem("photoClubData", JSON.stringify(this._data));
+    if (!this._savingFromRemote) this._scheduleWrite();
+  },
+
+  _genId() { return this._nextId++; },
+
+  adminLogin(username, password) {
+    const s = this._data.settings;
+    if (username === s.admin_user && password === s.admin_pass) {
+      const token = "admin_" + Date.now() + "_" + Math.random().toString(36).slice(2);
+      this._data.sessions[token] = { role: "admin", user: username };
+      this._save();
+      return Promise.resolve({ token, role: "admin", user: username });
+    }
+    return Promise.reject(new Error("账号或密码错误"));
+  },
+
+  guestLogin(code) {
+    const s = this._data.settings;
+    if (code === s.guest_code) {
+      const token = "guest_" + Date.now() + "_" + Math.random().toString(36).slice(2);
+      this._data.sessions[token] = { role: "guest", user: "访客" };
+      this._save();
+      return Promise.resolve({ token, role: "guest", user: "访客" });
+    }
+    return Promise.reject(new Error("邀请码无效"));
+  },
+
+  getPublicSettings() {
+    return Promise.resolve({ club_name: this._data.settings.club_name, club_desc: this._data.settings.club_desc });
+  },
+  getFullSettings() {
+    return Promise.resolve(Object.assign({}, this._data.settings));
+  },
+  updateSettings(data) {
+    if (data.admin_user) this._data.settings.admin_user = data.admin_user;
+    if (data.admin_pass) this._data.settings.admin_pass = data.admin_pass;
+    if (data.guest_code) this._data.settings.guest_code = data.guest_code;
+    if (data.club_name) this._data.settings.club_name = data.club_name;
+    if (data.club_desc !== undefined) this._data.settings.club_desc = data.club_desc;
+    this._save();
+    return Promise.resolve({ message: "设置已保存" });
+  },
+
+  getMembers() { return Promise.resolve(this._data.members); },
+  createMember(data) {
+    const m = { id: this._genId(), name: data.name, role: data.role || "member", join_date: data.join_date || new Date().toISOString().slice(0,10), contact: data.contact || "", points: 0, created_at: new Date().toISOString() };
+    this._data.members.unshift(m);
+    this._save();
+    return Promise.resolve(m);
+  },
+  updateMember(id, data) {
+    const m = this._data.members.find(x => x.id === id);
+    if (m) {
+      if (data.name !== undefined) m.name = data.name;
+      if (data.role !== undefined) m.role = data.role;
+      if (data.join_date !== undefined) m.join_date = data.join_date;
+      if (data.contact !== undefined) m.contact = data.contact;
+      this._save();
+    }
+    return Promise.resolve({ message: "成员已更新" });
+  },
+  deleteMember(id) {
+    this._data.members = this._data.members.filter(x => x.id !== id);
+    this._data.pointsHistory = (this._data.pointsHistory || []).filter(p => p.member_id !== id);
+    this._save();
+    return Promise.resolve({ message: "成员已删除" });
+  },
+
+  adjustPoints(memberId, delta, reason) {
+    const m = this._data.members.find(x => x.id === memberId);
+    if (!m) return Promise.reject(new Error("成员不存在"));
+    m.points = (m.points || 0) + delta;
+    this._data.pointsHistory = this._data.pointsHistory || [];
+    this._data.pointsHistory.unshift({ id: this._genId(), member_id: memberId, delta, reason: reason || "手动调整", balance: m.points, created_at: new Date().toISOString() });
+    this._save();
+    return Promise.resolve({ message: "积分已更新" });
+  },
+  getPointsHistory(memberId) {
+    return Promise.resolve((this._data.pointsHistory || []).filter(p => p.member_id === memberId));
+  },
+
+  getActivities() { return Promise.resolve(this._data.activities); },
+  createActivity(data) {
+    const a = { id: this._genId(), title: data.title, date: data.date || "", location: data.location || "", status: data.status || "active", description: data.description || "", tasks: JSON.stringify(data.tasks || []), created_at: new Date().toISOString() };
+    this._data.activities.unshift(a);
+    this._save();
+    return Promise.resolve(a);
+  },
+  updateActivity(id, data) {
+    const a = this._data.activities.find(x => x.id === id);
+    if (a) {
+      if (data.title !== undefined) a.title = data.title;
+      if (data.date !== undefined) a.date = data.date;
+      if (data.location !== undefined) a.location = data.location;
+      if (data.status !== undefined) a.status = data.status;
+      if (data.description !== undefined) a.description = data.description;
+      if (data.tasks !== undefined) a.tasks = JSON.stringify(data.tasks);
+      this._save();
+    }
+    return Promise.resolve({ message: "活动已更新" });
+  },
+  deleteActivity(id) {
+    this._data.activities = this._data.activities.filter(x => x.id !== id);
+    this._save();
+    return Promise.resolve({ message: "活动已删除" });
+  },
+
+  getKnowledge() { return Promise.resolve(this._data.knowledge); },
+  createKnowledge(data) {
+    const k = { id: this._genId(), title: data.title, category: data.category || "", tags: data.tags || "", content: data.content || "", created_at: new Date().toISOString() };
+    this._data.knowledge.unshift(k);
+    this._save();
+    return Promise.resolve(k);
+  },
+  updateKnowledge(id, data) {
+    const k = this._data.knowledge.find(x => x.id === id);
+    if (k) {
+      if (data.title !== undefined) k.title = data.title;
+      if (data.category !== undefined) k.category = data.category;
+      if (data.tags !== undefined) k.tags = data.tags;
+      if (data.content !== undefined) k.content = data.content;
+      this._save();
+    }
+    return Promise.resolve({ message: "条目已更新" });
+  },
+  deleteKnowledge(id) {
+    this._data.knowledge = this._data.knowledge.filter(x => x.id !== id);
+    this._save();
+    return Promise.resolve({ message: "条目已删除" });
+  },
+
+  getNews() { return Promise.resolve(this._data.news); },
+  createNews(data) {
+    const n = { id: this._genId(), title: data.title, category: data.category || "", source: data.source || "", content: data.content || "", url: data.url || "", created_at: new Date().toISOString() };
+    this._data.news.unshift(n);
+    this._save();
+    return Promise.resolve(n);
+  },
+  updateNews(id, data) {
+    const n = this._data.news.find(x => x.id === id);
+    if (n) {
+      if (data.title !== undefined) n.title = data.title;
+      if (data.category !== undefined) n.category = data.category;
+      if (data.source !== undefined) n.source = data.source;
+      if (data.content !== undefined) n.content = data.content;
+      if (data.url !== undefined) n.url = data.url;
+      this._save();
+    }
+    return Promise.resolve({ message: "资讯已更新" });
+  },
+  deleteNews(id) {
+    this._data.news = this._data.news.filter(x => x.id !== id);
+    this._save();
+    return Promise.resolve({ message: "资讯已删除" });
+  },
+
+  getTips() { return Promise.resolve(this._data.tips); },
+  createTips(data) {
+    const t = { id: this._genId(), title: data.title, category: data.category || "", content: data.content || "", created_at: new Date().toISOString() };
+    this._data.tips.unshift(t);
+    this._save();
+    return Promise.resolve(t);
+  },
+  updateTips(id, data) {
+    const t = this._data.tips.find(x => x.id === id);
+    if (t) {
+      if (data.title !== undefined) t.title = data.title;
+      if (data.category !== undefined) t.category = data.category;
+      if (data.content !== undefined) t.content = data.content;
+      this._save();
+    }
+    return Promise.resolve({ message: "技巧已更新" });
+  },
+  deleteTips(id) {
+    this._data.tips = this._data.tips.filter(x => x.id !== id);
+    this._save();
+    return Promise.resolve({ message: "技巧已删除" });
+  },
+
+  updateContent() {
+    return Promise.resolve({ message: "云端模式通过 GitHub 同步", added: 0, news_added: 0, tips_added: 0 });
+  }
+};
+
+API._init();
+
+/* ===== Normalize: snake_case -> camelCase ===== */
+function normalizeMember(m) {
+  return {
+    id: m.id,
+    name: m.name,
+    role: m.role,
+    joinDate: m.join_date || m.joinDate || '',
+    contact: m.contact || '',
+    points: m.points || 0,
+    createdAt: m.created_at || m.createdAt || ''
+  };
+}
+function normalizeActivity(a) {
+  return {
+    id: a.id,
+    title: a.title,
+    date: a.date || '',
+    location: a.location || '',
+    status: a.status || 'active',
+    description: a.description || '',
+    tasks: Array.isArray(a.tasks) ? a.tasks : (typeof a.tasks === 'string' ? JSON.parse(a.tasks || '[]') : []),
+    createdAt: a.created_at || a.createdAt || ''
+  };
+}
+function normalizeKnowledge(k) {
+  return {
+    id: k.id,
+    title: k.title,
+    category: k.category || '',
+    tags: k.tags || '',
+    content: k.content || '',
+    createdAt: k.created_at || k.createdAt || ''
+  };
+}
+function normalizeNews(n) {
+  return {
+    id: n.id,
+    title: n.title,
+    category: n.category || '',
+    source: n.source || '',
+    content: n.content || '',
+    url: n.url || '',
+    createdAt: n.created_at || n.createdAt || ''
+  };
+}
+function normalizeTips(t) {
+  return {
+    id: t.id,
+    title: t.title,
+    category: t.category || '',
+    content: t.content || '',
+    createdAt: t.created_at || t.createdAt || ''
+  };
+}
+function normalizeSettings(s) {
+  return {
+    adminUser: s.admin_user || s.adminUser || 'admin',
+    adminPass: s.admin_pass || s.adminPass || '',
+    guestCode: s.guest_code || s.guestCode || '',
+    clubName: s.club_name || s.clubName || '光影社',
+    clubDesc: s.club_desc || s.clubDesc || ''
+  };
+}
+
+/* ===== Store (in-memory cache) ===== */
+const store = {
+  data: {
+    settings: { clubName: '光影社', clubDesc: '' },
+    members: [],
+    activities: [],
+    knowledge: [],
+    news: [],
+    tips: []
+  },
+
+  async loadAll() {
+    const [settings, members, activities, knowledge, news, tips] = await Promise.all([
+      API.getPublicSettings(),
+      API.getMembers(),
+      API.getActivities(),
+      API.getKnowledge(),
+      API.getNews(),
+      API.getTips()
+    ]);
+    this.data.settings = normalizeSettings(settings);
+    this.data.members = members.map(normalizeMember);
+    this.data.activities = activities.map(normalizeActivity);
+    this.data.knowledge = knowledge.map(normalizeKnowledge);
+    this.data.news = news.map(normalizeNews);
+    this.data.tips = tips.map(normalizeTips);
+  },
+
+  async loadMembers() { this.data.members = (await API.getMembers()).map(normalizeMember); },
+  async loadActivities() { this.data.activities = (await API.getActivities()).map(normalizeActivity); },
+  async loadKnowledge() { this.data.knowledge = (await API.getKnowledge()).map(normalizeKnowledge); },
+  async loadNews() { this.data.news = (await API.getNews()).map(normalizeNews); },
+  async loadTips() { this.data.tips = (await API.getTips()).map(normalizeTips); }
+};
+
+/* ===== State ===== */
+let state = {
+  role: null,
+  user: null,
+  currentPage: 'dashboard',
+  filter: { knowledge: 'all', news: 'all', tips: 'all' },
+  search: { knowledge: '', news: '', tips: '' },
+  detailId: null
+};
+
+/* ===== Utils ===== */
+function $(id) { return document.getElementById(id); }
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtDate(d) {
+  if (!d) return '-';
+  const dt = new Date(d);
+  if (isNaN(dt)) return d;
+  return dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0');
+}
+function fmtDateTime(d) {
+  if (!d) return '-';
+  const dt = new Date(d);
+  if (isNaN(dt)) return d;
+  return fmtDate(d) + ' ' + String(dt.getHours()).padStart(2,'0') + ':' + String(dt.getMinutes()).padStart(2,'0');
+}
+function showToast(msg, isError) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isError ? ' error' : '');
+  setTimeout(() => t.className = 'toast', 2500);
+}
+function isAdmin() { return state.role === 'admin'; }
+
+/* ===== Login ===== */
+function switchLoginTab(tab) {
+  $('tabAdmin').classList.toggle('active', tab === 'admin');
+  $('tabGuest').classList.toggle('active', tab === 'guest');
+  $('adminLoginForm').style.display = tab === 'admin' ? 'block' : 'none';
+  $('guestLoginForm').style.display = tab === 'guest' ? 'block' : 'none';
+  $('adminError').textContent = '';
+  $('guestError').textContent = '';
+  $('loginHint').style.display = tab === 'admin' ? 'block' : 'none';
+}
+
+async function adminLogin() {
+  const user = $('adminUser').value.trim();
+  const pass = $('adminPass').value.trim();
+  if (!user || !pass) { $('adminError').textContent = '请输入账号和密码'; return; }
+  try {
+    const res = await API.adminLogin(user, pass);
+    API.token = res.token;
+    localStorage.setItem('photoClubToken', res.token);
+    state.role = 'admin';
+    state.user = res.user;
+    await store.loadAll();
+    enterApp();
+  } catch(e) {
+    $('adminError').textContent = e.message;
+  }
+}
+
+async function guestLogin() {
+  const code = $('guestCode').value.trim();
+  if (!code) { $('guestError').textContent = '请输入邀请码'; return; }
+  try {
+    const res = await API.guestLogin(code);
+    API.token = res.token;
+    localStorage.setItem('photoClubToken', res.token);
+    state.role = 'guest';
+    state.user = res.user;
+    await store.loadAll();
+    enterApp();
+  } catch(e) {
+    $('guestError').textContent = e.message;
+  }
+}
+
+function enterApp() {
+  $('loginScreen').style.display = 'none';
+  $('app').classList.add('active');
+  $('navSettings').style.display = isAdmin() ? 'flex' : 'none';
+  $('roleTag').textContent = isAdmin() ? '管理员' : '访客';
+  $('currentUser').textContent = state.user;
+  navigate('dashboard');
+}
+
+function logout() {
+  API.token = '';
+  localStorage.removeItem('photoClubToken');
+  state = { role: null, user: null, currentPage: 'dashboard',
+    filter: { knowledge: 'all', news: 'all', tips: 'all' },
+    search: { knowledge: '', news: '', tips: '' }, detailId: null };
+  $('app').classList.remove('active');
+  $('loginScreen').style.display = 'flex';
+  $('adminUser').value = '';
+  $('adminPass').value = '';
+  $('guestCode').value = '';
+  switchLoginTab('admin');
+}
+
+/* ===== Navigation ===== */
+function navigate(page) {
+  state.currentPage = page;
+  state.detailId = null;
+  document.querySelectorAll('.nav-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.page === page);
+  });
+  renderPage(page);
+  if (window.innerWidth <= 768) $('sidebar').classList.remove('open');
+}
+
+function toggleSidebar() {
+  $('sidebar').classList.toggle('open');
+}
+
+/* ===== Page Rendering ===== */
+function renderPage(page) {
+  const main = $('mainContent');
+  switch(page) {
+    case 'dashboard': renderDashboard(main); break;
+    case 'members': renderMembers(main); break;
+    case 'points': renderPoints(main); break;
+    case 'activities': renderActivities(main); break;
+    case 'knowledge': renderKnowledge(main); break;
+    case 'news': renderNews(main); break;
+    case 'tips': renderTips(main); break;
+    case 'settings': renderSettings(main); break;
+  }
+}
+
+/* ===== Dashboard ===== */
+function renderDashboard(el) {
+  const data = store.data;
+  const totalMembers = data.members.length;
+  const activeActivities = data.activities.filter(a => a.status === 'active').length;
+  const totalPoints = data.members.reduce((s, m) => s + (m.points || 0), 0);
+  const totalKnowledge = data.knowledge.length;
+  const totalNews = data.news.length;
+  const totalTips = data.tips.length;
+
+  el.innerHTML = `
+    <div class="page-header">
+      <h2>${esc(data.settings.clubName)} - 概览</h2>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">&#128101;</div>
+        <div class="stat-value">${totalMembers}</div>
+        <div class="stat-label">社团成员</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">&#128197;</div>
+        <div class="stat-value">${activeActivities}</div>
+        <div class="stat-label">进行中活动</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">&#127942;</div>
+        <div class="stat-value">${totalPoints}</div>
+        <div class="stat-label">累计积分</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">&#128218;</div>
+        <div class="stat-value">${totalKnowledge}</div>
+        <div class="stat-label">知识库条目</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">&#128240;</div>
+        <div class="stat-value">${totalNews}</div>
+        <div class="stat-label">行业资讯</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">&#128294;</div>
+        <div class="stat-value">${totalTips}</div>
+        <div class="stat-label">摄影技巧</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="card">
+        <div class="card-title">&#128197; 近期活动</div>
+        ${renderRecentActivities(data)}
+      </div>
+      <div class="card">
+        <div class="card-title">&#127942; 积分前三</div>
+        ${renderTopMembers(data)}
+      </div>
+    </div>
+  `;
+}
+
+function renderRecentActivities(data) {
+  const recent = [...data.activities].sort((a,b) => new Date(b.date||b.createdAt) - new Date(a.date||a.createdAt)).slice(0, 5);
+  if (!recent.length) return '<div class="empty-state"><div class="text">暂无活动</div></div>';
+  return recent.map(a => `
+    <div style="padding:8px 0;border-bottom:1px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-weight:500">${esc(a.title)}</span>
+        <span class="tag ${a.status==='active'?'tag-green':a.status==='done'?'tag-blue':'tag-gray'}">${a.status==='active'?'进行中':a.status==='done'?'已结束':'已取消'}</span>
+      </div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:2px">${fmtDate(a.date)} ${esc(a.location||'')}</div>
+    </div>
+  `).join('');
+}
+
+function renderTopMembers(data) {
+  const sorted = [...data.members].sort((a,b) => (b.points||0) - (a.points||0)).slice(0, 3);
+  if (!sorted.length) return '<div class="empty-state"><div class="text">暂无成员</div></div>';
+  return sorted.map((m, i) => `
+    <div class="leaderboard-row">
+      <div class="rank rank-${i+1}">${i+1}</div>
+      <div class="lb-name">${esc(m.name)}</div>
+      <div class="lb-points">${m.points||0}</div>
+    </div>
+  `).join('');
+}
+
+/* ===== Members ===== */
+function renderMembers(el) {
+  const data = store.data;
+  let html = `
+    <div class="page-header">
+      <h2>成员管理</h2>
+      ${isAdmin() ? '<button class="btn btn-primary" onclick="openMemberModal()">&#43; 添加成员</button>' : ''}
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="搜索成员姓名..." oninput="filterMembers(this.value)">
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>姓名</th><th>角色</th><th>加入日期</th><th>积分</th><th>联系方式</th>${isAdmin()?'<th>操作</th>':''}
+        </tr></thead>
+        <tbody id="membersBody">
+          ${renderMembersRows(data.members)}
+        </tbody>
+      </table>
+    </div>
+  `;
+  el.innerHTML = html;
+}
+
+function renderMembersRows(members) {
+  if (!members.length) return '<tr><td colspan="6"><div class="empty-state"><div class="text">暂无成员，点击"添加成员"开始</div></div></td></tr>';
+  return members.map(m => `
+    <tr>
+      <td style="font-weight:500">${esc(m.name)}</td>
+      <td><span class="tag ${m.role==='core'?'tag-amber':'tag-gray'}">${m.role==='core'?'核心成员':'普通成员'}</span></td>
+      <td>${fmtDate(m.joinDate)}</td>
+      <td style="font-weight:600;color:var(--accent)">${m.points||0}</td>
+      <td>${esc(m.contact||'-')}</td>
+      ${isAdmin() ? `<td>
+        <button class="btn btn-sm" onclick="openMemberModal(${m.id})">编辑</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteMember(${m.id})">删除</button>
+      </td>` : ''}
+    </tr>
+  `).join('');
+}
+
+function filterMembers(keyword) {
+  const data = store.data;
+  const filtered = data.members.filter(m => m.name.toLowerCase().includes(keyword.toLowerCase()));
+  $('membersBody').innerHTML = renderMembersRows(filtered);
+}
+
+function openMemberModal(id) {
+  const data = store.data;
+  const m = id ? data.members.find(x => x.id === id) : null;
+  $('modalContent').innerHTML = `
+    <h3>${m ? '编辑成员' : '添加成员'}</h3>
+    <div class="form-group">
+      <label>姓名</label>
+      <input type="text" id="mName" value="${m?esc(m.name):''}" placeholder="成员姓名">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>角色</label>
+        <select id="mRole">
+          <option value="member" ${m&&m.role==='member'?'selected':''}>普通成员</option>
+          <option value="core" ${m&&m.role==='core'?'selected':''}>核心成员</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>加入日期</label>
+        <input type="date" id="mJoinDate" value="${m?fmtDate(m.joinDate):fmtDate(new Date())}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>联系方式（微信/手机）</label>
+      <input type="text" id="mContact" value="${m?esc(m.contact||''):''}" placeholder="选填">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary" onclick="saveMember(${id||0})">保存</button>
+    </div>
+  `;
+  $('modalOverlay').classList.add('active');
+}
+
+async function saveMember(id) {
+  const name = $('mName').value.trim();
+  if (!name) { showToast('请输入姓名', true); return; }
+  const role = $('mRole').value;
+  const joinDate = $('mJoinDate').value;
+  const contact = $('mContact').value.trim();
+  try {
+    if (id) {
+      await API.updateMember(id, { name, role, join_date: joinDate, contact });
+    } else {
+      await API.createMember({ name, role, join_date: joinDate, contact });
+    }
+    await store.loadMembers();
+    closeModal();
+    renderPage('members');
+    showToast(id ? '成员已更新' : '成员已添加');
+  } catch(e) {
+    showToast(e.message, true);
+  }
+}
+
+async function deleteMember(id) {
+  if (!confirm('确认删除该成员？相关积分记录也会清除。')) return;
+  try {
+    await API.deleteMember(id);
+    await store.loadMembers();
+    renderPage('members');
+    showToast('成员已删除');
+  } catch(e) {
+    showToast(e.message, true);
+  }
+}
+
+/* ===== Points ===== */
+function renderPoints(el) {
+  const data = store.data;
+  const sorted = [...data.members].sort((a,b) => (b.points||0) - (a.points||0));
+  let html = `
+    <div class="page-header">
+      <h2>积分排行</h2>
+      ${isAdmin() ? '<button class="btn btn-primary" onclick="openPointsModal()">&#43; 积分变动</button>' : ''}
+    </div>
+  `;
+  if (!sorted.length) {
+    html += '<div class="empty-state"><div class="icon">&#127942;</div><div class="text">暂无成员数据</div></div>';
+  } else {
+    html += '<div class="table-wrap"><table><thead><tr><th>排名</th><th>姓名</th><th>角色</th><th>积分</th>';
+    if (isAdmin()) html += '<th>操作</th>';
+    html += '</tr></thead><tbody>';
+    sorted.forEach((m, i) => {
+      html += `<tr>
+        <td><div class="rank rank-${i<3?(i+1):'other'}" style="display:inline-flex">${i+1}</div></td>
+        <td style="font-weight:500">${esc(m.name)}</td>
+        <td><span class="tag ${m.role==='core'?'tag-amber':'tag-gray'}">${m.role==='core'?'核心':'普通'}</span></td>
+        <td style="font-weight:700;color:var(--accent);font-size:16px">${m.points||0}</td>
+        ${isAdmin() ? `<td><button class="btn btn-sm" onclick="openPointsHistory(${m.id})">记录</button></td>` : ''}
+      </tr>`;
+    });
+    html += '</tbody></table></div>';
+  }
+  el.innerHTML = html;
+}
+
+function openPointsModal() {
+  const data = store.data;
+  if (!data.members.length) { showToast('请先添加成员', true); return; }
+  const options = data.members.map(m => `<option value="${m.id}">${esc(m.name)} (当前${m.points||0}分)</option>`).join('');
+  $('modalContent').innerHTML = `
+    <h3>积分变动</h3>
+    <div class="form-group">
+      <label>成员</label>
+      <select id="pMember">${options}</select>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>变动类型</label>
+        <select id="pType">
+          <option value="add">增加 (+)</option>
+          <option value="deduct">扣减 (-)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>分值</label>
+        <input type="number" id="pValue" value="1" min="1" style="width:100%">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>原因 / 关联活动</label>
+      <input type="text" id="pReason" placeholder="如：参加外拍活动、投稿被选登等">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary" onclick="savePoints()">确认</button>
+    </div>
+  `;
+  $('modalOverlay').classList.add('active');
+}
+
+async function savePoints() {
+  const memberId = parseInt($('pMember').value);
+  const type = $('pType').value;
+  const value = parseInt($('pValue').value);
+  const reason = $('pReason').value.trim() || '手动调整';
+  if (!value || value <= 0) { showToast('分值必须大于0', true); return; }
+  const delta = type === 'add' ? value : -value;
+  try {
+    await API.adjustPoints(memberId, delta, reason);
+    await store.loadMembers();
+    closeModal();
+    renderPage('points');
+    showToast('积分已更新');
+  } catch(e) {
+    showToast(e.message, true);
+  }
+}
+
+async function openPointsHistory(memberId) {
+  const data = store.data;
+  const m = data.members.find(x => x.id === memberId);
+  if (!m) return;
+  let history = [];
+  try {
+    history = await API.getPointsHistory(memberId);
+  } catch(e) { /* ignore */ }
+  $('modalContent').innerHTML = `
+    <h3>${esc(m.name)} - 积分记录</h3>
+    <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">当前积分: <span style="font-weight:700;color:var(--accent);font-size:18px">${m.points||0}</span></div>
+    ${history.length ? history.map(h => `
+      <div class="points-history-item">
+        <div>
+          <div>${esc(h.reason)}</div>
+          <div style="font-size:11px;color:var(--text-muted)">${fmtDateTime(h.created_at)}</div>
+        </div>
+        <div class="points-delta ${h.delta>0?'positive':'negative'}">${h.delta>0?'+':''}${h.delta}</div>
+      </div>
+    `).join('') : '<div class="empty-state"><div class="text">暂无积分变动记录</div></div>'}
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">关闭</button>
+    </div>
+  `;
+  $('modalOverlay').classList.add('active');
+}
+
+/* ===== Activities ===== */
+function renderActivities(el) {
+  const data = store.data;
+  let html = `
+    <div class="page-header">
+      <h2>活动与任务</h2>
+      ${isAdmin() ? '<button class="btn btn-primary" onclick="openActivityModal()">&#43; 发布活动</button>' : ''}
+    </div>
+    <div class="filter-tabs">
+      <div class="filter-tab active" onclick="filterActivities('all', this)">全部</div>
+      <div class="filter-tab" onclick="filterActivities('active', this)">进行中</div>
+      <div class="filter-tab" onclick="filterActivities('done', this)">已结束</div>
+      <div class="filter-tab" onclick="filterActivities('cancelled', this)">已取消</div>
+    </div>
+    <div class="content-list" id="activitiesList">
+      ${renderActivitiesList(data.activities, 'all')}
+    </div>
+  `;
+  el.innerHTML = html;
+}
+
+let activityFilter = 'all';
+function filterActivities(status, btn) {
+  activityFilter = status;
+  document.querySelectorAll('.filter-tabs .filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const data = store.data;
+  $('activitiesList').innerHTML = renderActivitiesList(data.activities, status);
+}
+
+function renderActivitiesList(activities, filter) {
+  let list = activities;
+  if (filter !== 'all') list = activities.filter(a => a.status === filter);
+  list = [...list].sort((a,b) => new Date(b.date||b.createdAt) - new Date(a.date||a.createdAt));
+  if (!list.length) return '<div class="empty-state"><div class="icon">&#128197;</div><div class="text">暂无活动</div></div>';
+  return list.map(a => {
+    const tasks = a.tasks || [];
+    const doneTasks = tasks.filter(t => t.status === 'done').length;
+    const statusMap = { active: ['进行中','tag-green'], done: ['已结束','tag-blue'], cancelled: ['已取消','tag-gray'] };
+    const [statusText, statusClass] = statusMap[a.status] || ['未知','tag-gray'];
+    return `
+      <div class="content-item">
+        <div class="item-header">
+          <div>
+            <div class="item-title">${esc(a.title)}</div>
+            <div class="item-meta">
+              <span>&#128197; ${fmtDate(a.date)}</span>
+              ${a.location ? `<span>&#128205; ${esc(a.location)}</span>` : ''}
+              <span class="tag ${statusClass}">${statusText}</span>
+              ${tasks.length ? `<span>&#9745; ${doneTasks}/${tasks.length} 任务完成</span>` : ''}
+            </div>
+          </div>
+          <div class="item-actions">
+            <button class="btn btn-sm" onclick="viewActivity(${a.id})">详情</button>
+            ${isAdmin() ? `
+              <button class="btn btn-sm" onclick="openActivityModal(${a.id})">编辑</button>
+              <button class="btn btn-sm btn-danger" onclick="deleteActivity(${a.id})">删除</button>
+            ` : ''}
+          </div>
+        </div>
+        ${a.description ? `<div class="item-body">${esc(a.description)}</div>` : ''}
+        ${tasks.length ? `<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">任务清单</div>
+          ${tasks.map(t => {
+            const ts = t.status==='done'?'<span class="status-dot done"></span>已完成':t.status==='pending'?'<span class="status-dot pending"></span>待处理':'<span class="status-dot active"></span>进行中';
+            return `<div style="font-size:12px;padding:3px 0;display:flex;justify-content:space-between">
+              <span>${esc(t.title)} ${t.assignee?'- '+esc(t.assignee):''}</span>
+              <span style="color:var(--text-muted)">${ts} ${t.points?`(${t.points}分)`:''}</span>
+            </div>`;
+          }).join('')}
+        </div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function openActivityModal(id) {
+  const data = store.data;
+  const a = id ? data.activities.find(x => x.id === id) : null;
+  const tasks = a ? (a.tasks || []) : [];
+  $('modalContent').innerHTML = `
+    <h3>${a ? '编辑活动' : '发布活动'}</h3>
+    <div class="form-group">
+      <label>活动名称</label>
+      <input type="text" id="aTitle" value="${a?esc(a.title):''}" placeholder="如：秋季外拍活动">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>日期</label>
+        <input type="date" id="aDate" value="${a?fmtDate(a.date):fmtDate(new Date())}">
+      </div>
+      <div class="form-group">
+        <label>地点</label>
+        <input type="text" id="aLocation" value="${a?esc(a.location||''):''}" placeholder="活动地点">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>状态</label>
+      <select id="aStatus">
+        <option value="active" ${a&&a.status==='active'?'selected':''}>进行中</option>
+        <option value="done" ${a&&a.status==='done'?'selected':''}>已结束</option>
+        <option value="cancelled" ${a&&a.status==='cancelled'?'selected':''}>已取消</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>活动描述</label>
+      <textarea id="aDesc" placeholder="活动内容、要求、注意事项等">${a?esc(a.description||''):''}</textarea>
+    </div>
+    <div class="form-group">
+      <label>任务清单</label>
+      <div id="taskList">${tasks.map((t,i) => renderTaskRow(t,i)).join('')}</div>
+      <button class="btn btn-sm" style="margin-top:8px" onclick="addTaskRow()">&#43; 添加任务</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary" onclick="saveActivity(${id||0})">保存</button>
+    </div>
+  `;
+  $('modalOverlay').classList.add('active');
+}
+
+function renderTaskRow(t, i) {
+  return `<div class="form-row" id="taskRow${i}" style="margin-bottom:6px;align-items:flex-end">
+    <div class="form-group" style="flex:2">
+      <input type="text" placeholder="任务名称" value="${esc(t.title||'')}" id="taskTitle${i}">
+    </div>
+    <div class="form-group" style="flex:1">
+      <input type="text" placeholder="负责人" value="${esc(t.assignee||'')}" id="taskAssignee${i}">
+    </div>
+    <div class="form-group" style="flex:0 0 70px">
+      <input type="number" placeholder="积分" value="${t.points||''}" id="taskPoints${i}" style="width:100%">
+    </div>
+    <div class="form-group" style="flex:0 0 100px">
+      <select id="taskStatus${i}">
+        <option value="pending" ${t.status==='pending'?'selected':''}>待处理</option>
+        <option value="active" ${t.status==='active'?'selected':''}>进行中</option>
+        <option value="done" ${t.status==='done'?'selected':''}>已完成</option>
+      </select>
+    </div>
+    <button class="btn btn-sm btn-danger" style="flex:0 0 auto;margin-bottom:16px" onclick="document.getElementById('taskRow${i}').remove()">删</button>
+  </div>`;
+}
+
+let taskCounter = 100;
+function addTaskRow() {
+  const i = taskCounter++;
+  const div = document.createElement('div');
+  div.innerHTML = renderTaskRow({}, i);
+  $('taskList').appendChild(div.firstChild);
+}
+
+async function saveActivity(id) {
+  const title = $('aTitle').value.trim();
+  if (!title) { showToast('请输入活动名称', true); return; }
+  const date = $('aDate').value;
+  const location = $('aLocation').value.trim();
+  const status = $('aStatus').value;
+  const description = $('aDesc').value.trim();
+  const tasks = [];
+  const taskRows = document.querySelectorAll('[id^="taskRow"]');
+  taskRows.forEach(row => {
+    const idx = row.id.replace('taskRow','');
+    const tTitle = row.querySelector(`#taskTitle${idx}`);
+    if (tTitle && tTitle.value.trim()) {
+      tasks.push({
+        title: tTitle.value.trim(),
+        assignee: row.querySelector(`#taskAssignee${idx}`)?.value.trim() || '',
+        points: parseInt(row.querySelector(`#taskPoints${idx}`)?.value) || 0,
+        status: row.querySelector(`#taskStatus${idx}`)?.value || 'pending'
+      });
+    }
+  });
+  try {
+    if (id) {
+      await API.updateActivity(id, { title, date, location, status, description, tasks });
+    } else {
+      await API.createActivity({ title, date, location, status, description, tasks });
+    }
+    await store.loadActivities();
+    closeModal();
+    renderPage('activities');
+    showToast(id ? '活动已更新' : '活动已发布');
+  } catch(e) {
+    showToast(e.message, true);
+  }
+}
+
+async function deleteActivity(id) {
+  if (!confirm('确认删除该活动？')) return;
+  try {
+    await API.deleteActivity(id);
+    await store.loadActivities();
+    renderPage('activities');
+    showToast('活动已删除');
+  } catch(e) {
+    showToast(e.message, true);
+  }
+}
+
+function viewActivity(id) {
+  const data = store.data;
+  const a = data.activities.find(x => x.id === id);
+  if (!a) return;
+  const tasks = a.tasks || [];
+  const statusMap = { active: ['进行中','tag-green'], done: ['已结束','tag-blue'], cancelled: ['已取消','tag-gray'] };
+  const [st, sc] = statusMap[a.status] || ['未知','tag-gray'];
+  $('modalContent').innerHTML = `
+    <h3>${esc(a.title)}</h3>
+    <div class="detail-meta">
+      <span>&#128197; ${fmtDate(a.date)}</span>
+      ${a.location ? `<span>&#128205; ${esc(a.location)}</span>` : ''}
+      <span class="tag ${sc}">${st}</span>
+    </div>
+    ${a.description ? `<div class="detail-body">${esc(a.description)}</div>` : ''}
+    ${tasks.length ? `<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+      <div style="font-weight:600;margin-bottom:8px">任务清单</div>
+      ${tasks.map(t => `<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;display:flex;justify-content:space-between">
+        <span>${esc(t.title)} ${t.assignee?'- '+esc(t.assignee):''}</span>
+        <span style="color:var(--text-muted)">${t.status==='done'?'已完成':t.status==='active'?'进行中':'待处理'} ${t.points?`(${t.points}分)`:''}</span>
+      </div>`).join('')}
+    </div>` : ''}
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">关闭</button>
+    </div>
+  `;
+  $('modalOverlay').classList.add('active');
+}
+
+/* ===== Knowledge Base ===== */
+function renderKnowledge(el) {
+  const data = store.data;
+  const categories = [...new Set(data.knowledge.map(k => k.category).filter(Boolean))];
+  let html = `
+    <div class="page-header">
+      <h2>知识库</h2>
+      ${isAdmin() ? '<button class="btn btn-primary" onclick="openKnowledgeModal()">&#43; 添加条目</button>' : ''}
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="搜索标题或内容..." value="${esc(state.search.knowledge)}" oninput="state.search.knowledge=this.value;renderKnowledgeList()">
+      <select onchange="state.filter.knowledge=this.value;renderKnowledgeList()">
+        <option value="all" ${state.filter.knowledge==='all'?'selected':''}>全部分类</option>
+        ${categories.map(c => `<option value="${esc(c)}" ${state.filter.knowledge===c?'selected':''}>${esc(c)}</option>`).join('')}
+      </select>
+    </div>
+    <div class="content-list" id="knowledgeList">
+      ${renderKnowledgeListInner(data)}
+    </div>
+  `;
+  el.innerHTML = html;
+}
+
+function renderKnowledgeList() {
+  const data = store.data;
+  $('knowledgeList').innerHTML = renderKnowledgeListInner(data);
+}
+
+function renderKnowledgeListInner(data) {
+  let list = data.knowledge;
+  if (state.filter.knowledge !== 'all') list = list.filter(k => k.category === state.filter.knowledge);
+  if (state.search.knowledge) {
+    const kw = state.search.knowledge.toLowerCase();
+    list = list.filter(k => (k.title||'').toLowerCase().includes(kw) || (k.content||'').toLowerCase().includes(kw));
+  }
+  list = [...list].sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+  if (!list.length) return '<div class="empty-state"><div class="icon">&#128218;</div><div class="text">暂无知识条目</div></div>';
+  return list.map(k => `
+    <div class="content-item">
+      <div class="item-header">
+        <div>
+          <div class="item-title">${esc(k.title)}</div>
+          <div class="item-meta">
+            ${k.category ? `<span class="tag tag-blue">${esc(k.category)}</span>` : ''}
+            ${k.tags ? `<span>&#127991; ${esc(k.tags)}</span>` : ''}
+            <span>&#128197; ${fmtDate(k.createdAt)}</span>
+          </div>
+        </div>
+        <div class="item-actions">
+          <button class="btn btn-sm" onclick="viewKnowledge(${k.id})">查看</button>
+          ${isAdmin() ? `
+            <button class="btn btn-sm" onclick="openKnowledgeModal(${k.id})">编辑</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteKnowledge(${k.id})">删除</button>
+          ` : ''}
+        </div>
+      </div>
+      <div class="item-body">${esc((k.content||'').substring(0,120))}${(k.content||'').length>120?'...':''}</div>
+    </div>
+  `).join('');
+}
+
+function openKnowledgeModal(id) {
+  const data = store.data;
+  const k = id ? data.knowledge.find(x => x.id === id) : null;
+  const categories = [...new Set(data.knowledge.map(x => x.category).filter(Boolean))];
+  $('modalContent').innerHTML = `
+    <h3>${k ? '编辑知识条目' : '添加知识条目'}</h3>
+    <div class="form-group">
+      <label>标题</label>
+      <input type="text" id="kTitle" value="${k?esc(k.title):''}" placeholder="知识标题">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>分类</label>
+        <input type="text" id="kCategory" value="${k?esc(k.category||''):''}" placeholder="如：构图技巧、后期教程" list="catList">
+        <datalist id="catList">${categories.map(c => `<option value="${esc(c)}">`).join('')}</datalist>
+      </div>
+      <div class="form-group">
+        <label>标签</label>
+        <input type="text" id="kTags" value="${k?esc(k.tags||''):''}" placeholder="逗号分隔，如：人像,自然光">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>内容</label>
+      <textarea id="kContent" style="min-height:200px" placeholder="知识内容，支持多行文本">${k?esc(k.content||''):''}</textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary" onclick="saveKnowledge(${id||0})">保存</button>
+    </div>
+  `;
+  $('modalOverlay').classList.add('active');
+}
+
+async function saveKnowledge(id) {
+  const title = $('kTitle').value.trim();
+  if (!title) { showToast('请输入标题', true); return; }
+  const category = $('kCategory').value.trim();
+  const tags = $('kTags').value.trim();
+  const content = $('kContent').value.trim();
+  try {
+    if (id) {
+      await API.updateKnowledge(id, { title, category, tags, content });
+    } else {
+      await API.createKnowledge({ title, category, tags, content });
+    }
+    await store.loadKnowledge();
+    closeModal();
+    renderPage('knowledge');
+    showToast(id ? '条目已更新' : '条目已添加');
+  } catch(e) {
+    showToast(e.message, true);
+  }
+}
+
+function viewKnowledge(id) {
+  const data = store.data;
+  const k = data.knowledge.find(x => x.id === id);
+  if (!k) return;
+  $('modalContent').innerHTML = `
+    <h3>${esc(k.title)}</h3>
+    <div class="detail-meta">
+      ${k.category ? `<span class="tag tag-blue">${esc(k.category)}</span>` : ''}
+      ${k.tags ? `<span>&#127991; ${esc(k.tags)}</span>` : ''}
+      <span>&#128197; ${fmtDate(k.createdAt)}</span>
+    </div>
+    <div class="detail-body">${esc(k.content||'')}</div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">关闭</button>
+    </div>
+  `;
+  $('modalOverlay').classList.add('active');
+}
+
+async function deleteKnowledge(id) {
+  if (!confirm('确认删除该知识条目？')) return;
+  try {
+    await API.deleteKnowledge(id);
+    await store.loadKnowledge();
+    renderPage('knowledge');
+    showToast('条目已删除');
+  } catch(e) {
+    showToast(e.message, true);
+  }
+}
+
+/* ===== News ===== */
+function renderNews(el) {
+  const data = store.data;
+  const categories = [...new Set(data.news.map(n => n.category).filter(Boolean))];
+  let html = `
+    <div class="page-header">
+      <h2>行业资讯</h2>
+      ${isAdmin() ? '<button class="btn btn-primary" onclick="openNewsModal()">&#43; 发布资讯</button>' : ''}
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="搜索资讯..." value="${esc(state.search.news)}" oninput="state.search.news=this.value;renderNewsList()">
+      <select onchange="state.filter.news=this.value;renderNewsList()">
+        <option value="all" ${state.filter.news==='all'?'selected':''}>全部分类</option>
+        ${categories.map(c => `<option value="${esc(c)}" ${state.filter.news===c?'selected':''}>${esc(c)}</option>`).join('')}
+      </select>
+    </div>
+    <div class="content-list" id="newsList">
+      ${renderNewsListInner(data)}
+    </div>
+  `;
+  el.innerHTML = html;
+}
+
+function renderNewsList() {
+  const data = store.data;
+  $('newsList').innerHTML = renderNewsListInner(data);
+}
+
+function renderNewsListInner(data) {
+  let list = data.news;
+  if (state.filter.news !== 'all') list = list.filter(n => n.category === state.filter.news);
+  if (state.search.news) {
+    const kw = state.search.news.toLowerCase();
+    list = list.filter(n => (n.title||'').toLowerCase().includes(kw) || (n.content||'').toLowerCase().includes(kw));
+  }
+  list = [...list].sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+  if (!list.length) return '<div class="empty-state"><div class="icon">&#128240;</div><div class="text">暂无资讯</div></div>';
+  return list.map(n => `
+    <div class="content-item">
+      <div class="item-header">
+        <div>
+          <div class="item-title">${esc(n.title)}</div>
+          <div class="item-meta">
+            ${n.category ? `<span class="tag tag-amber">${esc(n.category)}</span>` : ''}
+            ${n.source ? `<span>&#128206; ${esc(n.source)}</span>` : ''}
+            <span>&#128197; ${fmtDate(n.createdAt)}</span>
+          </div>
+        </div>
+        <div class="item-actions">
+          <button class="btn btn-sm" onclick="viewNews(${n.id})">查看</button>
+          ${isAdmin() ? `
+            <button class="btn btn-sm" onclick="openNewsModal(${n.id})">编辑</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteNews(${n.id})">删除</button>
+          ` : ''}
+        </div>
+      </div>
+      <div class="item-body">${esc((n.content||'').substring(0,150))}${(n.content||'').length>150?'...':''}</div>
+      ${n.url ? `<div style="margin-top:8px"><a href="${esc(n.url)}" target="_blank" style="font-size:12px">&#128279; 查看原文</a></div>` : ''}
+    </div>
+  `).join('');
+}
+
+function openNewsModal(id) {
+  const data = store.data;
+  const n = id ? data.news.find(x => x.id === id) : null;
+  const categories = [...new Set(data.news.map(x => x.category).filter(Boolean))];
+  const presetCats = ['行业动态','器材发布','赛事信息','展览活动','政策法规'];
+  const allCats = [...new Set([...presetCats, ...categories])];
+  $('modalContent').innerHTML = `
+    <h3>${n ? '编辑资讯' : '发布资讯'}</h3>
+    <div class="form-group">
+      <label>标题</label>
+      <input type="text" id="nTitle" value="${n?esc(n.title):''}" placeholder="资讯标题">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>分类</label>
+        <select id="nCategory">
+          ${allCats.map(c => `<option value="${esc(c)}" ${n&&n.category===c?'selected':''}>${esc(c)}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>来源</label>
+        <input type="text" id="nSource" value="${n?esc(n.source||''):''}" placeholder="如：中国摄影报">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>内容</label>
+      <textarea id="nContent" style="min-height:150px" placeholder="资讯内容">${n?esc(n.content||''):''}</textarea>
+    </div>
+    <div class="form-group">
+      <label>原文链接（选填）</label>
+      <input type="text" id="nUrl" value="${n?esc(n.url||''):''}" placeholder="https://...">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary" onclick="saveNews(${id||0})">保存</button>
+    </div>
+  `;
+  $('modalOverlay').classList.add('active');
+}
+
+async function saveNews(id) {
+  const title = $('nTitle').value.trim();
+  if (!title) { showToast('请输入标题', true); return; }
+  const category = $('nCategory').value;
+  const source = $('nSource').value.trim();
+  const content = $('nContent').value.trim();
+  const url = $('nUrl').value.trim();
+  try {
+    if (id) {
+      await API.updateNews(id, { title, category, source, content, url });
+    } else {
+      await API.createNews({ title, category, source, content, url });
+    }
+    await store.loadNews();
+    closeModal();
+    renderPage('news');
+    showToast(id ? '资讯已更新' : '资讯已发布');
+  } catch(e) {
+    showToast(e.message, true);
+  }
+}
+
+function viewNews(id) {
+  const data = store.data;
+  const n = data.news.find(x => x.id === id);
+  if (!n) return;
+  $('modalContent').innerHTML = `
+    <h3>${esc(n.title)}</h3>
+    <div class="detail-meta">
+      ${n.category ? `<span class="tag tag-amber">${esc(n.category)}</span>` : ''}
+      ${n.source ? `<span>&#128206; ${esc(n.source)}</span>` : ''}
+      <span>&#128197; ${fmtDate(n.createdAt)}</span>
+    </div>
+    <div class="detail-body">${esc(n.content||'')}</div>
+    ${n.url ? `<div style="margin-top:16px"><a href="${esc(n.url)}" target="_blank">&#128279; 查看原文</a></div>` : ''}
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">关闭</button>
+    </div>
+  `;
+  $('modalOverlay').classList.add('active');
+}
+
+async function deleteNews(id) {
+  if (!confirm('确认删除该资讯？')) return;
+  try {
+    await API.deleteNews(id);
+    await store.loadNews();
+    renderPage('news');
+    showToast('资讯已删除');
+  } catch(e) {
+    showToast(e.message, true);
+  }
+}
+
+/* ===== Tips ===== */
+function renderTips(el) {
+  const data = store.data;
+  const categories = [...new Set(data.tips.map(t => t.category).filter(Boolean))];
+  let html = `
+    <div class="page-header">
+      <h2>摄影技巧</h2>
+      ${isAdmin() ? '<button class="btn btn-primary" onclick="openTipsModal()">&#43; 发布技巧</button>' : ''}
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="搜索技巧..." value="${esc(state.search.tips)}" oninput="state.search.tips=this.value;renderTipsList()">
+      <select onchange="state.filter.tips=this.value;renderTipsList()">
+        <option value="all" ${state.filter.tips==='all'?'selected':''}>全部分类</option>
+        ${categories.map(c => `<option value="${esc(c)}" ${state.filter.tips===c?'selected':''}>${esc(c)}</option>`).join('')}
+      </select>
+    </div>
+    <div class="content-list" id="tipsList">
+      ${renderTipsListInner(data)}
+    </div>
+  `;
+  el.innerHTML = html;
+}
+
+function renderTipsList() {
+  const data = store.data;
+  $('tipsList').innerHTML = renderTipsListInner(data);
+}
+
+function renderTipsListInner(data) {
+  let list = data.tips;
+  if (state.filter.tips !== 'all') list = list.filter(t => t.category === state.filter.tips);
+  if (state.search.tips) {
+    const kw = state.search.tips.toLowerCase();
+    list = list.filter(t => (t.title||'').toLowerCase().includes(kw) || (t.content||'').toLowerCase().includes(kw));
+  }
+  list = [...list].sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+  if (!list.length) return '<div class="empty-state"><div class="icon">&#128294;</div><div class="text">暂无技巧</div></div>';
+  return list.map(t => `
+    <div class="content-item">
+      <div class="item-header">
+        <div>
+          <div class="item-title">${esc(t.title)}</div>
+          <div class="item-meta">
+            ${t.category ? `<span class="tag tag-green">${esc(t.category)}</span>` : ''}
+            <span>&#128197; ${fmtDate(t.createdAt)}</span>
+          </div>
+        </div>
+        <div class="item-actions">
+          <button class="btn btn-sm" onclick="viewTips(${t.id})">查看</button>
+          ${isAdmin() ? `
+            <button class="btn btn-sm" onclick="openTipsModal(${t.id})">编辑</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteTips(${t.id})">删除</button>
+          ` : ''}
+        </div>
+      </div>
+      <div class="item-body">${esc((t.content||'').substring(0,150))}${(t.content||'').length>150?'...':''}</div>
+    </div>
+  `).join('');
+}
+
+function openTipsModal(id) {
+  const data = store.data;
+  const t = id ? data.tips.find(x => x.id === id) : null;
+  const presetCats = ['构图技巧','曝光控制','人像摄影','风光摄影','后期修图','器材使用','手机摄影'];
+  const existingCats = [...new Set(data.tips.map(x => x.category).filter(Boolean))];
+  const allCats = [...new Set([...presetCats, ...existingCats])];
+  $('modalContent').innerHTML = `
+    <h3>${t ? '编辑技巧' : '发布技巧'}</h3>
+    <div class="form-group">
+      <label>标题</label>
+      <input type="text" id="tTitle" value="${t?esc(t.title):''}" placeholder="技巧标题">
+    </div>
+    <div class="form-group">
+      <label>分类</label>
+      <select id="tCategory">
+        ${allCats.map(c => `<option value="${esc(c)}" ${t&&t.category===c?'selected':''}>${esc(c)}</option>`).join('')}
+      </select>
+    </div>
+    <div class="form-group">
+      <label>内容</label>
+      <textarea id="tContent" style="min-height:200px" placeholder="技巧内容，支持多行文本">${t?esc(t.content||''):''}</textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">取消</button>
+      <button class="btn btn-primary" onclick="saveTips(${id||0})">保存</button>
+    </div>
+  `;
+  $('modalOverlay').classList.add('active');
+}
+
+async function saveTips(id) {
+  const title = $('tTitle').value.trim();
+  if (!title) { showToast('请输入标题', true); return; }
+  const category = $('tCategory').value;
+  const content = $('tContent').value.trim();
+  try {
+    if (id) {
+      await API.updateTips(id, { title, category, content });
+    } else {
+      await API.createTips({ title, category, content });
+    }
+    await store.loadTips();
+    closeModal();
+    renderPage('tips');
+    showToast(id ? '技巧已更新' : '技巧已发布');
+  } catch(e) {
+    showToast(e.message, true);
+  }
+}
+
+function viewTips(id) {
+  const data = store.data;
+  const t = data.tips.find(x => x.id === id);
+  if (!t) return;
+  $('modalContent').innerHTML = `
+    <h3>${esc(t.title)}</h3>
+    <div class="detail-meta">
+      ${t.category ? `<span class="tag tag-green">${esc(t.category)}</span>` : ''}
+      <span>&#128197; ${fmtDate(t.createdAt)}</span>
+    </div>
+    <div class="detail-body">${esc(t.content||'')}</div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">关闭</button>
+    </div>
+  `;
+  $('modalOverlay').classList.add('active');
+}
+
+async function deleteTips(id) {
+  if (!confirm('确认删除该技巧？')) return;
+  try {
+    await API.deleteTips(id);
+    await store.loadTips();
+    renderPage('tips');
+    showToast('技巧已删除');
+  } catch(e) {
+    showToast(e.message, true);
+  }
+}
+
+/* ===== Settings ===== */
+async function renderSettings(el) {
+  let s = store.data.settings;
+  // Fetch full settings (with admin credentials) if admin
+  if (isAdmin()) {
+    try {
+      const full = await API.getFullSettings();
+      s = normalizeSettings(full);
+      store.data.settings = s;
+    } catch(e) { /* use cached */ }
+  }
+  el.innerHTML = `
+    <div class="page-header">
+      <h2>系统设置</h2>
+    </div>
+    <div class="card">
+      <div class="card-title">管理员账号</div>
+      <div class="form-group">
+        <label>管理员账号</label>
+        <input type="text" id="setAdminUser" value="${esc(s.adminUser)}">
+      </div>
+      <div class="form-group">
+        <label>管理密码</label>
+        <input type="text" id="setAdminPass" value="${esc(s.adminPass)}">
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">访客邀请码</div>
+      <div class="form-group">
+        <label>邀请码（微信好友凭此码进入浏览）</label>
+        <input type="text" id="setGuestCode" value="${esc(s.guestCode)}">
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">社团信息</div>
+      <div class="form-group">
+        <label>社团名称</label>
+        <input type="text" id="setClubName" value="${esc(s.clubName)}">
+      </div>
+      <div class="form-group">
+        <label>社团简介</label>
+        <input type="text" id="setClubDesc" value="${esc(s.clubDesc)}">
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">GitHub 云端同步</div>
+      <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">配置 GitHub 仓库实现多设备数据共享。访客无需 Token，仅管理员写入需要 Token。</div>
+      <div class="form-group">
+        <label>GitHub 用户名</label>
+        <input type="text" id="setGhOwner" value="${esc(ghCfg().owner || '')}" placeholder="如 your-name">
+      </div>
+      <div class="form-group">
+        <label>仓库名</label>
+        <input type="text" id="setGhRepo" value="${esc(ghCfg().repo || '')}" placeholder="如 photo-club-data">
+      </div>
+      <div class="form-group">
+        <label>分支名</label>
+        <input type="text" id="setGhBranch" value="${esc(ghCfg().branch || 'main')}" placeholder="如 main">
+      </div>
+      <div class="form-group">
+        <label>Personal Access Token（仅管理员需要）</label>
+        <input type="password" id="setGhToken" value="${esc(ghCfg().token || '')}" placeholder="ghp_...">
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="saveGithubConfig()">保存配置</button>
+        <button class="btn btn-primary" onclick="syncFromCloud()">立即同步</button>
+        <button class="btn btn-primary" onclick="generateShareFile()">生成共享文件</button>
+      </div>
+      <div id="syncStatus" style="font-size:12px;color:var(--text-secondary);margin-top:8px"></div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-primary" onclick="saveSettings()">保存设置</button>
+    </div>
+  `;
+}
+
+async function saveSettings() {
+  const adminUser = $('setAdminUser').value.trim();
+  const adminPass = $('setAdminPass').value.trim();
+  const guestCode = $('setGuestCode').value.trim();
+  const clubName = $('setClubName').value.trim();
+  const clubDesc = $('setClubDesc').value.trim();
+  if (!adminUser || !adminPass || !guestCode) { showToast('账号、密码、邀请码不能为空', true); return; }
+  try {
+    await API.updateSettings({
+      admin_user: adminUser, admin_pass: adminPass, guest_code: guestCode,
+      club_name: clubName || '光影社', club_desc: clubDesc || ''
+    });
+    store.data.settings = { adminUser, adminPass, guestCode, clubName: clubName || '光影社', clubDesc: clubDesc || '' };
+    showToast('设置已保存');
+  } catch(e) {
+    showToast(e.message, true);
+  }
+}
+
+function saveGithubConfig() {
+  const owner = $('setGhOwner').value.trim();
+  const repo = $('setGhRepo').value.trim();
+  const branch = $('setGhBranch').value.trim();
+  const token = $('setGhToken').value.trim();
+  if (!owner || !repo || !branch) { showToast('用户名、仓库名、分支不能为空', true); return; }
+  let existing = {};
+  try { existing = JSON.parse(localStorage.getItem('photoClubGithub') || '{}'); } catch(e) {}
+  const finalToken = token || existing.token || '';
+  localStorage.setItem('photoClubGithub', JSON.stringify({ owner, repo, branch, token: finalToken }));
+  API._remoteSha = null;
+  showToast('GitHub 配置已保存，正在同步...');
+  API._syncFromRemote().then(() => {
+    if (state.role) {
+      store.loadAll().then(() => renderPage(state.currentPage));
+    }
+    updateSyncStatus();
+  }).catch(() => {
+    showToast('同步失败，请检查配置或网络', true);
+  });
+}
+
+function syncFromCloud() {
+  showToast('正在从云端同步...');
+  API._syncFromRemote().then((changed) => {
+    showToast(changed ? '同步完成，数据已更新' : '同步完成，数据无变化');
+    if (state.role) {
+      store.loadAll().then(() => renderPage(state.currentPage));
+    }
+    updateSyncStatus();
+  }).catch(() => {
+    showToast('同步失败，请检查配置或网络', true);
+  });
+}
+
+function updateSyncStatus() {
+  const el = $('syncStatus');
+  if (!el) return;
+  if (API._lastSync) {
+    const time = new Date(API._lastSync).toLocaleTimeString();
+    el.textContent = '上次同步: ' + time + (API._isConfigured() ? '' : '（未配置）');
+  } else {
+    el.textContent = API._isConfigured() ? '等待首次同步...' : '未配置 GitHub';
+  }
+}
+
+function generateShareFile() {
+  try {
+    let html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+    const cfg = ghCfg();
+    if (!cfg.owner || !cfg.repo || !cfg.branch) { showToast('请先保存 GitHub 配置', true); return; }
+    const cloudConfig = JSON.stringify({ owner: cfg.owner, repo: cfg.repo, branch: cfg.branch });
+    html = html.replace('const CLOUD_CONFIG = {"owner":"kaka666-88","repo":"photo-club-data","branch":"main"};', 'const CLOUD_CONFIG = ' + cloudConfig + ';');
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = '光影社-共享版.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('共享文件已生成下载');
+  } catch(e) {
+    showToast('生成失败: ' + e.message, true);
+  }
+}
+
+/* ===== Modal ===== */
+function closeModal() {
+  $('modalOverlay').classList.remove('active');
+}
+$('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+/* ===== Auto Login (restore session) ===== */
+async function tryRestoreSession() {
+  if (!API.token) return false;
+  const session = (API._data.sessions || {})[API.token];
+  if (!session) {
+    API.token = "";
+    localStorage.removeItem("photoClubToken");
+    return false;
+  }
+  state.role = session.role;
+  state.user = session.user;
+  await store.loadAll();
+  enterApp();
+  return true;
+}
+
+/* ===== Init ===== */
+(async function init() {
+  API._init();
+  await API._syncFromRemote();
+  API.startPolling();
+  setInterval(() => { updateSyncStatus(); }, 30000);
+  const restored = await tryRestoreSession();
+  if (!restored) {
+    try {
+      const s = await API.getPublicSettings();
+      store.data.settings = normalizeSettings(s);
+    } catch(e) { /* cloud not configured, show login anyway */ }
+  }
+})();
+
+</script>
+</body>
+</html>
