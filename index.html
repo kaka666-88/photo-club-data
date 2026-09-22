@@ -662,6 +662,7 @@ function ghCfg() {
     c.owner = c.owner || CLOUD_CONFIG.owner;
     c.repo = c.repo || CLOUD_CONFIG.repo;
     c.branch = c.branch || CLOUD_CONFIG.branch;
+    c.token = c.token || CLOUD_CONFIG.token || '';
   }
   return c;
 }
@@ -2311,13 +2312,21 @@ async function saveSettings() {
   const clubName = $('setClubName').value.trim();
   const clubDesc = $('setClubDesc').value.trim();
   if (!adminUser || !adminPass) { showToast('账号和密码不能为空', true); return; }
-  // 确保 GitHub token 存在（从设置页 token 输入框取，或保留已有的）
+  // 确保 GitHub token 存在
   const ghToken = $('setGhToken').value.trim();
   if (ghToken) {
     let gh = {};
     try { gh = JSON.parse(localStorage.getItem('photoClubGithub') || '{}'); } catch(e) {}
     gh.token = ghToken;
     localStorage.setItem('photoClubGithub', JSON.stringify(gh));
+  } else {
+    // 检查 localStorage 是否已有 token
+    let gh = {};
+    try { gh = JSON.parse(localStorage.getItem('photoClubGithub') || '{}'); } catch(e) {}
+    if (!gh.token) {
+      showToast('请先在下方 GitHub 配置区填入 Token，否则修改无法同步到云端', true);
+      return;
+    }
   }
   try {
     await API.updateSettings({
@@ -2328,12 +2337,16 @@ async function saveSettings() {
     // 同步更新记住的管理员密码
     localStorage.setItem('photoClubAdminUser', adminUser);
     localStorage.setItem('photoClubAdminPass', adminPass);
-    // 强制立即同步到云端（不等2秒防抖）
-    API._writeRemote().then((ok) => {
-      showToast(ok ? '设置已保存并同步到云端' : '设置已保存（云端同步失败，请检查Token）', !ok);
-    }).catch(() => {
-      showToast('设置已保存（云端同步失败）', true);
-    });
+    // 如果有 token，强制立即同步到云端
+    if (API._hasToken()) {
+      API._writeRemote().then((ok) => {
+        showToast(ok ? '设置已保存并同步到云端' : '设置已保存（云端同步失败，请检查Token）', !ok);
+      }).catch(() => {
+        showToast('设置已保存（云端同步失败）', true);
+      });
+    } else {
+      showToast('设置已保存（仅本地，未配置Token无法同步云端）', true);
+    }
   } catch(e) {
     showToast(e.message, true);
   }
