@@ -723,8 +723,8 @@ const API = {
     if (!this._isConfigured() || !this._hasToken()) return false;
     const cfg = this._getGithubConfig();
     try {
-      let sha = this._remoteSha;
-      if (!sha) {
+      let sha = null;
+      {
         try {
           const getResp = await fetch(this._apiUrl(), {
             headers: { 'Authorization': 'Bearer ' + cfg.token, 'Accept': 'application/vnd.github.v3+json' }
@@ -2314,6 +2314,9 @@ async function saveSettings() {
       club_name: clubName || '光影社', club_desc: clubDesc || ''
     });
     store.data.settings = { adminUser, adminPass, guestCode, clubName: clubName || '光影社', clubDesc: clubDesc || '' };
+    // 同步更新记住的管理员密码
+    localStorage.setItem('photoClubAdminUser', adminUser);
+    localStorage.setItem('photoClubAdminPass', adminPass);
     showToast('设置已保存');
   } catch(e) {
     showToast(e.message, true);
