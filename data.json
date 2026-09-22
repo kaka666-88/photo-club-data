@@ -8,33 +8,6 @@
   },
   "members": [
     {
-      "id": 11,
-      "name": "李小强",
-      "role": "member",
-      "join_date": "2026-09-22",
-      "contact": "",
-      "points": 0,
-      "created_at": "2026-09-22T10:31:23.874Z"
-    },
-    {
-      "id": 10,
-      "name": "柴津玲",
-      "role": "member",
-      "join_date": "2026-09-22",
-      "contact": "",
-      "points": 0,
-      "created_at": "2026-09-22T10:31:15.694Z"
-    },
-    {
-      "id": 9,
-      "name": "吴巍",
-      "role": "core",
-      "join_date": "2026-09-22",
-      "contact": "",
-      "points": 0,
-      "created_at": "2026-09-22T10:31:04.976Z"
-    },
-    {
       "id": 1,
       "name": "社长",
       "role": "core",
