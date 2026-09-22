@@ -1428,6 +1428,13 @@ async function saveMember(id) {
     } else {
       await API.createMember({ name, role, join_date: joinDate, contact });
     }
+    // 强制立即同步到云端
+    if (API._hasToken()) {
+      const ok = await API._writeRemote();
+      if (!ok) {
+        showToast('成员已添加到本地，但云端同步失败，请检查 Token', true);
+      }
+    }
     await store.loadMembers();
     closeModal();
     renderPage('members');
@@ -1441,6 +1448,10 @@ async function deleteMember(id) {
   if (!confirm('确认删除该成员？相关积分记录也会清除。')) return;
   try {
     await API.deleteMember(id);
+    if (API._hasToken()) {
+      const ok = await API._writeRemote();
+      if (!ok) showToast('本地已删除，但云端同步失败', true);
+    }
     await store.loadMembers();
     renderPage('members');
     showToast('成员已删除');
@@ -1737,6 +1748,7 @@ async function saveActivity(id) {
     } else {
       await API.createActivity({ title, date, location, status, description, tasks });
     }
+    if (API._hasToken()) await API._writeRemote();
     await store.loadActivities();
     closeModal();
     renderPage('activities');
@@ -1893,6 +1905,7 @@ async function saveKnowledge(id) {
     } else {
       await API.createKnowledge({ title, category, tags, content });
     }
+    if (API._hasToken()) await API._writeRemote();
     await store.loadKnowledge();
     closeModal();
     renderPage('knowledge');
@@ -2048,6 +2061,7 @@ async function saveNews(id) {
     } else {
       await API.createNews({ title, category, source, content, url });
     }
+    if (API._hasToken()) await API._writeRemote();
     await store.loadNews();
     closeModal();
     renderPage('news');
@@ -2190,6 +2204,7 @@ async function saveTips(id) {
     } else {
       await API.createTips({ title, category, content });
     }
+    if (API._hasToken()) await API._writeRemote();
     await store.loadTips();
     closeModal();
     renderPage('tips');
