@@ -424,6 +424,16 @@ var PHOTOS = [
 ];
 
 var HERO_PHOTO = PHOTOS[18].url;
+
+function photoUrl(url){
+  try{
+    var parts=url.split('/photos/');
+    if(parts.length===2){
+      return parts[0]+'/photos/'+encodeURIComponent(parts[1]);
+    }
+  }catch(e){}
+  return url;
+}
 var BG_PHOTOS = [PHOTOS[0].url, PHOTOS[18].url, PHOTOS[24].url, PHOTOS[35].url];
 
 // ===== Seed Data =====
@@ -871,7 +881,7 @@ function renderPage(page){
 
 function renderHome(){
   // Hero image
-  $('heroImg').src=HERO_PHOTO;
+  $('heroImg').src=photoUrl(HERO_PHOTO);
   // Stats
   var members=API.getMembers();
   var acts=API.getActivities();
@@ -887,7 +897,7 @@ function renderHome(){
   var html='';
   for(var i=0;i<Math.min(4,PHOTOS.length);i++){
     var p=PHOTOS[i];
-    html+='<div class="photo-card" onclick="openPhoto('+i+')"><img src="'+p.url+'" alt="'+esc(p.title)+'" loading="lazy"><div class="photo-info"><div class="title">'+esc(p.title)+'</div><div class="author">'+esc(p.author)+'</div></div></div>';
+    html+='<div class="photo-card" onclick="openPhoto('+i+')"><img src="'+photoUrl(p.url)+'" alt="'+esc(p.title)+'" loading="lazy"><div class="photo-info"><div class="title">'+esc(p.title)+'</div><div class="author">'+esc(p.author)+'</div></div></div>';
   }
   $('homeGallery').innerHTML=html;
   // Activities preview
@@ -902,7 +912,7 @@ function renderHome(){
 
 function renderGallery(){
   var html=PHOTOS.map(function(p,i){
-    return '<div class="photo-card" onclick="openPhoto('+i+')"><img src="'+p.url+'" alt="'+esc(p.title)+'" loading="lazy"><div class="photo-info"><div class="title">'+esc(p.title)+'</div><div class="author">'+esc(p.author)+'</div></div></div>';
+    return '<div class="photo-card" onclick="openPhoto('+i+')"><img src="'+photoUrl(p.url)+'" alt="'+esc(p.title)+'" loading="lazy"><div class="photo-info"><div class="title">'+esc(p.title)+'</div><div class="author">'+esc(p.author)+'</div></div></div>';
   }).join('');
   $('fullGallery').innerHTML=html;
 }
@@ -1188,7 +1198,7 @@ function openPhoto(idx){
   if(!p)return;
   openModal('<div style="text-align:center">'+
     '<span class="modal-close" onclick="closeModal()" style="position:absolute;top:8px;right:12px;font-size:24px;color:#fff;z-index:10">&times;</span>'+
-    '<img src="'+p.url+'" style="max-width:100%;border-radius:8px" alt="'+esc(p.title)+'">'+
+    '<img src="'+photoUrl(p.url)+'" style="max-width:100%;border-radius:8px" alt="'+esc(p.title)+'">'+
     '<div style="margin-top:12px"><div style="font-size:16px;font-weight:600">'+esc(p.title)+'</div>'+
     '<div style="font-size:13px;color:var(--gray)">\u6444\u5f70\uff1a'+esc(p.author)+'</div></div>'+
     '</div>');
@@ -1196,7 +1206,7 @@ function openPhoto(idx){
 
 // ===== Init =====
 API._init();
-$('loginBg').style.backgroundImage='url('+HERO_PHOTO+')';
+$('loginBg').style.backgroundImage='url("'+photoUrl(HERO_PHOTO)+'")';
 (function(){
   try{
     API._syncFromRemote().then(function(){
