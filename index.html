@@ -563,7 +563,7 @@ function renderActivities(el){
   if(isAdmin()){
     html+='<div style="padding:0 16px 12px"><button class="set-btn btn-gold" onclick="showAddActivity()">+ 发布活动</button></div>';
   }
-  html+='<div class="filter-bar"><div class="chip active" onclick="filterActs('all',this)">全部</div><div class="chip" onclick="filterActs('active',this)">进行中</div><div class="chip" onclick="filterActs('done',this)">已结束</div></div>';
+  html+=`<div class="filter-bar"><div class="chip active" onclick="filterActs('all',this)">全部</div><div class="chip" onclick="filterActs('active',this)">进行中</div><div class="chip" onclick="filterActs('done',this)">已结束</div></div>`;
   const filtered=acts; // Show all by default
   if(!filtered.length){html+='<div class="empty">暂无活动</div>';el.innerHTML=html;return;}
   html+=filtered.map(a=>`
