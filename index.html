@@ -938,6 +938,8 @@ function renderHeroSlides(){
   // Show admin controls
   if(isAdmin()){
     $('heroAdmin').style.display = 'flex';
+  }else{
+    $('heroAdmin').style.display = 'none';
   }
 }
 
