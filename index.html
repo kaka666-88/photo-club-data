@@ -2,773 +2,1165 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>留声光影 - 摄影社团</title>
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{
-  --bg:#0a0a0b;--bg2:#141416;--bg3:#1c1c1f;--card:#1e1e22;--hover:#26262b;
-  --border:#2a2a30;--text:#e8e8e8;--text2:#9a9aa0;--muted:#5c5c62;
-  --gold:#c8a44e;--gold2:#d8b45e;--gold-dim:rgba(200,164,78,0.12);
-  --green:#5cb85c;--red:#d4574e;--blue:#4a90d9;
-  --r:8px;--rs:5px;--safe-b:env(safe-area-inset-bottom,0px);
-  --font:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
-}
-html{font-size:16px;-webkit-text-size-adjust:100%}
-body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;overflow-x:hidden}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--gold:#c9a96e;--gold-d:#a88950;--dark:#1a1a1a;--dark2:#252525;--dark3:#333;--gray:#888;--bg:#0e0e0e;--card:#1e1e1e;--text:#e0e0e0;--radius:12px}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
 a{color:var(--gold);text-decoration:none}
-button{font-family:var(--font);cursor:pointer;border:none;border-radius:var(--rs);background:none;color:inherit}
-input,textarea,select{font-family:var(--font);background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:var(--rs);outline:none;width:100%;font-size:15px;box-sizing:border-box}
-input:focus,textarea:focus{border-color:var(--gold)}
-textarea{resize:vertical;min-height:80px}
-::-webkit-scrollbar{width:0;height:0}
+img{display:block;max-width:100%}
+button{cursor:pointer;font-family:inherit;border:none;outline:none}
+input,textarea,select{font-family:inherit;outline:none}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--dark3);border-radius:3px}
 
-/* ===== Login ===== */
-#loginScreen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:1000}
-#loginScreen .bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(0.35) blur(2px);transform:scale(1.1)}
-#loginScreen .overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,11,0.6) 0%,rgba(10,10,11,0.9) 100%)}
-.login-card{position:relative;z-index:1;width:90%;max-width:360px;text-align:center}
-.login-card .logo{width:72px;height:72px;margin:0 auto 16px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--bg);font-weight:bold}
-.login-card h1{font-size:24px;font-weight:600;margin-bottom:6px;color:var(--text)}
-.login-card .sub{font-size:14px;color:var(--text2);margin-bottom:28px}
-.login-btn{width:100%;padding:13px;border-radius:var(--rs);font-size:15px;font-weight:500;margin-top:10px;transition:opacity .2s}
-.btn-gold{background:var(--gold);color:var(--bg)}
-.btn-gold:active{opacity:0.85}
-.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text2)}
-.btn-ghost:active{background:var(--hover)}
-.login-hint{margin-top:16px;font-size:12px;color:var(--muted)}
+/* ===== Layout ===== */
+#app{min-height:100vh;padding-bottom:60px}
+.page{display:none;animation:fade .3s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-/* ===== App Layout ===== */
-#app{display:none;flex-direction:column;min-height:100vh}
-#app.show{display:flex}
-.page-bg{position:fixed;inset:0;z-index:0;background-size:cover;background-position:center;opacity:0.12;transition:background-image .6s ease}
-.main-content{position:relative;z-index:1;flex:1;padding-bottom:70px;padding-bottom:calc(70px + var(--safe-b));min-height:100vh}
+/* ===== Top Bar ===== */
+.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(14,14,14,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--dark3)}
+.topbar .logo{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:700;color:var(--gold)}
+.topbar .logo span{font-size:12px;color:var(--gray);font-weight:400}
+.topbar .actions{display:flex;gap:8px;align-items:center}
+.topbar .avatar{width:32px;height:32px;border-radius:50%;background:var(--dark3);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--gold);border:1px solid var(--gold)}
 
-/* ===== Bottom Tab Bar ===== */
-.tab-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;background:rgba(20,20,22,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);padding-bottom:var(--safe-b)}
-.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 0 6px;gap:2px;color:var(--muted);transition:color .2s;font-size:11px}
-.tab-item .icon{font-size:22px;line-height:1}
-.tab-item.active{color:var(--gold)}
-.tab-item:active{color:var(--text2)}
+/* ===== Bottom Nav ===== */
+.bottomnav{position:fixed;bottom:0;left:0;right:0;z-index:200;display:flex;background:rgba(14,14,14,.95);backdrop-filter:blur(10px);border-top:1px solid var(--dark3);height:56px}
+.bottomnav .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--gray);font-size:10px;cursor:pointer;transition:color .2s;-webkit-user-select:none;user-select:none}
+.bottomnav .nav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2}
+.bottomnav .nav-item.active{color:var(--gold)}
 
-/* ===== Page Header ===== */
-.page-head{padding:16px 16px 8px}
-.page-head h2{font-size:20px;font-weight:600}
-.page-head .desc{font-size:13px;color:var(--text2);margin-top:2px}
-
-/* ===== Hero Section (Home) ===== */
-.hero{position:relative;width:100%;height:42vh;min-height:280px;overflow:hidden}
+/* ===== Home ===== */
+.hero{position:relative;height:42vh;min-height:280px;overflow:hidden}
 .hero img{width:100%;height:100%;object-fit:cover}
-.hero .grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,11,0.1) 0%,rgba(10,10,11,0.5) 50%,rgba(10,10,11,0.95) 100%)}
-.hero .info{position:absolute;bottom:20px;left:16px;right:16px}
-.hero .info h1{font-size:26px;font-weight:700;text-shadow:0 2px 8px rgba(0,0,0,0.5)}
-.hero .info p{font-size:13px;color:var(--text2);margin-top:4px}
-.hero .photo-credit{position:absolute;top:12px;right:12px;font-size:11px;color:rgba(255,255,255,0.5);background:rgba(0,0,0,0.4);padding:3px 8px;border-radius:10px}
+.hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.3) 0%,rgba(0,0,0,.7) 100%)}
+.hero .hero-text{position:absolute;bottom:24px;left:0;right:0;text-align:center;z-index:2}
+.hero .hero-text h1{font-size:28px;color:#fff;letter-spacing:2px;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.hero .hero-text p{font-size:13px;color:rgba(255,255,255,.8);margin-top:4px}
+.section{padding:16px}
+.section-title{font-size:18px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.section-title .more{font-size:12px;color:var(--gray);font-weight:400}
+.stats-row{display:flex;gap:8px;margin-bottom:16px}
+.stat-card{flex:1;background:var(--card);border-radius:var(--radius);padding:12px 8px;text-align:center}
+.stat-card .num{font-size:22px;font-weight:700;color:var(--gold)}
+.stat-card .label{font-size:11px;color:var(--gray);margin-top:2px}
 
-/* ===== Stats Grid ===== */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:16px}
-.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 8px;text-align:center}
-.stat .num{font-size:22px;font-weight:700;color:var(--gold)}
-.stat .lbl{font-size:11px;color:var(--text2);margin-top:2px}
+/* ===== Gallery ===== */
+.gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.gallery-grid .photo-card{position:relative;border-radius:var(--radius);overflow:hidden;aspect-ratio:1;cursor:pointer}
+.gallery-grid .photo-card img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.gallery-grid .photo-card:hover img{transform:scale(1.05)}
+.gallery-grid .photo-card .photo-info{position:absolute;bottom:0;left:0;right:0;padding:8px;background:linear-gradient(to top,rgba(0,0,0,.8),transparent);font-size:11px}
+.gallery-grid .photo-card .photo-info .title{color:#fff;font-weight:600}
+.gallery-grid .photo-card .photo-info .author{color:rgba(255,255,255,.6)}
+@media(min-width:768px){.gallery-grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1024px){.gallery-grid{grid-template-columns:repeat(4,1fr)}}
 
 /* ===== Cards ===== */
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin:0 16px 12px}
-.card-title{font-size:15px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
-.card-title .more{font-size:12px;color:var(--gold);font-weight:400}
+.card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.card .card-title{font-size:15px;font-weight:600;margin-bottom:6px}
+.card .card-desc{font-size:13px;color:var(--gray);line-height:1.5}
+.card .card-meta{display:flex;gap:12px;font-size:11px;color:var(--gray);margin-top:8px;flex-wrap:wrap}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;background:rgba(201,169,110,.15);color:var(--gold)}
+.tag.status-active{background:rgba(76,175,80,.15);color:#4caf50}
+.tag.status-done{background:rgba(158,158,158,.15);color:#9e9e9e}
+.tag.status-upcoming{background:rgba(255,152,0,.15);color:#ff9800}
 
-/* ===== Activity Cards ===== */
-.act-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin:0 16px 12px;overflow:hidden}
-.act-card .act-head{padding:14px}
-.act-card .act-title{font-size:16px;font-weight:600}
-.act-card .act-meta{font-size:12px;color:var(--text2);margin-top:4px;display:flex;flex-wrap:wrap;gap:8px}
-.act-card .act-meta span{display:inline-flex;align-items:center;gap:3px}
-.act-card .act-body{padding:0 14px 14px;font-size:13px;color:var(--text2);line-height:1.7}
-.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500}
-.tag-green{background:rgba(92,184,92,0.15);color:var(--green)}
-.tag-blue{background:rgba(74,144,217,0.15);color:var(--blue)}
-.tag-gray{background:rgba(90,90,98,0.2);color:var(--muted)}
-.tag-gold{background:var(--gold-dim);color:var(--gold)}
+/* ===== Members ===== */
+.member-list{display:flex;flex-direction:column;gap:8px}
+.member-item{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:var(--radius);padding:12px}
+.member-item .m-avatar{width:40px;height:40px;border-radius:50%;background:var(--dark3);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--gold);flex-shrink:0}
+.member-item .m-info{flex:1}
+.member-item .m-info .m-name{font-size:14px;font-weight:600}
+.member-item .m-info .m-role{font-size:11px;color:var(--gray)}
+.member-item .m-points{font-size:16px;font-weight:700;color:var(--gold)}
+.member-item .m-del{color:#f44336;font-size:12px;cursor:pointer;padding:4px 8px}
 
-/* ===== Photo Gallery ===== */
-.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:16px}
-.gallery .item{position:relative;aspect-ratio:1;border-radius:var(--r);overflow:hidden;background:var(--bg2)}
-.gallery .item img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
-.gallery .item:active img{transform:scale(0.97)}
-.gallery .item .caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.8));padding:20px 8px 6px;font-size:11px}
-.gallery .item .caption .t{font-weight:600;color:#fff}
-.gallery .item .caption .a{color:rgba(255,255,255,0.7);font-size:10px}
-.gallery .item.full{grid-column:span 2;aspect-ratio:2}
+/* ===== Points ===== */
+.points-table{width:100%;border-collapse:collapse;font-size:13px}
+.points-table th{text-align:left;padding:8px;color:var(--gray);font-weight:400;border-bottom:1px solid var(--dark3)}
+.points-table td{padding:8px;border-bottom:1px solid var(--dark2)}
 
-/* ===== Members List ===== */
-.mem-list{padding:16px}
-.mem-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
-.mem-item:last-child{border-bottom:none}
-.mem-avatar{width:40px;height:40px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--bg);font-weight:600;flex-shrink:0}
-.mem-info{flex:1;min-width:0}
-.mem-info .name{font-size:14px;font-weight:500}
-.mem-info .role{font-size:12px;color:var(--text2)}
-.mem-points{font-size:14px;font-weight:600;color:var(--gold)}
+/* ===== Tips ===== */
+.tip-item{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.tip-item .tip-cat{font-size:11px;color:var(--gold);margin-bottom:4px}
+.tip-item .tip-title{font-size:15px;font-weight:600;margin-bottom:6px}
+.tip-item .tip-content{font-size:13px;color:#bbb;line-height:1.6;white-space:pre-line}
+.tip-item .tip-tags{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
 
-/* ===== Leaderboard ===== */
-.lb{padding:16px}
-.lb-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
-.lb-rank{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;background:var(--bg3);color:var(--text2)}
-.lb-rank.r1{background:linear-gradient(135deg,#FFD700,#FFA500);color:#000}
-.lb-rank.r2{background:linear-gradient(135deg,#C0C0C0,#A0A0A0);color:#000}
-.lb-rank.r3{background:linear-gradient(135deg,#CD7F32,#B87333);color:#000}
-.lb-name{flex:1;font-size:14px;font-weight:500}
-.lb-score{font-size:16px;font-weight:700;color:var(--gold)}
+/* ===== News ===== */
+.news-item{background:var(--card);border-radius:var(--radius);padding:14px;margin-bottom:10px;display:flex;gap:12px}
+.news-item .news-text{flex:1}
+.news-item .news-title{font-size:14px;font-weight:600;margin-bottom:4px}
+.news-item .news-summary{font-size:12px;color:var(--gray);line-height:1.5}
+.news-item .news-meta{font-size:10px;color:var(--gray);margin-top:6px}
+.news-item .news-thumb{width:80px;height:80px;border-radius:8px;object-fit:cover;flex-shrink:0}
 
-/* ===== Knowledge/News/Tips List ===== */
-.kn-item{padding:14px 0;border-bottom:1px solid var(--border)}
-.kn-item:last-child{border-bottom:none}
-.kn-item .kn-cat{font-size:11px;color:var(--gold);margin-bottom:4px}
-.kn-item .kn-title{font-size:15px;font-weight:500;line-height:1.4}
-.kn-item .kn-preview{font-size:13px;color:var(--text2);margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.kn-item .kn-date{font-size:11px;color:var(--muted);margin-top:4px}
+/* ===== Activities ===== */
+.act-item{background:var(--card);border-radius:var(--radius);overflow:hidden;margin-bottom:12px}
+.act-item .act-banner{height:140px;object-fit:cover;width:100%}
+.act-item .act-body{padding:14px}
+.act-item .act-title{font-size:15px;font-weight:600;margin-bottom:4px}
+.act-item .act-desc{font-size:13px;color:var(--gray);line-height:1.5}
+.act-item .act-meta{display:flex;gap:12px;font-size:11px;color:var(--gray);margin-top:8px;flex-wrap:wrap}
 
-/* ===== About Page ===== */
-.about-section{padding:16px}
-.about-section h3{font-size:16px;font-weight:600;margin-bottom:8px;color:var(--gold)}
-.about-section p{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:12px}
-.about-section .quote{font-size:18px;font-weight:600;text-align:center;color:var(--gold);margin:20px 0;padding:0 20px;line-height:1.6}
-.about-section .feishu-link{display:block;text-align:center;margin-top:16px;padding:12px;border:1px solid var(--gold);border-radius:var(--r);color:var(--gold);font-size:14px}
+/* ===== Forms ===== */
+.form-group{margin-bottom:12px}
+.form-group label{display:block;font-size:12px;color:var(--gray);margin-bottom:4px}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:var(--dark2);border:1px solid var(--dark3);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px}
+.form-group textarea{resize:vertical;min-height:80px}
+.btn{padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;transition:opacity .2s}
+.btn:active{opacity:.7}
+.btn-gold{background:var(--gold);color:#1a1a1a}
+.btn-ghost{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+.btn-red{background:transparent;color:#f44336;border:1px solid #f44336}
+.btn-sm{padding:6px 12px;font-size:12px}
 
-/* ===== Settings ===== */
-.set-group{padding:16px}
-.set-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
-.set-row:last-child{border-bottom:none}
-.set-row label{font-size:14px;color:var(--text2);flex-shrink:0;width:80px}
-.set-row input{flex:1;max-width:200px}
-.set-btn{width:100%;padding:12px;border-radius:var(--rs);font-size:14px;font-weight:500;margin-top:8px}
-
-/* ===== Modal / Bottom Sheet ===== */
-.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.6);display:none;align-items:flex-end;justify-content:center}
+/* ===== Modal ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:300;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-overlay.show{display:flex}
-.modal{background:var(--bg2);border-radius:16px 16px 0 0;width:100%;max-width:500px;max-height:80vh;overflow-y:auto;padding:20px 20px calc(20px + var(--safe-b));animation:slideUp .3s ease}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal h3{font-size:18px;font-weight:600;margin-bottom:16px}
-.modal .close{position:absolute;top:16px;right:16px;font-size:24px;color:var(--muted);background:none;border:none}
-.modal .form-row{margin-bottom:12px}
-.modal .form-row label{display:block;font-size:13px;color:var(--text2);margin-bottom:4px}
-.modal .form-actions{display:flex;gap:10px;margin-top:16px}
-.modal .form-actions button{flex:1;padding:12px;border-radius:var(--rs);font-size:14px;font-weight:500}
+.modal{background:var(--card);border-radius:var(--radius);padding:20px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto}
+.modal h3{font-size:18px;margin-bottom:16px}
+.modal .modal-close{float:right;font-size:22px;color:var(--gray);cursor:pointer;line-height:1}
+
+/* ===== Login ===== */
+.login-screen{position:fixed;inset:0;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.login-bg{position:absolute;inset:0;background-size:cover;background-position:center}
+.login-bg::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.65)}
+.login-box{position:relative;z-index:2;text-align:center;padding:24px;width:100%;max-width:360px}
+.login-box h1{font-size:32px;color:var(--gold);letter-spacing:3px;margin-bottom:4px}
+.login-box .sub{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:32px}
+.login-box .form-group{text-align:left}
+.login-box .form-group input{background:rgba(255,255,255,.08);border:1px solid rgba(201,169,110,.3);color:#fff}
+.login-box .form-group input::placeholder{color:rgba(255,255,255,.4)}
+.login-box .btn-gold{width:100%;margin-top:8px}
+.login-box .guest-btn{margin-top:12px;color:rgba(255,255,255,.5);font-size:13px;cursor:pointer}
+.login-box .err-msg{color:#ff6b6b;font-size:12px;margin-top:8px;min-height:16px}
 
 /* ===== Toast ===== */
-#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:300;padding:10px 20px;border-radius:20px;font-size:13px;background:var(--gold);color:var(--bg);font-weight:500;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90%;text-align:center}
-#toast.show{opacity:1}
-#toast.err{background:var(--red);color:#fff}
+.toast{position:fixed;top:60px;left:50%;transform:translateX(-50%);background:var(--dark3);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:90%;text-align:center}
+.toast.show{opacity:1}
+.toast.error{background:#d32f2f}
 
-/* ===== Empty State ===== */
-.empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px}
+/* ===== Empty ===== */
+.empty{text-align:center;padding:40px 16px;color:var(--gray);font-size:14px}
 
-/* ===== Photo Viewer ===== */
-#photoViewer{position:fixed;inset:0;z-index:250;background:rgba(0,0,0,0.95);display:none;align-items:center;justify-content:center;flex-direction:column}
-#photoViewer.show{display:flex}
-#photoViewer img{max-width:100%;max-height:85vh;object-fit:contain}
-#photoViewer .pv-info{color:var(--text2);font-size:14px;margin-top:12px;text-align:center}
-#photoViewer .pv-close{position:absolute;top:16px;right:16px;font-size:28px;color:var(--text2);background:none;border:none}
+/* ===== Settings ===== */
+.set-section{margin-bottom:16px}
+.set-section h4{font-size:13px;color:var(--gray);margin-bottom:8px;padding:0 4px}
+.set-item{display:flex;align-items:center;justify-content:space-between;background:var(--card);border-radius:8px;padding:12px 16px;margin-bottom:6px}
+.set-item .set-label{font-size:14px}
+.set-item .set-value{font-size:13px;color:var(--gray)}
 
-/* ===== Misc ===== */
-.section-gap{height:8px}
-.filter-bar{display:flex;gap:8px;padding:0 16px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.filter-bar .chip{padding:6px 14px;border-radius:16px;font-size:12px;white-space:nowrap;border:1px solid var(--border);color:var(--text2);background:var(--bg2)}
-.filter-bar .chip.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold)}
+/* ===== Upload ===== */
+.upload-area{border:2px dashed var(--dark3);border-radius:8px;padding:24px;text-align:center;color:var(--gray);font-size:13px;cursor:pointer;transition:border-color .2s}
+.upload-area:hover{border-color:var(--gold)}
+.upload-area input{display:none}
+
+/* ===== Responsive ===== */
+@media(min-width:768px){
+  .section{max-width:800px;margin:0 auto}
+  .topbar{max-width:800px;margin:0 auto;left:0;right:0}
+  .bottomnav{max-width:800px;margin:0 auto;left:50%;transform:translateX(-50%);width:100%}
+}
+@media(min-width:1024px){
+  .section{max-width:1000px}
+  .topbar{max-width:1000px}
+  .bottomnav{max-width:1000px}
+}
 </style>
 </head>
 <body>
 
 <!-- ===== Login Screen ===== -->
-<div id="loginScreen">
-  <div class="bg" id="loginBg"></div>
-  <div class="overlay"></div>
-  <div class="login-card">
-    <div class="logo">&#128247;</div>
+<div id="loginScreen" class="login-screen">
+  <div id="loginBg" class="login-bg"></div>
+  <div class="login-box">
     <h1>留声光影</h1>
     <p class="sub">用镜头记录世界，用光影讲述故事</p>
-    <div id="adminLoginForm" style="margin-top:20px;text-align:left">
-      <input id="loginUser" placeholder="账号" style="margin-bottom:8px" autocomplete="username">
-      <input id="loginPass" type="password" placeholder="密码" autocomplete="current-password">
-      <button class="login-btn btn-gold" onclick="adminLoginSubmit()">管理员登录</button>
+    <div class="form-group">
+      <input id="loginUser" placeholder="账号" autocomplete="username" style="margin-bottom:8px">
     </div>
-    <button class="login-btn btn-ghost" onclick="doGuestLogin()">访客进入</button>
-    <p class="login-hint">留声光影摄影社团 · 成员作品展示与活动管理</p>
+    <div class="form-group">
+      <input id="loginPass" type="password" placeholder="密码" autocomplete="current-password">
+    </div>
+    <div id="loginErr" class="err-msg"></div>
+    <button class="btn btn-gold" onclick="adminLoginSubmit()">管理员登录</button>
+    <div class="guest-btn" onclick="doGuestLogin()">访客浏览</div>
   </div>
 </div>
 
-<!-- ===== App ===== -->
-<div id="app">
-  <div class="page-bg" id="pageBg"></div>
-  <div class="main-content" id="mainContent"></div>
-  <nav class="tab-bar">
-    <div class="tab-item active" data-page="home" onclick="navigate('home')">
-      <span class="icon">&#127968;</span><span>首页</span>
-    </div>
-    <div class="tab-item" data-page="gallery" onclick="navigate('gallery')">
-      <span class="icon">&#128247;</span><span>作品</span>
-    </div>
-    <div class="tab-item" data-page="activities" onclick="navigate('activities')">
-      <span class="icon">&#128197;</span><span>活动</span>
-    </div>
-    <div class="tab-item" data-page="about" onclick="navigate('about')">
-      <span class="icon">&#8505;</span><span>社团</span>
-    </div>
-    <div class="tab-item" data-page="settings" onclick="navigate('settings')">
-      <span class="icon">&#9881;</span><span>我的</span>
-    </div>
-  </nav>
+<!-- ===== Main App ===== -->
+<div id="app" style="display:none">
+
+<!-- Top Bar -->
+<div class="topbar">
+  <div class="logo">留声光影 <span>摄影社团</span></div>
+  <div class="actions">
+    <div class="avatar" id="userAvatar">访</div>
+  </div>
 </div>
 
-<!-- ===== Modal ===== -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+<!-- ===== Home Page ===== -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <img id="heroImg" src="" alt="">
+    <div class="hero-text">
+      <h1>留声光影</h1>
+      <p>用镜头记录世界，用光影讲述故事</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="stats-row" id="statsRow"></div>
+    <div class="section-title">社团简介</div>
+    <div class="card" id="aboutCard"></div>
+    <div class="section-title">精选作品 <span class="more" onclick="switchPage('gallery')">查看全部 ></span></div>
+    <div class="gallery-grid" id="homeGallery"></div>
+    <div class="section-title">最新活动 <span class="more" onclick="switchPage('activities')">查看全部 ></span></div>
+    <div id="homeActivities"></div>
+    <div class="section-title">摄影资讯 <span class="more" onclick="switchPage('news')">查看全部 ></span></div>
+    <div id="homeNews"></div>
+  </div>
+</div>
+
+<!-- ===== Gallery Page ===== -->
+<div id="page-gallery" class="page">
+  <div class="section">
+    <div class="section-title">作品展示</div>
+    <div class="gallery-grid" id="fullGallery"></div>
+  </div>
+</div>
+
+<!-- ===== Members Page ===== -->
+<div id="page-members" class="page">
+  <div class="section">
+    <div class="section-title">
+      社团成员
+      <span id="addMemberBtn" style="display:none">
+        <button class="btn btn-gold btn-sm" onclick="showAddMember()">+ 添加</button>
+      </span>
+    </div>
+    <div class="member-list" id="memberList"></div>
+  </div>
+</div>
+
+<!-- ===== Points Page ===== -->
+<div id="page-points" class="page">
+  <div class="section">
+    <div class="section-title">
+      积分排行
+      <span id="uploadPointsBtn" style="display:none">
+        <button class="btn btn-gold btn-sm" onclick="showUploadPoints()">上传明细</button>
+      </span>
+    </div>
+    <div id="pointsRanking"></div>
+    <div class="section-title" style="margin-top:16px">积分明细</div>
+    <div id="pointsDetail"></div>
+  </div>
+</div>
+
+<!-- ===== Tips Page ===== -->
+<div id="page-tips" class="page">
+  <div class="section">
+    <div class="section-title">摄影技巧</div>
+    <div id="tipsList"></div>
+  </div>
+</div>
+
+<!-- ===== News Page ===== -->
+<div id="page-news" class="page">
+  <div class="section">
+    <div class="section-title">摄影资讯</div>
+    <div id="newsList"></div>
+  </div>
+</div>
+
+<!-- ===== Activities Page ===== -->
+<div id="page-activities" class="page">
+  <div class="section">
+    <div class="section-title">
+      社团活动
+      <span id="addActivityBtn" style="display:none">
+        <button class="btn btn-gold btn-sm" onclick="showAddActivity()">+ 发布</button>
+      </span>
+    </div>
+    <div id="activitiesList"></div>
+  </div>
+</div>
+
+<!-- ===== Settings Page ===== -->
+<div id="page-settings" class="page">
+  <div class="section">
+    <div class="section-title">设置</div>
+    <div class="set-section">
+      <h4>账号</h4>
+      <div class="set-item">
+        <span class="set-label">当前身份</span>
+        <span class="set-value" id="setRole">访客</span>
+      </div>
+    </div>
+    <div class="set-section" id="settingsAdmin" style="display:none">
+      <h4>管理设置</h4>
+      <div class="set-item">
+        <span class="set-label">社团名称</span>
+        <span class="set-value" id="setClubName">-</span>
+      </div>
+      <div class="set-item">
+        <span class="set-label">修改密码</span>
+        <button class="btn btn-ghost btn-sm" onclick="showChangePass()">修改</button>
+      </div>
+      <div class="set-item">
+        <span class="set-label">GitHub Token</span>
+        <button class="btn btn-ghost btn-sm" onclick="showSetToken()">设置</button>
+      </div>
+      <div class="set-item">
+        <span class="set-label">手动同步</span>
+        <button class="btn btn-ghost btn-sm" onclick="manualSync()">同步</button>
+      </div>
+    </div>
+    <div class="set-section">
+      <button class="btn btn-ghost" style="width:100%" onclick="logout()">退出登录</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<!-- ===== Bottom Nav ===== -->
+<div id="bottomNav" class="bottomnav" style="display:none">
+  <div class="nav-item active" data-page="home" onclick="switchPage('home')">
+    <svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10h4v-6h6v6h4V10"/></svg>
+    <span>首页</span>
+  </div>
+  <div class="nav-item" data-page="gallery" onclick="switchPage('gallery')">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+    <span>作品</span>
+  </div>
+  <div class="nav-item" data-page="members" onclick="switchPage('members')">
+    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    <span>成员</span>
+  </div>
+  <div class="nav-item" data-page="activities" onclick="switchPage('activities')">
+    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    <span>活动</span>
+  </div>
+  <div class="nav-item" data-page="points" onclick="switchPage('points')">
+    <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+    <span>积分</span>
+  </div>
+  <div class="nav-item" data-page="tips" onclick="switchPage('tips')">
+    <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    <span>技巧</span>
+  </div>
+  <div class="nav-item" data-page="news" onclick="switchPage('news')">
+    <svg viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2"/><path d="M4 22V4a2 2 0 0 1 2-2"/><circle cx="12" cy="12" r="2"/><path d="M12 10v8M10 12h4"/></svg>
+    <span>资讯</span>
+  </div>
+  <div class="nav-item" data-page="settings" onclick="switchPage('settings')">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    <span>我的</span>
+  </div>
+</div>
+
+<!-- ===== Modals ===== -->
+<div id="modalOverlay" class="modal-overlay">
   <div class="modal" id="modalContent"></div>
 </div>
 
-<!-- ===== Photo Viewer ===== -->
-<div id="photoViewer" onclick="closePhotoViewer(event)">
-  <button class="pv-close" onclick="closePhotoViewer()">&times;</button>
-  <img id="pvImg" src="">
-  <div class="pv-info" id="pvInfo"></div>
-</div>
-
 <!-- ===== Toast ===== -->
-<div id="toast"></div>
+<div id="toast" class="toast"></div>
 
 <script>
-// ===== Photo Data =====
-const PHOTOS = [{"title": "海景", "author": "叶蓓", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/海景_叶蓓_thumb.jpg"}, {"title": "光影黄昏", "author": "叶蓓", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/光影黄昏_叶蓓_thumb.jpg"}, {"title": "湖光山色", "author": "李小强", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/湖光山色_李小强_thumb.jpg"}, {"title": "秋日物语", "author": "李小强", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/秋日物语_李小强_thumb.jpg"}, {"title": "玉渊潭樱花", "author": "李小强", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/玉渊潭樱花_李小强_thumb.jpg"}, {"title": "颐和园", "author": "李小强", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/颐和园_李小强_thumb.jpg"}, {"title": "山里人家", "author": "柴津玲", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/山里人家_柴津玲_thumb.jpg"}, {"title": "青砖", "author": "柴津玲", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/青砖_柴津玲_thumb.jpg"}, {"title": "夕阳映彩霞", "author": "马骏", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/夕阳映彩霞_马骏_thumb.jpg"}, {"title": "烟雨长桥", "author": "王金环", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/烟雨长桥_王金环_thumb.jpg"}, {"title": "夏日山野", "author": "刘衡源", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/夏日山野_刘衡源_thumb.jpg"}, {"title": "山花特写", "author": "刘衡源", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/山花特写_刘衡源_thumb.jpg"}, {"title": "霞光满天", "author": "沈丽红", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/霞光满天_沈丽红_thumb.jpg"}, {"title": "盛放的生命", "author": "沈丽红", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/盛放的生命_沈丽红_thumb.jpg"}, {"title": "双朵春胭", "author": "沈丽红", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/双朵春胭_沈丽红_thumb.jpg"}, {"title": "街景", "author": "叶蓓", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/街景_叶蓓_thumb.jpg"}, {"title": "赤诚", "author": "叶蓓", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/赤诚_叶蓓_thumb.jpg"}, {"title": "古镇夜景", "author": "李小强", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/古镇夜景_李小强_thumb.jpg"}, {"title": "中国建筑之美", "author": "李小强", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/中国建筑之美_李小强_thumb.jpg"}, {"title": "建筑纪实", "author": "李乐薇", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/建筑纪实_李乐薇_thumb.jpg"}, {"title": "童趣", "author": "李乐薇", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/童趣_李乐薇_thumb.jpg"}, {"title": "方寸工位", "author": "李乐薇", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/方寸工位_李乐薇_thumb.jpg"}, {"title": "人物特写", "author": "李小强", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg"}, {"title": "人物特写", "author": "吕佳敏", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_吕佳敏_thumb.jpg"}, {"title": "特写", "author": "叶蓓", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/特写_叶蓓_thumb.jpg"}, {"title": "窗前", "author": "叶蓓", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/窗前_叶蓓_thumb.jpg"}, {"title": "莲花", "author": "李小强", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/莲花_李小强_thumb.jpg"}, {"title": "当下", "author": "叶蓓", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/当下_叶蓓_thumb.jpg"}, {"title": "都市之光", "author": "柴津玲", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/都市之光_柴津玲_thumb.jpg"}, {"title": "向阳而生", "author": "吴巍", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/向阳而生_吴巍_thumb.jpg"}, {"title": "吉祥如意", "author": "王征", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/吉祥如意_王征_thumb.jpg"}, {"title": "城与天空", "author": "吴巍", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/城与天空_吴巍_thumb.jpg"}, {"title": "夜色微光", "author": "吴巍", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/夜色微光_吴巍_thumb.jpg"}, {"title": "宛平城下", "author": "吴巍", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/宛平城下_吴巍_thumb.jpg"}, {"title": "研习会现场", "author": "社团", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/研习会现场_社团_thumb.jpg"}, {"title": "线下实拍", "author": "吴巍", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/线下实拍_吴巍_thumb.jpg"}, {"title": "线下实拍", "author": "李小强", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/线下实拍_李小强_thumb.jpg"}, {"title": "线下实拍", "author": "沈丽红", "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/线下实拍_沈丽红_thumb.jpg"}];
-const BG_PHOTOS = ["https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/海景_叶蓓_thumb.jpg", "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/光影黄昏_叶蓓_thumb.jpg", "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/湖光山色_李小强_thumb.jpg", "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/秋日物语_李小强_thumb.jpg", "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/玉渊潭樱花_李小强_thumb.jpg", "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/颐和园_李小强_thumb.jpg"];
-const HERO_PHOTO = "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/海景_叶蓓_thumb.jpg";
+'use strict';
 
 // ===== Cloud Config =====
-const CLOUD_CONFIG = {owner:"kaka666-88",repo:"photo-club-data",branch:"main"};
+var CLOUD_CONFIG = {owner:"kaka666-88",repo:"photo-club-data",branch:"main"};
 
-function ghCfg(){
-  let c={};
-  try{c=JSON.parse(localStorage.getItem('photoClubGithub')||'{}');}catch(e){}
-  if(CLOUD_CONFIG){
-    c.owner=c.owner||CLOUD_CONFIG.owner;
-    c.repo=c.repo||CLOUD_CONFIG.repo;
-    c.branch=c.branch||CLOUD_CONFIG.branch;
-    c.token=c.token||CLOUD_CONFIG.token||'';
-  }
-  return c;
-}
+// ===== Photos =====
+var PHOTOS = [
+  {title:"\u6d77\u666f",author:"\u53f6\u84d3",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/\u6d77\u666f_\u53f6\u84d3_thumb.jpg"},
+  {title:"\u5149\u5f71\u9ec4\u6606",author:"\u53f6\u84d3",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/\u5149\u5f71\u9ec4\u660e_\u53f6\u84d3_thumb.jpg"},
+  {title:"\u9006\u5149\u526a\u5f71",author:"\u53f6\u84d3",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/\u9006\u5149\u526a\u5f71_\u53f6\u84d3_thumb.jpg"},
+  {title:"\u5fae\u8ddd\u82b1\u5349",author:"\u53f6\u84d3",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/\u5fae\u8ddd\u82b1\u5349_\u53f6\u84d3_thumb.jpg"},
+  {title:"\u8857\u62cd\u4eba\u7269",author:"\u5434\u5d34",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/\u8857\u62cd\u4eba\u7269_\u5434\u5d34_thumb.jpg"},
+  {title:"\u53e4\u5efa\u7b51\u51e0\u4f55",author:"\u5434\u5d34",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/\u53e4\u5efa\u7b51\u51e0\u4f55_\u5434\u5d34_thumb.jpg"},
+  {title:"\u98ce\u5149\u4eba\u50cf",author:"\u5434\u5d34",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/\u98ce\u5149\u4eba\u50cf_\u5434\u5d34_thumb.jpg"},
+  {title:"\u5c71\u6c34\u95f4",author:"\u5434\u5d34",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/\u5c71\u6c34\u95f4_\u5434\u5d34_thumb.jpg"}
+];
+
+var HERO_PHOTO = PHOTOS[0].url;
+var BG_PHOTOS = [PHOTOS[0].url, PHOTOS[1].url, PHOTOS[3].url, PHOTOS[4].url];
 
 // ===== Seed Data =====
-const SEED_DATA = {"settings":{"admin_user":"admin","admin_pass":"admin666","guest_code":"PHOTO2026","club_name":"留声光影","club_desc":"用镜头记录世界，用光影讲述故事"},"sessions":{},"members":[{"id":1,"name":"留声光影","role":"core","join_date":"2026-01-01","contact":"","points":0,"created_at":"2026-01-01T00:00:00.000Z"}],"pointsHistory":[],"activities":[{"id":1,"title":"周常摄影打卡（第12周）","status":"active","date":"2026-09-14","location":"自由拍摄","description":"本周主题：秋日物语。提交1张作品即可获得3积分，优秀作品额外+5积分。","tasks":[],"created_at":"2026-09-14T00:00:00.000Z"},{"id":2,"title":"首期线下实拍活动 - 悦海书局","status":"done","date":"2026-09-14","location":"悦海书局","description":"以公司书吧为主题场景，通过线下实拍帮助社团成员提升审美水平与摄影实战技巧。参加+10积分，提交4张以上作品额外+20积分。作品将制作成明信片。","tasks":[],"created_at":"2026-09-10T00:00:00.000Z"},{"id":3,"title":"定格·讲述 留声光影研习会","status":"done","date":"2026-08-06","location":"一层会议室","description":"通过话题卡互动、作品分享等环节，提升摄影审美与实拍技巧，增进成员默契与链接。提交专题作品+10积分，参加活动并分享+10积分。","tasks":[],"created_at":"2026-08-01T00:00:00.000Z"}],"knowledge":[{"id":1,"title":"曝光三要素：光圈、快门与ISO的完整指南","category":"曝光控制","tags":"光圈,快门,ISO","content":"曝光是摄影的核心技术基础，由光圈、快门、ISO三个要素共同决定。\n\n光圈控制镜头进光孔的大小，f值越小光圈越大进光越多景深越浅。人像常用f/1.8-f/2.8虚化背景，风光常用f/8-f/11保证全景清晰。\n\n快门速度控制传感器曝光时间。快门1/500s以上凝固运动瞬间，1/60s-1/250s日常拍摄，1秒以上记录运动轨迹。手持不低于1/60秒。\n\nISO控制传感器对光的敏感度。ISO 100-200画质最干净，1600以上噪点明显。优先用低ISO。","created_at":"2026-05-19T00:00:00.000Z"},{"id":2,"title":"构图法则大全：从三分法到极简构图","category":"构图技巧","tags":"三分法,引导线,极简","content":"三分法：将重要元素放在九宫格交叉点上。人像眼睛放上1/3，地平线放上1/3或下1/3。\n\n引导线构图：利用道路、河流引导视线，低角度透视感最强。\n\n框架构图：用门窗、树枝做前景框架，增加层次感。\n\n对角线构图：主体沿对角线排列，倾斜5-15度出效果。\n\n极简构图：干净背景+单一主体，少即是多。","created_at":"2026-05-19T00:00:00.000Z"},{"id":3,"title":"人像摄影全攻略","category":"人像摄影","tags":"人像,用光,摆姿","content":"景别选择：远景交待环境，中景自然亲切，近景突出表情，特写强调细节。\n\n构图要点：眼睛放上1/3交叉点，视线方向留白2/3，避免裁切关节。\n\n用光：侧光45度立体感最强，逆光需对脸部点测光+增加0.7-1EV。阴天是天然柔光箱。\n\n摆姿：侧身30度+下巴微收显瘦显高，回眸抓拍自然有动感。","created_at":"2026-05-19T00:00:00.000Z"},{"id":4,"title":"风光摄影实战","category":"风光摄影","tags":"风光,黄金时刻","content":"黄金时刻：日出后1小时、日落前1小时，光线柔和温暖。\n蓝调时刻：日落后10-25分钟，天空深蓝+城市灯光。\n\n山景：用广角贴近前景增加深度，长焦压缩透视表现层次。\n水景：慢门1-5秒拍出丝绸质感，需三脚架+ND滤镜。\n冰雪：增加曝光补偿+0.3-1EV。","created_at":"2026-05-19T00:00:00.000Z"}],"news":[{"id":1,"title":"AI技术深度赋能影像产业：2026年核心趋势","category":"行业动态","source":"综合报道","content":"2026年影像器材行业从功能满足向体验引领跃迁。四大趋势：AI深度赋能、视频化需求爆发、本土产业链成熟、便携化一体化。AI不会取代摄影师，但会用AI的摄影师将取代不用AI的摄影师。","url":"","created_at":"2026-07-01T00:00:00.000Z"},{"id":2,"title":"富士胶片携相机新品亮相2026影像展","category":"器材发布","source":"央广网","content":"富士胶片以1046平米展台亮相P&I SHANGHAI 2026。GFX100 II等亿像素中画幅相机，X-H2S等热门无反机型集中展示。","url":"","created_at":"2026-07-29T00:00:00.000Z"}],"tips":[{"id":1,"title":"手机摄影构图五法","category":"构图技巧","content":"1.三分法：眼睛放上1/3交叉点\n2.引导线：利用道路、河流引导视线\n3.框架构图：门窗、树枝做前景\n4.对角线构图：倾斜5-15度\n5.极简构图：干净背景+单一主体","created_at":"2026-05-19T00:00:00.000Z"},{"id":2,"title":"夜景拍摄完全指南","category":"曝光控制","content":"最佳时段：日落后15-25分钟蓝调时刻。\n参数：ISO 100-200，快门1/10至2秒，三脚架必备。\n手机夜景：超级夜景模式保持静止3-5秒。\n后期：提暗不提亮，拉高阴影降低高光。","created_at":"2026-05-19T00:00:00.000Z"},{"id":3,"title":"黄金时刻与蓝调时刻","category":"风光摄影","content":"黄金时刻：日出后1小时、日落前1小时\n蓝调时刻：日落后10-25分钟\n阴天柔光：天然柔光箱，拍人像皮肤细腻\n正午硬光：避开人像，适合建筑几何和黑白","created_at":"2026-05-19T00:00:00.000Z"}]};
+var SEED_DATA = {
+  settings: {
+    admin_user: "admin",
+    admin_pass: "admin666",
+    club_name: "\u7559\u58f0\u5149\u5f71",
+    club_desc: "\u7528\u955c\u5934\u8bb0\u5f55\u4e16\u754c\uff0c\u7528\u5149\u5f71\u8bb2\u8ff0\u6545\u4e8b"
+  },
+  sessions: {},
+  members: [
+    {id:1, name:"\u5434\u5d34", role:"\u793e\u957f", points:0},
+    {id:2, name:"\u53f6\u84d3", role:"\u6838\u5fc3\u6210\u5458", points:0},
+    {id:3, name:"\u9648\u5b87", role:"\u6210\u5458", points:0}
+  ],
+  pointsHistory: [],
+  activities: [
+    {id:1, title:"9\u6708\u6708\u5e95\u7814\u4e60\u4f1a\uff1a\u5149\u5f71\u8ba1\u5212", desc:"\u672c\u671f\u7814\u4e60\u4f1a\u4e3b\u9898\u4e3a\u5149\u5f71\u8ba1\u5212\uff0c\u5305\u62ec\u81ea\u7136\u5149\u3001\u4eba\u5de5\u5149\u4e0e\u6df7\u5408\u5149\u7684\u8fd0\u7528\u3002", status:"upcoming", date:"2026-09-28", location:"\u793e\u56e2\u6d3b\u52a8\u5ba4"},
+    {id:2, title:"8\u6708\u7814\u4e60\u4f1a\u56de\u987e\uff1a\u4eba\u50cf\u6444\u5f71", desc:"\u4e0a\u6708\u7814\u4e60\u4f1a\u4e3b\u9898\u4e3a\u4eba\u50cf\u6444\u5f71\uff0c\u6210\u5458\u4eec\u5c55\u793a\u4e86\u4f18\u79c0\u4f5c\u54c1\u3002", status:"done", date:"2026-08-25", location:"\u793e\u56e2\u6d3b\u52a8\u5ba4"},
+    {id:3, title:"\u5468\u5e38\u6253\u5361\uff1a\u57ce\u5e02\u8857\u62cd", desc:"\u6bcf\u5468\u4e00\u4e2a\u4e3b\u9898\uff0c\u672c\u5468\u4e3b\u9898\u57ce\u5e02\u8857\u62cd\uff0c\u62cd\u6444\u57ce\u5e02\u751f\u6d3b\u4e2d\u7684\u51b3\u5b9a\u6027\u77ac\u95f4\u3002", status:"active", date:"2026-09-23", location:"\u5168\u57ce\u5e02"}
+  ],
+  knowledge: [
+    {id:1, title:"\u6444\u5f71\u66dd\u5149\u4e09\u8981\u7d20", content:"\u66dd\u5149\u662f\u6444\u5f71\u7684\u6838\u5fc3\u6280\u672f\u57fa\u7840\uff0c\u7531\u5149\u5708\u3001\u5feb\u95e8\u3001ISO\u4e09\u4e2a\u8981\u7d20\u5171\u540c\u51b3\u5b9a\u3002\n\n\u5149\u5708\u63a7\u5236\u955c\u5934\u8fdb\u5149\u5b54\u7684\u5927\u5c0f\uff0cf\u503c\u8d8a\u5c0f\u5149\u5708\u8d8a\u5927\u8fdb\u5149\u8d8a\u591a\u666f\u6df1\u8d8a\u6d45\u3002\u4eba\u50cf\u5e38\u7528\u5927\u5149\u5708\u865a\u5316\u80cc\u666f\u3002\n\n\u5feb\u95e8\u63a7\u5236\u611f\u5149\u65f6\u95f4\u957f\u77ed\uff0c\u9ad8\u901f\u5feb\u95e8\u51bb\u7ed3\u8fd0\u52a8\uff0c\u6162\u901f\u5feb\u95e8\u62cd\u51fa\u6d41\u4e1d\u3002\n\nISO\u63a7\u5236\u611f\u5149\u5668\u7075\u654f\u5ea6\uff0cISO\u8d8a\u9ad8\u753b\u9762\u8d8a\u4eae\u4f46\u566a\u70b9\u8d8a\u591a\u3002\u65e5\u5149\u4e0bISO100-400\uff0c\u591c\u95f4ISO1600-6400\u3002", category:"\u66dd\u5149\u63a7\u5236", tags:"\u5149\u5708,\u5feb\u95e8,ISO"},
+    {id:2, title:"\u6784\u56fe\u57fa\u672c\u6cd5\u5219", content:"\u6784\u56fe\u662f\u6444\u5f71\u7684\u89c6\u89c9\u8bed\u8a00\u3002\n\n\u4e09\u5206\u6cd5\uff1a\u5c06\u753b\u9762\u5206\u4e3a\u4e5d\u5bab\u683c\uff0c\u4e3b\u4f53\u653e\u5728\u4ea4\u53c9\u70b9\u4e0a\u3002\n\n\u5f15\u5bfc\u7ebf\uff1a\u7528\u7ebf\u6761\u3001\u9053\u8def\u3001\u6cb3\u6d41\u7b49\u5f15\u5bfc\u89c6\u7ebf\u3002\n\n\u6846\u67b6\u6784\u56fe\uff1a\u7528\u524d\u666f\u6216\u7a97\u53e3\u6846\u4f4f\u4e3b\u4f53\u3002\n\n\u5bf9\u79f0\u6784\u56fe\uff1a\u5229\u7528\u6c34\u9762\u3001\u73bb\u7483\u7b49\u521b\u9020\u5bf9\u79f0\u3002\n\n\u524d\u666f\u6784\u56fe\uff1a\u7528\u524d\u666f\u589e\u52a0\u753b\u9762\u5c42\u6b21\u611f\u3002", category:"\u6784\u56fe\u6280\u6cd5", tags:"\u4e09\u5206\u6cd5,\u5f15\u5bfc\u7ebf,\u6846\u67b6"},
+    {id:3, title:"\u5149\u7ebf\u7684\u8fd0\u7528", content:"\u5149\u7ebf\u662f\u6444\u5f71\u7684\u7075\u9b42\u3002\n\n\u9ec4\u91d1\u65f6\u523b\uff1a\u65e5\u51fa\u540e\u548c\u65e5\u843d\u524d\u4e00\u5c0f\u65f6\uff0c\u5149\u7ebf\u67d4\u548c\u8272\u6e29\u6696\u3002\n\n\u9006\u5149\u526a\u5f71\uff1a\u5f3a\u5149\u4e0b\u62cd\u526a\u5f71\uff0c\u8f6e\u5ed3\u6e05\u6670\u3002\n\n\u4fa7\u5149\uff1a\u5149\u4ece\u4fa7\u9762\u6253\u6765\uff0c\u5851\u9020\u7acb\u4f53\u611f\u3002\n\n\u9876\u5149\uff1a\u5149\u4ece\u4e0a\u65b9\u6253\u6765\uff0c\u9002\u5408\u62cd\u5efa\u7b51\u3002\n\n\u8fb1\u5149\u4e0b\u4e0d\u62cd\u4eba\u50cf\uff0c\u9002\u5408\u5efa\u7b51\u51e0\u4f55\u548c\u9ed1\u767d\u5f71\u8c03\u3002", category:"\u5149\u5f71\u6280\u6cd5", tags:"\u9ec4\u91d1\u65f6\u523b,\u9006\u5149,\u526a\u5f71"},
+    {id:4, title:"\u540e\u671f\u4fee\u56fe\u57fa\u7840", content:"\u540e\u671f\u662f\u6444\u5f71\u7684\u7b2c\u4e8c\u6b21\u521b\u4f5c\u3002\n\n\u8c03\u8272\uff1a\u8c03\u6574\u8272\u6e29\u3001\u5bf9\u6bd4\u5ea6\u3001\u9ad8\u5149\u3001\u9634\u5f71\u3002\n\n\u88c1\u526a\uff1a\u4e8c\u6b21\u6784\u56fe\uff0c\u53bb\u9664\u591a\u4f59\u5143\u7d20\u3002\n\n\u5c40\u90e8\u8c03\u6574\uff1a\u4f7f\u7528\u7b14\u5237\u5de5\u5177\u5c40\u90e8\u63d0\u4eae\u6216\u538b\u6697\u3002\n\n\u5e38\u7528\u8f6f\u4ef6\uff1aLightroom\u3001Snapseed\u3001VSCO\u3002\n\n\u5efa\u8bae\u539f\u5219\uff1a\u5148\u8c03\u6574\u5149\u5f71\uff0c\u518d\u8c03\u8272\u5f69\uff0c\u6700\u540e\u88c1\u526a\u3002", category:"\u540e\u671f\u5904\u7406", tags:"\u8c03\u8272,\u88c1\u526a,\u4fee\u56fe"}
+  ],
+  news: [],
+  tips: [
+    {id:1, title:"\u5fae\u8ddd\u6444\u5f71\u5165\u95e8", content:"\u5fae\u8ddd\u6444\u5f71\u53ef\u4ee5\u53d1\u73b0\u5fae\u89c2\u4e16\u754c\u7684\u7f8e\u3002\n\n\u955c\u5934\u9009\u62e9\uff1a\u4e13\u7528\u5fae\u8ddd\u955c\u5934\u6216\u5e26\u5fae\u8ddd\u529f\u80fd\u7684\u955c\u5934\u3002\n\n\u5149\u5708\u8bbe\u7f6e\uff1af/8-f/16\uff0c\u4fdd\u8bc1\u8db3\u591f\u666f\u6df1\u3002\n\n\u5bf9\u7126\uff1a\u624b\u52a8\u5bf9\u7126\uff0c\u5c0f\u5fc3\u5bf9\u7126\u70b9\u504f\u79fb\u3002\n\n\u5149\u7ebf\uff1a\u81ea\u7136\u5149\u6216\u67d4\u5149\u706f\uff0c\u907f\u514d\u95ea\u5149\u3002\n\n\u7a33\u5b9a\u6027\uff1a\u4f7f\u7528\u4e09\u811a\u67b6\uff0cISO\u9002\u5f53\u63d0\u9ad8\u3002", category:"\u5fae\u8ddd\u6444\u5f71", tags:"\u5fae\u8ddd,\u666f\u6df1,\u5bf9\u7126"},
+    {id:2, title:"\u624b\u673a\u6444\u5f71\u6280\u5de7", content:"\u624b\u673a\u4e5f\u80fd\u62cd\u51fa\u5927\u7247\u3002\n\n\u6e05\u7406\u955c\u5934\uff1a\u62cd\u524d\u64e6\u5e72\u51c0\u955c\u5934\u3002\n\n\u5f00\u542f\u7f51\u683c\uff1a\u5e2e\u52a9\u6784\u56fe\u548c\u5bf9\u79f0\u3002\n\n\u624b\u52a8\u8c03\u6574\u66dd\u5149\uff1a\u70b9\u51fb\u5c4f\u5e55\u5bf9\u7126\uff0c\u4e0a\u4e0b\u6ed1\u52a8\u8c03\u6574\u4eae\u5ea6\u3002\n\n\u5584\u7528HDR\uff1a\u9ad8\u5bf9\u6bd4\u573a\u666f\u4f7f\u7528HDR\u6a21\u5f0f\u3002\n\n\u540e\u671fAPP\uff1aSnapseed\u3001VSCO\u3001Lightroom\u79fb\u52a8\u7248\u3002", category:"\u624b\u673a\u6444\u5f71", tags:"\u624b\u673a,\u7f51\u683c,HDR"},
+    {id:3, title:"\u98ce\u5149\u4eba\u50cf\u8981\u70b9", content:"\u98ce\u5149\u4eba\u50cf\u662f\u6700\u53d7\u6b22\u8fce\u7684\u6444\u5f71\u9898\u6750\u3002\n\n\u65f6\u95f4\u9009\u62e9\uff1a\u9ec4\u91d1\u65f6\u523b\u6700\u4f73\uff0c\u5149\u7ebf\u67d4\u548c\u3002\n\n\u5730\u70b9\u9009\u62e9\uff1a\u80cc\u666f\u5e72\u51c0\uff0c\u907f\u514d\u6742\u4e71\u3002\n\n\u5f15\u5bfc\uff1a\u8ba9\u6a21\u7279\u81ea\u7136\u8d70\u52a8\uff0c\u6293\u62cd\u81ea\u7136\u77ac\u95f4\u3002\n\n\u6784\u56fe\uff1a\u4e09\u5206\u6cd5\u6216\u5c3d\u91cf\u4e0d\u628a\u5934\u90e8\u653e\u5728\u4e0a\u4e09\u5206\u4e4b\u4e00\u3002\n\n\u5149\u5708\uff1af/1.8-f/2.8\u865a\u5316\u80cc\u666f\u3002\n\n\u5feb\u95e8\uff1a1/200s\u4ee5\u4e0a\u51bb\u7ed3\u52a8\u4f5c\u3002", category:"\u4eba\u50cf\u6444\u5f71", tags:"\u4eba\u50cf,\u9ec4\u91d1\u65f6\u523b,\u5149\u5708"}
+  ]
+};
 
-// ===== API Layer (GitHub Sync) =====
-const API = {
-  _data:null,_nextId:1,_remoteSha:null,_pollTimer:null,_writeTimer:null,
-  _savingFromRemote:false,_skipNextSync:false,_lastSync:0,
+// ===== State =====
+var state = {
+  role: null,
+  user: null,
+  token: null,
+  currentPage: "home"
+};
 
-  _isConfigured(){const c=ghCfg();return !!(c.owner&&c.repo&&c.branch);},
-  _hasToken(){const c=ghCfg();return !!(c.token);},
-  _rawUrl(){const c=ghCfg();return 'https://raw.githubusercontent.com/'+c.owner+'/'+c.repo+'/'+c.branch+'/data.json?t='+Date.now();},
-  _apiUrl(){const c=ghCfg();return 'https://api.github.com/repos/'+c.owner+'/'+c.repo+'/contents/data.json';},
-  _encodeBase64(s){return btoa(unescape(encodeURIComponent(s)));},
+// ===== Utils =====
+function $(id){return document.getElementById(id);}
+function esc(s){if(!s)return '';var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+function showToast(msg, isErr){
+  var t=$('toast');
+  t.textContent=msg;
+  t.className='toast show'+(isErr?' error':'');
+  setTimeout(function(){t.className='toast';},3000);
+}
+function isAdmin(){return state.role==='admin';}
 
-  async _readRemote(){
+// ===== Cloud API =====
+var API = {
+  _data: null,
+  _nextId: 1,
+  _remoteSha: null,
+  _pollTimer: null,
+  _writeTimer: null,
+  _savingFromRemote: false,
+  _skipNextSync: false,
+  _lastSync: 0,
+
+  _isConfigured: function(){
+    var c=this.ghCfg();
+    return c&&c.owner&&c.repo;
+  },
+  _hasToken: function(){
+    var c=this.ghCfg();
+    return !!(c&&c.token);
+  },
+  ghCfg: function(){
+    try{var c=JSON.parse(localStorage.getItem('photoClubGithub')||'{}');return c;}catch(e){return {};}
+  },
+  _apiUrl: function(){
+    var c=this.ghCfg();
+    return 'https://api.github.com/repos/'+c.owner+'/'+c.repo+'/contents/data.json';
+  },
+  _rawUrl: function(){
+    var c=this.ghCfg();
+    return 'https://raw.githubusercontent.com/'+c.owner+'/'+c.repo+'/'+c.branch+'/data.json?t='+Date.now();
+  },
+  _encodeBase64: function(str){
+    return btoa(unescape(encodeURIComponent(str)));
+  },
+  _decodeBase64: function(b64){
+    return decodeURIComponent(escape(atob(b64)));
+  },
+
+  _init: function(){
+    var saved=localStorage.getItem('photoClubData');
+    if(saved){
+      try{this._data=JSON.parse(saved);}catch(e){this._data=null;}
+    }
+    if(!this._data){
+      this._data=JSON.parse(JSON.stringify(SEED_DATA));
+      this._saveLocal();
+    }
+    // Save cloud config
+    if(!localStorage.getItem('photoClubGithub')){
+      localStorage.setItem('photoClubGithub',JSON.stringify(CLOUD_CONFIG));
+    }
+    // Start polling
+    this._startPoll();
+  },
+
+  _saveLocal: function(){
+    localStorage.setItem('photoClubData',JSON.stringify(this._data));
+  },
+
+  _save: function(){
+    this._saveLocal();
+    if(this._savingFromRemote)return;
+    this._scheduleWrite();
+  },
+
+  _scheduleWrite: function(){
+    var self=this;
+    if(this._writeTimer)clearTimeout(this._writeTimer);
+    this._writeTimer=setTimeout(function(){self._writeRemote();},2000);
+  },
+
+  _startPoll: function(){
+    var self=this;
+    if(this._pollTimer)clearInterval(this._pollTimer);
+    this._pollTimer=setInterval(function(){self._syncFromRemote();},30000);
+    // Initial sync
+    setTimeout(function(){self._syncFromRemote();},1000);
+  },
+
+  _syncFromRemote: async function(){
+    if(this._skipNextSync){this._skipNextSync=false;this._lastSync=Date.now();return false;}
+    if(!this._isConfigured())return false;
+    try{
+      var r=await this._readRemote();
+      if(!r)return false;
+      var ls=this._data.sessions||{};
+      this._data=r;
+      this._data.sessions=ls;
+      var all=[].concat(this._data.members||[],this._data.activities||[],this._data.knowledge||[],this._data.news||[],this._data.tips||[]);
+      var maxId=0;
+      for(var i=0;i<all.length;i++){if(all[i].id>maxId)maxId=all[i].id;}
+      this._nextId=maxId+1;
+      this._savingFromRemote=true;
+      this._saveLocal();
+      this._savingFromRemote=false;
+      this._lastSync=Date.now();
+      if(state.role&&typeof renderPage==='function'){renderPage(state.currentPage);}
+      return true;
+    }catch(e){console.error('Sync error:',e);return false;}
+  },
+
+  _readRemote: async function(){
     if(!this._isConfigured())return null;
     try{
-      let text;
+      var text;
       if(this._hasToken()){
-        const c=ghCfg();
-        const r=await fetch(this._apiUrl()+'?ref='+c.branch+'&t='+Date.now(),{headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github.v3+json'}});
+        var c=this.ghCfg();
+        var r=await fetch(this._apiUrl()+'?ref='+c.branch+'&t='+Date.now(),{headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github.v3+json'}});
         if(!r.ok)return null;
-        const fd=await r.json();
-        text=atob(fd.content.replace(/\n/g,''));
+        var fd=await r.json();
+        text=this._decodeBase64(fd.content.replace(/\n/g,''));
         this._remoteSha=fd.sha;
       }else{
-        const r=await fetch(this._rawUrl());
-        if(!r.ok)return null;
-        text=await r.text();
+        var r2=await fetch(this._rawUrl());
+        if(!r2.ok)return null;
+        text=await r2.text();
       }
       if(!text||text.trim().startsWith('<'))return null;
       return JSON.parse(text);
     }catch(e){return null;}
   },
 
-  async _writeRemote(){
+  _writeRemote: async function(){
     if(!this._isConfigured())return false;
     if(!this._hasToken()){console.warn('No token');return false;}
-    const c=ghCfg();
+    var c=this.ghCfg();
     try{
-      let sha=null;
+      var sha=null;
       try{
-        const gr=await fetch(this._apiUrl(),{headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github.v3+json'}});
-        if(gr.ok){const fd=await gr.json();sha=fd.sha;this._remoteSha=sha;}
+        var gr=await fetch(this._apiUrl(),{headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github.v3+json'}});
+        if(gr.ok){var fd=await gr.json();sha=fd.sha;this._remoteSha=sha;}
       }catch(e){}
-      const d=JSON.parse(JSON.stringify(this._data));delete d.sessions;
-      const content=this._encodeBase64(JSON.stringify(d,null,2));
-      const body=JSON.stringify({message:'Update '+new Date().toISOString(),content:content,sha:sha||undefined,branch:c.branch});
-      const pr=await fetch(this._apiUrl(),{method:'PUT',headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:body});
-      if(pr.ok){const res=await pr.json();this._remoteSha=res.content.sha;this._skipNextSync=true;this._lastSync=Date.now();return true;}
-      const et=await pr.text();console.error('Write failed:',pr.status,et);showToast('同步失败:'+pr.status,true);return false;
+      var d=JSON.parse(JSON.stringify(this._data));
+      delete d.sessions;
+      var content=this._encodeBase64(JSON.stringify(d,null,2));
+      var body=JSON.stringify({message:'Update '+new Date().toISOString(),content:content,sha:sha||undefined,branch:c.branch});
+      var pr=await fetch(this._apiUrl(),{method:'PUT',headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:body});
+      if(pr.ok){var res=await pr.json();this._remoteSha=res.content.sha;this._skipNextSync=true;this._lastSync=Date.now();return true;}
+      var et=await pr.text();console.error('Write failed:',pr.status,et);showToast('\u540c\u6b65\u5931\u8d25:'+pr.status,true);return false;
     }catch(e){console.error('Write error:',e);return false;}
   },
 
-  _scheduleWrite(){if(this._writeTimer)clearTimeout(this._writeTimer);this._writeTimer=setTimeout(()=>{this._writeRemote();},2000);},
-
-  async _syncFromRemote(){
-    if(this._skipNextSync){this._skipNextSync=false;this._lastSync=Date.now();return false;}
-    const r=await this._readRemote();if(!r)return false;
-    const ls=this._data.sessions||{};this._data=r;this._data.sessions=ls;
-    const all=[...(this._data.members||[]),...(this._data.activities||[]),...(this._data.knowledge||[]),...(this._data.news||[]),...(this._data.tips||[])];
-    this._nextId=Math.max(0,...all.map(x=>x.id||0))+1;
-    this._savingFromRemote=true;this._save();this._savingFromRemote=false;
-    this._lastSync=Date.now();
-    if(state.role&&typeof renderPage==='function'){await store.loadAll();renderPage(state.currentPage);}
-    return true;
-  },
-
-  startPolling(){if(this._pollTimer)clearInterval(this._pollTimer);this._pollTimer=setInterval(()=>{this._syncFromRemote();},30000);},
-
-  _init(){
-    const s=localStorage.getItem("photoClubData");
-    if(s){this._data=JSON.parse(s);}
-    else{this._data=JSON.parse(JSON.stringify(SEED_DATA));this._data.knowledge.forEach((k,i)=>{k.id=i+1;k.created_at=new Date().toISOString();});this._data.tips.forEach((t,i)=>{t.id=i+1;t.created_at=new Date().toISOString();});this._data.news.forEach((n,i)=>{n.id=i+1;n.created_at=new Date().toISOString();});this._data.sessions={};this._nextId=100;this._save();}
-    if(!this._data.sessions)this._data.sessions={};
-  },
-
-  _save(){localStorage.setItem("photoClubData",JSON.stringify(this._data));if(!this._savingFromRemote)this._scheduleWrite();},
-  _genId(){return this._nextId++;},
-
-  adminLogin(u,p){
-    const s=this._data.settings;
+  // ===== Auth =====
+  adminLogin: function(u,p){
+    var s=this._data.settings;
     if(u===s.admin_user&&p===s.admin_pass){
-      const t="admin_"+Date.now()+"_"+Math.random().toString(36).slice(2);
-      this._data.sessions[t]={role:"admin",user:u};this._save();
-      localStorage.setItem('photoClubAdminUser',u);localStorage.setItem('photoClubAdminPass',p);
-      return Promise.resolve({token:t,role:"admin",user:u});
+      var token='admin_'+Date.now();
+      this._data.sessions=this._data.sessions||{};
+      this._data.sessions[token]={user:u,role:'admin',ts:Date.now()};
+      this._save();
+      return Promise.resolve({user:u,token:token});
     }
-    return Promise.reject(new Error("账号或密码错误"));
+    return Promise.reject(new Error('\u8d26\u53f7\u6216\u5bc6\u7801\u9519\u8bef'));
   },
-  guestLogin(){const t="guest_"+Date.now()+"_"+Math.random().toString(36).slice(2);this._data.sessions[t]={role:"guest",user:"访客"};this._save();return Promise.resolve({token:t,role:"guest",user:"访客"});},
-  getSettings(){return Promise.resolve(Object.assign({},this._data.settings));},
-  updateSettings(d){
-    if(d.admin_user)this._data.settings.admin_user=d.admin_user;
-    if(d.admin_pass)this._data.settings.admin_pass=d.admin_pass;
-    if(d.club_name)this._data.settings.club_name=d.club_name;
-    if(d.club_desc!==undefined)this._data.settings.club_desc=d.club_desc;
-    this._save();return Promise.resolve({message:"设置已保存"});
+
+  guestLogin: function(){
+    var token='guest_'+Date.now();
+    this._data.sessions=this._data.sessions||{};
+    this._data.sessions[token]={user:'\u8bbf\u5ba2',role:'guest',ts:Date.now()};
+    this._save();
+    return Promise.resolve({user:'\u8bbf\u5ba2',token:token});
   },
-  getMembers(){return Promise.resolve(this._data.members);},
-  createMember(d){const m={id:this._genId(),name:d.name,role:d.role||"member",join_date:d.join_date||new Date().toISOString().slice(0,10),contact:d.contact||"",points:0,created_at:new Date().toISOString()};this._data.members.unshift(m);this._save();this._writeRemote();return Promise.resolve(m);},
-  updateMember(id,d){const m=this._data.members.find(x=>x.id===id);if(m){if(d.name!==undefined)m.name=d.name;if(d.role!==undefined)m.role=d.role;if(d.contact!==undefined)m.contact=d.contact;if(d.points!==undefined)m.points=d.points;}this._save();this._writeRemote();return Promise.resolve(m);},
-  deleteMember(id){this._data.members=this._data.members.filter(x=>x.id!==id);this._save();this._writeRemote();return Promise.resolve({});},
-  getActivities(){return Promise.resolve(this._data.activities);},
-  createActivity(d){const a={id:this._genId(),title:d.title,status:d.status||"active",date:d.date||"",location:d.location||"",description:d.description||"",tasks:[],created_at:new Date().toISOString()};this._data.activities.unshift(a);this._save();this._writeRemote();return Promise.resolve(a);},
-  deleteActivity(id){this._data.activities=this._data.activities.filter(x=>x.id!==id);this._save();this._writeRemote();return Promise.resolve({});},
-  getKnowledge(){return Promise.resolve(this._data.knowledge);},
-  createKnowledge(d){const k={id:this._genId(),title:d.title,category:d.category||"",content:d.content||"",tags:d.tags||"",created_at:new Date().toISOString()};this._data.knowledge.unshift(k);this._save();this._writeRemote();return Promise.resolve(k);},
-  deleteKnowledge(id){this._data.knowledge=this._data.knowledge.filter(x=>x.id!==id);this._save();this._writeRemote();return Promise.resolve({});},
-  getNews(){return Promise.resolve(this._data.news);},
-  createNews(d){const n={id:this._genId(),title:d.title,category:d.category||"",content:d.content||"",source:d.source||"",url:d.url||"",created_at:new Date().toISOString()};this._data.news.unshift(n);this._save();this._writeRemote();return Promise.resolve(n);},
-  deleteNews(id){this._data.news=this._data.news.filter(x=>x.id!==id);this._save();this._writeRemote();return Promise.resolve({});},
-  getTips(){return Promise.resolve(this._data.tips);},
-  createTip(d){const t={id:this._genId(),title:d.title,category:d.category||"",content:d.content||"",created_at:new Date().toISOString()};this._data.tips.unshift(t);this._save();this._writeRemote();return Promise.resolve(t);},
-  deleteTip(id){this._data.tips=this._data.tips.filter(x=>x.id!==id);this._save();this._writeRemote();return Promise.resolve({});},
+
+  // ===== Members =====
+  getMembers: function(){return this._data.members||[];},
+  addMember: function(name,role){
+    var m={id:this._nextId++,name:name,role:role,points:0};
+    this._data.members=this._data.members||[];
+    this._data.members.push(m);
+    this._save();this._writeRemote();
+    return m;
+  },
+  deleteMember: function(id){
+    this._data.members=(this._data.members||[]).filter(function(m){return m.id!==id;});
+    this._save();this._writeRemote();
+  },
+
+  // ===== Points =====
+  getPointsRanking: function(){
+    var members=(this._data.members||[]).slice();
+    members.sort(function(a,b){return (b.points||0)-(a.points||0);});
+    return members;
+  },
+  getPointsHistory: function(){return this._data.pointsHistory||[];},
+  addPointsBatch: function(records){
+    this._data.pointsHistory=this._data.pointsHistory||[];
+    var self=this;
+    records.forEach(function(r){
+      r.id=self._nextId++;
+      self._data.pointsHistory.push(r);
+      var m=(self._data.members||[]).find(function(x){return x.name===r.name;});
+      if(m){m.points=(m.points||0)+(r.points||0);}
+    });
+    this._save();this._writeRemote();
+  },
+
+  // ===== Activities =====
+  getActivities: function(){return this._data.activities||[];},
+  addActivity: function(act){
+    act.id=this._nextId++;
+    this._data.activities=this._data.activities||[];
+    this._data.activities.unshift(act);
+    this._save();this._writeRemote();
+    return act;
+  },
+  updateActivity: function(id,updates){
+    var acts=this._data.activities||[];
+    for(var i=0;i<acts.length;i++){
+      if(acts[i].id===id){Object.assign(acts[i],updates);break;}
+    }
+    this._save();this._writeRemote();
+  },
+
+  // ===== Knowledge/Tips =====
+  getKnowledge: function(){return this._data.knowledge||[];},
+  getTips: function(){return this._data.tips||[];},
+
+  // ===== News =====
+  getNews: function(){return this._data.news||[];},
+  addNews: function(item){
+    item.id=this._nextId++;
+    item.created_at=new Date().toISOString();
+    this._data.news=this._data.news||[];
+    this._data.news.unshift(item);
+    if(this._data.news.length>50)this._data.news=this._data.news.slice(0,50);
+    this._save();this._writeRemote();
+  },
+
+  // ===== Settings =====
+  saveSettings: function(updates){
+    var s=this._data.settings;
+    if(updates.admin_pass)s.admin_pass=updates.admin_pass;
+    if(updates.club_name)s.club_name=updates.club_name;
+    if(updates.club_desc!==undefined)s.club_desc=updates.club_desc;
+    this._save();this._writeRemote();
+    return Promise.resolve({message:'\u8bbe\u7f6e\u5df2\u4fdd\u5b58'});
+  },
+
+  saveGithubToken: function(token){
+    var cfg=this.ghCfg();
+    cfg.token=token;
+    localStorage.setItem('photoClubGithub',JSON.stringify(cfg));
+    return Promise.resolve({message:'Token\u5df2\u4fdd\u5b58'});
+  }
 };
 
-// ===== Store =====
-const store={data:null,async loadAll(){this.data=await new Promise(r=>r(API._data));}};
+// ===== Store (data access wrapper) =====
+var store = {
+  get data(){return API._data;}
+};
 
-// ===== State =====
-let state={role:null,user:null,token:null,currentPage:'home'};
-
-// ===== Utils =====
-function $(id){return document.getElementById(id);}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function fmtDate(d){if(!d)return '';return d.slice(0,10);}
-function showToast(msg,err){const t=$('toast');t.textContent=msg;t.className=err?'show err':'show';setTimeout(()=>{t.className='';},2500);}
-function isAdmin(){return state.role==='admin';}
-
-// ===== Login =====
-// Admin form is always visible now
-function doGuestLogin(){
-  API.guestLogin().then(r=>{state.role='guest';state.user='访客';state.token=r.token;enterApp();});
+// ===== Session =====
+function saveSession(){
+  if(state.token){
+    localStorage.setItem('photoClubSession',JSON.stringify({token:state.token,user:state.user,role:state.role}));
+  }
 }
-function adminLoginSubmit(){
-  try{
-    const u=$('loginUser').value.trim();const p=$('loginPass').value.trim();
-    if(!u||!p){showToast('请输入账号和密码',true);return;}
-    API.adminLogin(u,p).then(r=>{state.role='admin';state.user=r.user;state.token=r.token;enterApp();}).catch(e=>{showToast(e.message,true);});
-  }catch(e){showToast('登录出错: '+e.message,true);}
+function clearSession(){
+  localStorage.removeItem('photoClubSession');
 }
 function tryRestoreSession(){
-  const t=localStorage.getItem('photoClubSession');
-  if(t){
-    const s=API._data.sessions[t];
-    if(s){state.role=s.role;state.user=s.user;state.token=t;return true;}
-  }
-  // Try auto-login with saved admin credentials
-  const au=localStorage.getItem('photoClubAdminUser');
-  const ap=localStorage.getItem('photoClubAdminPass');
-  if(au&&ap){
-    return API.adminLogin(au,ap).then(r=>{state.role='admin';state.user=r.user;state.token=r.token;return true;}).catch(()=>false);
-  }
-  return false;
+  var saved=localStorage.getItem('photoClubSession');
+  if(!saved)return Promise.resolve(false);
+  try{
+    var sess=JSON.parse(saved);
+    var sessions=API._data.sessions||{};
+    var info=sessions[sess.token];
+    if(info){
+      state.role=info.role;
+      state.user=info.user;
+      state.token=sess.token;
+      return Promise.resolve(true);
+    }
+    // Try admin auto-login with remembered credentials
+    var au=localStorage.getItem('photoClubAdminUser');
+    var ap=localStorage.getItem('photoClubAdminPass');
+    if(au&&ap){
+      return API.adminLogin(au,ap).then(function(r){
+        state.role='admin';state.user=r.user;state.token=r.token;
+        saveSession();
+        return true;
+      }).catch(function(){return false;});
+    }
+  }catch(e){}
+  return Promise.resolve(false);
 }
+
+// ===== Login =====
+function adminLoginSubmit(){
+  var u=$('loginUser').value.trim();
+  var p=$('loginPass').value.trim();
+  if(!u||!p){showToast('\u8bf7\u8f93\u5165\u8d26\u53f7\u548c\u5bc6\u7801',true);return;}
+  API.adminLogin(u,p).then(function(r){
+    state.role='admin';state.user=r.user;state.token=r.token;
+    localStorage.setItem('photoClubAdminUser',u);
+    localStorage.setItem('photoClubAdminPass',p);
+    saveSession();
+    enterApp();
+  }).catch(function(e){showToast(e.message,true);});
+}
+
+function doGuestLogin(){
+  API.guestLogin().then(function(r){
+    state.role='guest';state.user=r.user;state.token=r.token;
+    saveSession();
+    enterApp();
+  });
+}
+
 function enterApp(){
   $('loginScreen').style.display='none';
-  $('app').classList.add('show');
-  store.loadAll().then(()=>{navigate('home');API.startPolling();});
+  $('app').style.display='block';
+  $('bottomNav').style.display='flex';
+  // Update avatar
+  $('userAvatar').textContent=state.user?state.user.charAt(0):'?';
+  // Show admin controls
+  if(isAdmin()){
+    var btns=document.querySelectorAll('[id$="Btn"]');
+    btns.forEach(function(b){b.style.display='inline';});
+    $('settingsAdmin').style.display='block';
+    $('setRole').textContent='\u7ba1\u7406\u5458 '+state.user;
+    $('setClubName').textContent=API._data.settings.club_name||'-';
+  }else{
+    $('setRole').textContent='\u8bbf\u5ba2';
+  }
+  renderPage('home');
 }
+
 function logout(){
-  if(state.token&&API._data.sessions[state.token])delete API._data.sessions[state.token];
-  localStorage.removeItem('photoClubSession');
+  clearSession();
   localStorage.removeItem('photoClubAdminUser');
   localStorage.removeItem('photoClubAdminPass');
-  state={role:null,user:null,token:null,currentPage:'home'};
-  $('app').classList.remove('show');
+  state.role=null;state.user=null;state.token=null;
+  $('app').style.display='none';
+  $('bottomNav').style.display='none';
   $('loginScreen').style.display='flex';
-  $('adminLoginForm').style.display='none';
-  $('loginUser').value='';$('loginPass').value='';
+  $('loginUser').value='';
+  $('loginPass').value='';
 }
 
 // ===== Navigation =====
-function navigate(page){
+function switchPage(page){
   state.currentPage=page;
-  document.querySelectorAll('.tab-item').forEach(el=>{el.classList.toggle('active',el.dataset.page===page);});
-  // Update background
-  const bg=$('pageBg');
-  const idx=Math.floor(Math.random()*BG_PHOTOS.length);
-  bg.style.backgroundImage='url('+BG_PHOTOS[idx]+')';
+  // Update nav
+  var items=document.querySelectorAll('.nav-item');
+  items.forEach(function(it){
+    it.classList.toggle('active',it.getAttribute('data-page')===page);
+  });
+  // Update pages
+  var pages=document.querySelectorAll('.page');
+  pages.forEach(function(p){
+    p.classList.toggle('active',p.id==='page-'+page);
+  });
   renderPage(page);
   window.scrollTo(0,0);
 }
 
+// ===== Render Functions =====
 function renderPage(page){
-  const main=$('mainContent');
   switch(page){
-    case 'home':renderHome(main);break;
-    case 'gallery':renderGallery(main);break;
-    case 'activities':renderActivities(main);break;
-    case 'about':renderAbout(main);break;
-    case 'settings':renderSettings(main);break;
+    case 'home':renderHome();break;
+    case 'gallery':renderGallery();break;
+    case 'members':renderMembers();break;
+    case 'points':renderPoints();break;
+    case 'tips':renderTips();break;
+    case 'news':renderNews();break;
+    case 'activities':renderActivities();break;
+    case 'settings':renderSettings();break;
   }
 }
 
-// ===== Home Page =====
-function renderHome(el){
-  const d=store.data;
-  const members=d.members.length;
-  const active=d.activities.filter(a=>a.status==='active').length;
-  const totalPts=d.members.reduce((s,m)=>s+(m.points||0),0);
-  const knowledge=d.knowledge.length;
-  const tips=d.tips.length;
-  // Pick a random hero photo
-  const hero=PHOTOS[Math.floor(Math.random()*PHOTOS.length)];
-
-  el.innerHTML=`
-    <div class="hero">
-      <img src="${hero.url}" alt="${esc(hero.title)}" loading="lazy">
-      <div class="grad"></div>
-      <div class="photo-credit">${esc(hero.author)} · ${esc(hero.title)}</div>
-      <div class="info">
-        <h1>${esc(d.settings.club_name||'留声光影')}</h1>
-        <p>${esc(d.settings.club_desc||'用镜头记录世界，用光影讲述故事')}</p>
-      </div>
-    </div>
-    <div class="stats">
-      <div class="stat"><div class="num">${members}</div><div class="lbl">社团成员</div></div>
-      <div class="stat"><div class="num">${active}</div><div class="lbl">进行中活动</div></div>
-      <div class="stat"><div class="num">${totalPts}</div><div class="lbl">累计积分</div></div>
-      <div class="stat"><div class="num">${knowledge}</div><div class="lbl">知识库</div></div>
-      <div class="stat"><div class="num">${tips}</div><div class="lbl">摄影技巧</div></div>
-      <div class="stat"><div class="num">${PHOTOS.length}</div><div class="lbl">作品展示</div></div>
-    </div>
-    ${renderRecentActivities(d)}
-    ${renderTopMembers(d)}
-  `;
-}
-
-function renderRecentActivities(d){
-  const recent=[...d.activities].sort((a,b)=>new Date(b.date||b.created_at)-new Date(a.date||a.created_at)).slice(0,3);
-  if(!recent.length)return '<div class="empty">暂无活动</div>';
-  return `
-    <div class="card">
-      <div class="card-title">近期活动 <span class="more" onclick="navigate('activities')">全部 &rsaquo;</span></div>
-      ${recent.map(a=>`
-        <div style="padding:10px 0;border-bottom:1px solid var(--border)">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <span style="font-weight:500;font-size:14px">${esc(a.title)}</span>
-            <span class="tag ${a.status==='active'?'tag-green':a.status==='done'?'tag-blue':'tag-gray'}">${a.status==='active'?'进行中':a.status==='done'?'已结束':'已取消'}</span>
-          </div>
-          <div style="font-size:12px;color:var(--muted);margin-top:3px">${fmtDate(a.date)} ${esc(a.location||'')}</div>
-        </div>
-      `).join('')}
-    </div>
-  `;
-}
-
-function renderTopMembers(d){
-  const sorted=[...d.members].sort((a,b)=>(b.points||0)-(a.points||0)).slice(0,5);
-  if(!sorted.length||sorted.every(m=>!m.points))return '';
-  return `
-    <div class="card">
-      <div class="card-title">积分排行 <span class="more" onclick="navigate('settings')">全部 &rsaquo;</span></div>
-      ${sorted.map((m,i)=>`
-        <div class="lb-row">
-          <div class="lb-rank ${i<3?'r'+(i+1):''}">${i+1}</div>
-          <div class="lb-name">${esc(m.name)}</div>
-          <div class="lb-score">${m.points||0}</div>
-        </div>
-      `).join('')}
-    </div>
-  `;
-}
-
-// ===== Gallery Page =====
-function renderGallery(el){
-  let html='<div class="page-head"><h2>成员作品</h2><div class="desc">来自21位社团成员的精选摄影作品</div></div>';
-  html+='<div class="gallery">';
-  // First photo as full-width feature
-  if(PHOTOS.length>0){
-    const p=PHOTOS[0];
-    html+=`<div class="item full" onclick="openPhoto('${p.url}','${esc(p.title)}','${esc(p.author)}')">
-      <img src="${p.url}" alt="${esc(p.title)}" loading="lazy">
-      <div class="caption"><div class="t">${esc(p.title)}</div><div class="a">摄影：${esc(p.author)}</div></div>
-    </div>`;
+function renderHome(){
+  // Hero image
+  $('heroImg').src=HERO_PHOTO;
+  // Stats
+  var members=API.getMembers();
+  var acts=API.getActivities();
+  var photos=PHOTOS.length;
+  $('statsRow').innerHTML=
+    '<div class="stat-card"><div class="num">'+members.length+'</div><div class="label">\u6210\u5458</div></div>'+
+    '<div class="stat-card"><div class="num">'+acts.length+'</div><div class="label">\u6d3b\u52a8</div></div>'+
+    '<div class="stat-card"><div class="num">'+photos+'</div><div class="label">\u4f5c\u54c1</div></div>';
+  // About
+  var s=API._data.settings;
+  $('aboutCard').innerHTML='<div class="card-title">'+esc(s.club_name)+'</div><div class="card-desc">'+esc(s.club_desc)+'</div>';
+  // Gallery preview (4 photos)
+  var html='';
+  for(var i=0;i<Math.min(4,PHOTOS.length);i++){
+    var p=PHOTOS[i];
+    html+='<div class="photo-card" onclick="openPhoto('+i+')"><img src="'+p.url+'" alt="'+esc(p.title)+'" loading="lazy"><div class="photo-info"><div class="title">'+esc(p.title)+'</div><div class="author">'+esc(p.author)+'</div></div></div>';
   }
-  for(let i=1;i<PHOTOS.length;i++){
-    const p=PHOTOS[i];
-    html+=`<div class="item" onclick="openPhoto('${p.url}','${esc(p.title)}','${esc(p.author)}')">
-      <img src="${p.url}" alt="${esc(p.title)}" loading="lazy">
-      <div class="caption"><div class="t">${esc(p.title)}</div><div class="a">${esc(p.author)}</div></div>
-    </div>`;
-  }
-  html+='</div>';
-  el.innerHTML=html;
+  $('homeGallery').innerHTML=html;
+  // Activities preview
+  var acts2=acts.slice(0,2);
+  html=acts2.map(function(a){return renderActivityCard(a);}).join('');
+  $('homeActivities').innerHTML=html||'<div class="empty">\u6682\u65e0\u6d3b\u52a8</div>';
+  // News preview
+  var news=API.getNews().slice(0,2);
+  html=news.map(function(n){return renderNewsCard(n);}).join('');
+  $('homeNews').innerHTML=html||'<div class="empty">\u6682\u65e0\u8d44\u8baf</div>';
 }
 
-function openPhoto(url,title,author){
-  $('pvImg').src=url;
-  $('pvInfo').textContent=title+' - 摄影：'+author;
-  $('photoViewer').classList.add('show');
-}
-function closePhotoViewer(e){
-  if(e&&e.target.tagName==='IMG')return;
-  $('photoViewer').classList.remove('show');
+function renderGallery(){
+  var html=PHOTOS.map(function(p,i){
+    return '<div class="photo-card" onclick="openPhoto('+i+')"><img src="'+p.url+'" alt="'+esc(p.title)+'" loading="lazy"><div class="photo-info"><div class="title">'+esc(p.title)+'</div><div class="author">'+esc(p.author)+'</div></div></div>';
+  }).join('');
+  $('fullGallery').innerHTML=html;
 }
 
-// ===== Activities Page =====
-function renderActivities(el){
-  const acts=store.data.activities||[];
-  let html='<div class="page-head"><h2>活动任务</h2><div class="desc">社团摄影活动与打卡任务</div></div>';
-  if(isAdmin()){
-    html+='<div style="padding:0 16px 12px"><button class="set-btn btn-gold" onclick="showAddActivity()">+ 发布活动</button></div>';
-  }
-  html+=`<div class="filter-bar"><div class="chip active" onclick="filterActs('all',this)">全部</div><div class="chip" onclick="filterActs('active',this)">进行中</div><div class="chip" onclick="filterActs('done',this)">已结束</div></div>`;
-  const filtered=acts; // Show all by default
-  if(!filtered.length){html+='<div class="empty">暂无活动</div>';el.innerHTML=html;return;}
-  html+=filtered.map(a=>`
-    <div class="act-card">
-      <div class="act-head">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start">
-          <div class="act-title">${esc(a.title)}</div>
-          <span class="tag ${a.status==='active'?'tag-green':a.status==='done'?'tag-blue':'tag-gray'}">${a.status==='active'?'进行中':a.status==='done'?'已结束':'已取消'}</span>
-        </div>
-        <div class="act-meta">
-          <span>&#128197; ${fmtDate(a.date)}</span>
-          ${a.location?'<span>&#128205; '+esc(a.location)+'</span>':''}
-        </div>
-      </div>
-      ${a.description?'<div class="act-body">'+esc(a.description)+'</div>':''}
-      ${isAdmin()?'<div style="padding:0 14px 14px"><button class="set-btn btn-ghost" onclick="deleteAct('+a.id+')" style="color:var(--red)">删除</button></div>':''}
-    </div>
-  `).join('');
-  el.innerHTML=html;
+function renderMembers(){
+  var members=API.getMembers();
+  var html=members.map(function(m){
+    var del=isAdmin()?'<span class="m-del" onclick="deleteMember('+m.id+')">\u5220\u9664</span>':'';
+    return '<div class="member-item">'+
+      '<div class="m-avatar">'+esc(m.name.charAt(0))+'</div>'+
+      '<div class="m-info"><div class="m-name">'+esc(m.name)+'</div><div class="m-role">'+esc(m.role)+'</div></div>'+
+      '<div class="m-points">'+(m.points||0)+'</div>'+
+      del+
+      '</div>';
+  }).join('');
+  $('memberList').innerHTML=html||'<div class="empty">\u6682\u65e0\u6210\u5458</div>';
 }
-function filterActs(status,el){
-  document.querySelectorAll('.filter-bar .chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  const acts=store.data.activities||[];
-  const filtered=status==='all'?acts:acts.filter(a=>a.status===status);
-  // Re-render activity list
-  const cards=document.querySelectorAll('.act-card');
-  cards.forEach(c=>c.remove());
-  const main=$('mainContent');
-  if(!filtered.length){main.insertAdjacentHTML('beforeend','<div class="empty">暂无活动</div>');return;}
-  filtered.forEach(a=>{
-    main.insertAdjacentHTML('beforeend',`<div class="act-card">
-      <div class="act-head"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div class="act-title">${esc(a.title)}</div><span class="tag ${a.status==='active'?'tag-green':a.status==='done'?'tag-blue':'tag-gray'}">${a.status==='active'?'进行中':a.status==='done'?'已结束':'已取消'}</span></div><div class="act-meta"><span>&#128197; ${fmtDate(a.date)}</span>${a.location?'<span>&#128205; '+esc(a.location)+'</span>':''}</div></div>
-      ${a.description?'<div class="act-body">'+esc(a.description)+'</div>':''}
-      ${isAdmin()?'<div style="padding:0 14px 14px"><button class="set-btn btn-ghost" onclick="deleteAct('+a.id+')" style="color:var(--red)">删除</button></div>':''}
-    </div>`);
+
+function renderPoints(){
+  var ranking=API.getPointsRanking();
+  var html=ranking.map(function(m,i){
+    var medal=i===0?'\ud83e\udd47':i===1?'\ud83e\udd48':i===2?'\ud83e\udd49':(i+1);
+    return '<div class="member-item">'+
+      '<div class="m-avatar">'+medal+'</div>'+
+      '<div class="m-info"><div class="m-name">'+esc(m.name)+'</div><div class="m-role">'+esc(m.role)+'</div></div>'+
+      '<div class="m-points">'+(m.points||0)+'</div>'+
+      '</div>';
+  }).join('');
+  $('pointsRanking').innerHTML=html||'<div class="empty">\u6682\u65e0\u6392\u884c</div>';
+  // Detail
+  var hist=API.getPointsHistory();
+  if(!hist.length){
+    $('pointsDetail').innerHTML='<div class="empty">\u6682\u65e0\u79ef\u5206\u660e\u7ec6</div>';
+    return;
+  }
+  html='<table class="points-table"><tr><th>\u59d3\u540d</th><th>\u79ef\u5206</th><th>\u539f\u56e0</th><th>\u65e5\u671f</th></tr>';
+  hist.slice().reverse().forEach(function(r){
+    html+='<tr><td>'+esc(r.name)+'</td><td>'+(r.points||0)+'</td><td>'+esc(r.reason||'-')+'</td><td>'+(r.date||'-')+'</td></tr>';
   });
-}
-function showAddActivity(){
-  showModal(`<h3>发布活动</h3>
-    <div class="form-row"><label>活动标题</label><input id="actTitle" placeholder="如：周常摄影打卡（第13周）"></div>
-    <div class="form-row"><label>日期</label><input id="actDate" type="date"></div>
-    <div class="form-row"><label>地点</label><input id="actLoc" placeholder="如：自由拍摄"></div>
-    <div class="form-row"><label>状态</label><select id="actStatus"><option value="active">进行中</option><option value="done">已结束</option></select></div>
-    <div class="form-row"><label>活动说明</label><textarea id="actDesc" placeholder="活动描述..."></textarea></div>
-    <div class="form-actions"><button class="btn-ghost" onclick="closeModal()">取消</button><button class="btn-gold" onclick="submitActivity()">发布</button></div>`);
-}
-function submitActivity(){
-  const d={title:$('actTitle').value.trim(),date:$('actDate').value,location:$('actLoc').value.trim(),status:$('actStatus').value,description:$('actDesc').value.trim()};
-  if(!d.title){showToast('请输入标题',true);return;}
-  API.createActivity(d).then(()=>{closeModal();showToast('活动已发布');renderPage('activities');});
-}
-function deleteAct(id){if(confirm('确定删除？')){API.deleteActivity(id).then(()=>{showToast('已删除');renderPage('activities');});}}
-
-// ===== About Page =====
-function renderAbout(el){
-  el.innerHTML=`
-    <div class="hero" style="height:30vh;min-height:200px">
-      <img src="${PHOTOS[Math.floor(Math.random()*PHOTOS.length)].url}" alt="" loading="lazy">
-      <div class="grad"></div>
-      <div class="info"><h1>留声光影</h1><p>用镜头记录世界，用光影讲述故事</p></div>
-    </div>
-    <div class="about-section">
-      <div class="quote">用镜头记录世界<br>用光影讲述故事</div>
-      <h3>关于社团</h3>
-      <p>「留声光影」是一个由国联股份员工自发组成的摄影社团，汇聚了21位热爱摄影的伙伴。我们通过周常打卡、专题研习、线下实拍等形式，共同提升摄影审美与实拍技巧，用镜头记录工作与生活中的美好瞬间。</p>
-      <h3>社团活动</h3>
-      <p><strong>周常摄影打卡</strong>：每周一期，成员提交摄影作品，获积分奖励。国庆期间双倍积分，红色主题额外奖励。</p>
-      <p><strong>定格·讲述研习会</strong>：通过话题卡互动、作品分享等环节，提升摄影审美与实拍技巧，增进成员默契与链接。</p>
-      <p><strong>线下实拍活动</strong>：以公司书吧等场景为主题，通过线下实拍帮助成员提升实战技巧，作品制作成明信片珍藏。</p>
-      <h3>积分体系</h3>
-      <p>参加活动+10积分，提交作品+5积分，优秀作品额外+5~20积分。周常打卡+3积分，国庆期间双倍。积分用于排行和社团周边奖励。</p>
-      <h3>社团周边</h3>
-      <p>定期制作摄影明信片、定制水杯、帆布包等周边，收录成员精选作品，作为社团成果纪念和成员互赠礼物。</p>
-      <a class="feishu-link" href="https://oa7m9pnagqr.feishu.cn/wiki/RPNCwnfGciEnv3k80XKcjTQQnSh" target="_blank" rel="noopener">查看飞书完整社团简介 &nearr;</a>
-    </div>
-  `;
+  html+='</table>';
+  $('pointsDetail').innerHTML=html;
 }
 
-// ===== Settings Page =====
-function renderSettings(el){
-  const d=store.data;
-  let html='<div class="page-head"><h2>'+esc(state.user||'我的')+'</h2><div class="desc">'+(isAdmin()?'管理员模式':'访客模式')+'</div></div>';
+function renderTips(){
+  var tips=API.getTips();
+  var knowledge=API.getKnowledge();
+  var all=knowledge.concat(tips);
+  if(!all.length){$('tipsList').innerHTML='<div class="empty">\u6682\u65e0\u5185\u5bb9</div>';return;}
+  var html=all.map(function(t){
+    var tags=(t.tags||'').split(',').filter(Boolean).map(function(tag){return '<span class="tag">'+esc(tag)+'</span>';}).join('');
+    return '<div class="tip-item">'+
+      '<div class="tip-cat">'+esc(t.category||'')+'</div>'+
+      '<div class="tip-title">'+esc(t.title)+'</div>'+
+      '<div class="tip-content">'+esc(t.content)+'</div>'+
+      '<div class="tip-tags">'+tags+'</div>'+
+      '</div>';
+  }).join('');
+  $('tipsList').innerHTML=html;
+}
 
+function renderNews(){
+  var news=API.getNews();
+  if(!news.length){$('newsList').innerHTML='<div class="empty">\u6682\u65e0\u8d44\u8baf\uff0c\u6444\u5f71\u8d44\u8baf\u4f1a\u81ea\u52a8\u66f4\u65b0</div>';return;}
+  var html=news.map(function(n){return renderNewsCard(n);}).join('');
+  $('newsList').innerHTML=html;
+}
+
+function renderNewsCard(n){
+  var thumb=n.image?'<img class="news-thumb" src="'+esc(n.image)+'" alt="" loading="lazy">':'';
+  return '<div class="news-item">'+thumb+
+    '<div class="news-text">'+
+    '<div class="news-title">'+esc(n.title)+'</div>'+
+    '<div class="news-summary">'+esc(n.summary||'')+'</div>'+
+    '<div class="news-meta">'+esc(n.source||'')+' \xb7 '+(n.created_at?new Date(n.created_at).toLocaleDateString('zh-CN'):'')+'</div>'+
+    (n.url?'<a href="'+esc(n.url)+'" target="_blank">\u67e5\u770b\u539f\u6587 ></a>':'')+
+    '</div></div>';
+}
+
+function renderActivities(){
+  var acts=API.getActivities();
+  if(!acts.length){$('activitiesList').innerHTML='<div class="empty">\u6682\u65e0\u6d3b\u52a8</div>';return;}
+  var html=acts.map(function(a){return renderActivityCard(a);}).join('');
+  $('activitiesList').innerHTML=html;
+}
+
+function renderActivityCard(a){
+  var statusMap={upcoming:'\u5f85\u5f00\u59cb',active:'\u8fdb\u884c\u4e2d',done:'\u5df2\u7ed3\u675f'};
+  var statusClass={upcoming:'status-upcoming',active:'status-active',done:'status-done'};
+  var editBtn=isAdmin()?'<button class="btn btn-ghost btn-sm" style="float:right" onclick="editActivity('+a.id+')">\u7f16\u8f91</button>':'';
+  return '<div class="act-item">'+
+    '<div class="act-body">'+
+    '<div class="act-title">'+esc(a.title)+editBtn+'</div>'+
+    '<div class="act-desc">'+esc(a.desc)+'</div>'+
+    '<div class="act-meta">'+
+    '<span class="tag '+statusClass[a.status]+'">'+statusMap[a.status]+'</span>'+
+    (a.date?'<span>\ud83d\udcc5 '+a.date+'</span>':'')+
+    (a.location?'<span>\ud83d\udccd '+esc(a.location)+'</span>':'')+
+    '</div></div></div>';
+}
+
+function renderSettings(){
   if(isAdmin()){
-    html+=`<div class="card">
-      <div class="card-title">成员管理 <span class="more" onclick="showAddMember()">+ 添加</span></div>
-      <div class="mem-list" id="memList"></div>
-    </div>`;
-    html+=`<div class="card">
-      <div class="card-title">积分排行</div>
-      <div class="lb" id="lbList"></div>
-    </div>`;
-    html+=`<div class="card">
-      <div class="card-title">社团设置</div>
-      <div class="set-group">
-        <div class="set-row"><label>社团名称</label><input id="setClubName" value="${esc(d.settings.club_name)}"></div>
-        <div class="set-row"><label>社团简介</label><input id="setClubDesc" value="${esc(d.settings.club_desc)}"></div>
-        <div class="set-row"><label>管理员账号</label><input id="setUser" value="${esc(d.settings.admin_user)}"></div>
-        <div class="set-row"><label>管理员密码</label><input id="setPass" type="password" value="${esc(d.settings.admin_pass)}"></div>
-      </div>
-      <button class="set-btn btn-gold" onclick="saveSettings()" style="margin:8px 16px 16px;width:calc(100% - 32px)">保存设置</button>
-    </div>`;
-    html+=`<div class="card">
-      <div class="card-title">GitHub 同步</div>
-      <div class="set-group">
-        <div class="set-row"><label>Token</label><input id="ghToken" type="password" placeholder="ghp_..." value="${esc(ghCfg().token||'')}"></div>
-      </div>
-      <button class="set-btn btn-gold" onclick="saveToken()" style="margin:8px 16px 16px;width:calc(100% - 32px)">保存Token</button>
-      <div style="padding:0 16px 16px;font-size:12px;color:var(--muted)">Token保存在本地浏览器，不会上传到仓库。配置后管理员操作会自动同步到云端。</div>
-    </div>`;
-    html+=`<div class="card">
-      <div class="card-title">内容管理</div>
-      <div class="set-group">
-        <div class="set-row" onclick="navigate('knowledge')" style="cursor:pointer"><label>知识库</label><span style="color:var(--gold)">${d.knowledge.length}条 &rsaquo;</span></div>
-        <div class="set-row" onclick="navigate('news')" style="cursor:pointer"><label>行业资讯</label><span style="color:var(--gold)">${d.news.length}条 &rsaquo;</span></div>
-        <div class="set-row" onclick="navigate('tips')" style="cursor:pointer"><label>摄影技巧</label><span style="color:var(--gold)">${d.tips.length}条 &rsaquo;</span></div>
-      </div>
-    </div>`;
-  }
-
-  html+=`<div style="padding:16px"><button class="set-btn btn-ghost" onclick="logout()" style="color:var(--red)">退出登录</button></div>`;
-  el.innerHTML=html;
-
-  if(isAdmin()){
-    renderMemberList(d);
-    renderLbList(d);
+    $('setClubName').textContent=API._data.settings.club_name||'-';
   }
 }
 
-function renderMemberList(d){
-  const el=$('memList');if(!el)return;
-  if(!d.members.length){el.innerHTML='<div class="empty">暂无成员</div>';return;}
-  el.innerHTML=d.members.map(m=>`
-    <div class="mem-item">
-      <div class="mem-avatar">${esc(m.name.charAt(0))}</div>
-      <div class="mem-info"><div class="name">${esc(m.name)}</div><div class="role">${m.role==='core'?'核心成员':'普通成员'} · ${m.points||0}积分</div></div>
-      <button onclick="deleteMember(${m.id})" style="color:var(--red);font-size:12px;background:none;border:none">删除</button>
-    </div>
-  `).join('');
-}
-function renderLbList(d){
-  const el=$('lbList');if(!el)return;
-  const sorted=[...d.members].sort((a,b)=>(b.points||0)-(a.points||0));
-  el.innerHTML=sorted.map((m,i)=>`
-    <div class="lb-row"><div class="lb-rank ${i<3?'r'+(i+1):''}">${i+1}</div><div class="lb-name">${esc(m.name)}</div><div class="lb-score">${m.points||0}</div></div>
-  `).join('');
-}
-function showAddMember(){
-  showModal(`<h3>添加成员</h3>
-    <div class="form-row"><label>姓名</label><input id="memName" placeholder="成员姓名"></div>
-    <div class="form-row"><label>角色</label><select id="memRole"><option value="member">普通成员</option><option value="core">核心成员</option></select></div>
-    <div class="form-row"><label>联系方式</label><input id="memContact" placeholder="微信/手机（选填）"></div>
-    <div class="form-actions"><button class="btn-ghost" onclick="closeModal()">取消</button><button class="btn-gold" onclick="submitMember()">添加</button></div>`);
-}
-function submitMember(){
-  const d={name:$('memName').value.trim(),role:$('memRole').value,contact:$('memContact').value.trim()};
-  if(!d.name){showToast('请输入姓名',true);return;}
-  API.createMember(d).then(()=>{closeModal();showToast('成员已添加');renderSettings($('mainContent'));});
-}
-function deleteMember(id){if(confirm('确定删除？')){API.deleteMember(id).then(()=>{showToast('已删除');renderSettings($('mainContent'));});}}
-
-function saveSettings(){
-  API.updateSettings({
-    club_name:$('setClubName').value.trim(),
-    club_desc:$('setClubDesc').value.trim(),
-    admin_user:$('setUser').value.trim(),
-    admin_pass:$('setPass').value.trim(),
-  }).then(()=>{
-    localStorage.setItem('photoClubAdminUser',$('setUser').value.trim());
-    localStorage.setItem('photoClubAdminPass',$('setPass').value.trim());
-    showToast('设置已保存并同步');
-    store.loadAll().then(()=>renderSettings($('mainContent')));
-  });
-}
-function saveToken(){
-  const t=$('ghToken').value.trim();
-  const c=ghCfg();c.token=t;
-  localStorage.setItem('photoClubGithub',JSON.stringify(c));
-  showToast('Token已保存');
-  API._writeRemote().then(ok=>{if(ok)showToast('云端同步成功');});
-}
-
-// ===== Modal =====
-function showModal(html){
-  $('modalContent').innerHTML='<button class="close" onclick="closeModal()">&times;</button>'+html;
+// ===== Modals =====
+function openModal(html){
+  $('modalContent').innerHTML=html;
   $('modalOverlay').classList.add('show');
 }
-function closeModal(e){
-  if(e&&e.target!==$('modalOverlay'))return;
+function closeModal(){
   $('modalOverlay').classList.remove('show');
+}
+
+function showAddMember(){
+  openModal('<h3>\u6dfb\u52a0\u6210\u5458 <span class="modal-close" onclick="closeModal()">&times;</span></h3>'+
+    '<div class="form-group"><label>\u59d3\u540d</label><input id="newMemberName" placeholder="\u6210\u5458\u59d3\u540d"></div>'+
+    '<div class="form-group"><label>\u89d2\u8272</label><select id="newMemberRole"><option>\u6210\u5458</option><option>\u6838\u5fc3\u6210\u5458</option><option>\u793e\u957f</option></select></div>'+
+    '<button class="btn btn-gold" style="width:100%" onclick="submitAddMember()">\u6dfb\u52a0</button>');
+}
+
+function submitAddMember(){
+  var name=$('newMemberName').value.trim();
+  var role=$('newMemberRole').value;
+  if(!name){showToast('\u8bf7\u8f93\u5165\u59d3\u540d',true);return;}
+  API.addMember(name,role);
+  closeModal();
+  renderMembers();
+  showToast('\u6210\u5458\u5df2\u6dfb\u52a0');
+}
+
+function deleteMember(id){
+  if(!confirm('\u786e\u8ba4\u5220\u9664\u8be5\u6210\u5458\uff1f'))return;
+  API.deleteMember(id);
+  renderMembers();
+  showToast('\u6210\u5458\u5df2\u5220\u9664');
+}
+
+function showAddActivity(){
+  openModal('<h3>\u53d1\u5e03\u6d3b\u52a8 <span class="modal-close" onclick="closeModal()">&times;</span></h3>'+
+    '<div class="form-group"><label>\u6d3b\u52a8\u6807\u9898</label><input id="newActTitle" placeholder="\u6d3b\u52a8\u540d\u79f0"></div>'+
+    '<div class="form-group"><label>\u63cf\u8ff0</label><textarea id="newActDesc" placeholder="\u6d3b\u52a8\u63cf\u8ff0"></textarea></div>'+
+    '<div class="form-group"><label>\u72b6\u6001</label><select id="newActStatus"><option value="upcoming">\u5f85\u5f00\u59cb</option><option value="active">\u8fdb\u884c\u4e2d</option><option value="done">\u5df2\u7ed3\u675f</option></select></div>'+
+    '<div class="form-group"><label>\u65e5\u671f</label><input id="newActDate" type="date"></div>'+
+    '<div class="form-group"><label>\u5730\u70b9</label><input id="newActLoc" placeholder="\u6d3b\u52a8\u5730\u70b9"></div>'+
+    '<button class="btn btn-gold" style="width:100%" onclick="submitAddActivity()">\u53d1\u5e03</button>');
+}
+
+function submitAddActivity(){
+  var title=$('newActTitle').value.trim();
+  if(!title){showToast('\u8bf7\u8f93\u5165\u6d3b\u52a8\u6807\u9898',true);return;}
+  API.addActivity({
+    title:title,
+    desc:$('newActDesc').value.trim(),
+    status:$('newActStatus').value,
+    date:$('newActDate').value,
+    location:$('newActLoc').value.trim()
+  });
+  closeModal();
+  renderActivities();
+  showToast('\u6d3b\u52a8\u5df2\u53d1\u5e03');
+}
+
+function editActivity(id){
+  var act=API.getActivities().find(function(a){return a.id===id;});
+  if(!act)return;
+  openModal('<h3>\u7f16\u8f91\u6d3b\u52a8 <span class="modal-close" onclick="closeModal()">&times;</span></h3>'+
+    '<div class="form-group"><label>\u6d3b\u52a8\u6807\u9898</label><input id="editActTitle" value="'+esc(act.title)+'"></div>'+
+    '<div class="form-group"><label>\u63cf\u8ff0</label><textarea id="editActDesc">'+esc(act.desc)+'</textarea></div>'+
+    '<div class="form-group"><label>\u72b6\u6001</label><select id="editActStatus"><option value="upcoming"'+(act.status==='upcoming'?' selected':'')+'>\u5f85\u5f00\u59cb</option><option value="active"'+(act.status==='active'?' selected':'')+'>\u8fdb\u884c\u4e2d</option><option value="done"'+(act.status==='done'?' selected':'')+'>\u5df2\u7ed3\u675f</option></select></div>'+
+    '<div class="form-group"><label>\u65e5\u671f</label><input id="editActDate" type="date" value="'+(act.date||'')+'"></div>'+
+    '<div class="form-group"><label>\u5730\u70b9</label><input id="editActLoc" value="'+esc(act.location||'')+'"></div>'+
+    '<button class="btn btn-gold" style="width:100%" onclick="submitEditActivity('+id+')">\u4fdd\u5b58</button>');
+}
+
+function submitEditActivity(id){
+  API.updateActivity(id,{
+    title:$('editActTitle').value.trim(),
+    desc:$('editActDesc').value.trim(),
+    status:$('editActStatus').value,
+    date:$('editActDate').value,
+    location:$('editActLoc').value.trim()
+  });
+  closeModal();
+  renderActivities();
+  showToast('\u6d3b\u52a8\u5df2\u66f4\u65b0');
+}
+
+function showUploadPoints(){
+  openModal('<h3>\u4e0a\u4f20\u79ef\u5206\u660e\u7ec6 <span class="modal-close" onclick="closeModal()">&times;</span></h3>'+
+    '<p style="font-size:13px;color:var(--gray);margin-bottom:12px">\u4e0a\u4f20Excel/CSV\u6587\u4ef6\uff0c\u683c\u5f0f\uff1a\u59d3\u540d\u3001\u79ef\u5206\u3001\u539f\u56e0\u3001\u65e5\u671f</p>'+
+    '<div class="upload-area" onclick="document.getElementById(\'pointsFile\').click()">'+
+    '\u70b9\u51fb\u9009\u62e9\u6587\u4ef6'+
+    '<input id="pointsFile" type="file" accept=".csv,.xlsx,.xls" onchange="parsePointsFile(this)">'+
+    '</div>'+
+    '<div id="pointsPreview" style="margin-top:12px"></div>'+
+    '<button class="btn btn-gold" style="width:100%;margin-top:12px;display:none" id="confirmPointsBtn" onclick="confirmUploadPoints()">\u786e\u8ba4\u5bfc\u5165</button>');
+}
+
+function parsePointsFile(input){
+  var file=input.files[0];
+  if(!file)return;
+  // For CSV files, use FileReader
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var text=e.target.result;
+    var lines=text.split(/\r?\n/).filter(function(l){return l.trim();});
+    var records=[];
+    // Skip header if first line contains text like "name" or chinese
+    var startIdx=0;
+    if(lines[0]&&/name|\u59d3\u540d/i.test(lines[0]))startIdx=1;
+    for(var i=startIdx;i<lines.length;i++){
+      var parts=lines[i].split(',').map(function(s){return s.trim();});
+      if(parts.length>=2&&parts[0]){
+        records.push({name:parts[0],points:parseInt(parts[1])||0,reason:parts[2]||'',date:parts[3]||new Date().toISOString().slice(0,10)});
+      }
+    }
+    if(!records.length){showToast('\u672a\u89e3\u6790\u51fa\u6709\u6548\u6570\u636e',true);return;}
+    window._pendingPoints=records;
+    var html='<table class="points-table"><tr><th>\u59d3\u540d</th><th>\u79ef\u5206</th><th>\u539f\u56e0</th><th>\u65e5\u671f</th></tr>';
+    records.forEach(function(r){html+='<tr><td>'+esc(r.name)+'</td><td>'+r.points+'</td><td>'+esc(r.reason)+'</td><td>'+r.date+'</td></tr>';});
+    html+='</table><p style="font-size:12px;color:var(--gray);margin-top:8px">\u5171 '+records.length+' \u6761\u8bb0\u5f55</p>';
+    $('pointsPreview').innerHTML=html;
+    $('confirmPointsBtn').style.display='block';
+  };
+  reader.readAsText(file,'UTF-8');
+}
+
+function confirmUploadPoints(){
+  if(!window._pendingPoints||!window._pendingPoints.length)return;
+  API.addPointsBatch(window._pendingPoints);
+  window._pendingPoints=null;
+  closeModal();
+  renderPoints();
+  showToast('\u79ef\u5206\u5df2\u5bfc\u5165');
+}
+
+function showChangePass(){
+  openModal('<h3>\u4fee\u6539\u5bc6\u7801 <span class="modal-close" onclick="closeModal()">&times;</span></h3>'+
+    '<div class="form-group"><label>\u65b0\u5bc6\u7801</label><input id="newPass" type="password"></div>'+
+    '<div class="form-group"><label>\u786e\u8ba4\u5bc6\u7801</label><input id="newPass2" type="password"></div>'+
+    '<button class="btn btn-gold" style="width:100%" onclick="submitChangePass()">\u4fdd\u5b58</button>');
+}
+
+function submitChangePass(){
+  var p1=$('newPass').value;
+  var p2=$('newPass2').value;
+  if(!p1){showToast('\u8bf7\u8f93\u5165\u65b0\u5bc6\u7801',true);return;}
+  if(p1!==p2){showToast('\u4e24\u6b21\u5bc6\u7801\u4e0d\u4e00\u81f4',true);return;}
+  API.saveSettings({admin_pass:p1});
+  localStorage.setItem('photoClubAdminPass',p1);
+  closeModal();
+  showToast('\u5bc6\u7801\u5df2\u4fee\u6539');
+}
+
+function showSetToken(){
+  openModal('<h3>\u8bbe\u7f6e GitHub Token <span class="modal-close" onclick="closeModal()">&times;</span></h3>'+
+    '<p style="font-size:13px;color:var(--gray);margin-bottom:12px">Token\u4ec5\u4fdd\u5b58\u5728\u672c\u5730\u6d4f\u89c8\u5668\uff0c\u4e0d\u4f1a\u4e0a\u4f20\u5230\u4e91\u7aef</p>'+
+    '<div class="form-group"><label>Personal Access Token</label><input id="tokenInput" type="password" placeholder="ghp_..."></div>'+
+    '<button class="btn btn-gold" style="width:100%" onclick="submitSetToken()">\u4fdd\u5b58</button>');
+}
+
+function submitSetToken(){
+  var token=$('tokenInput').value.trim();
+  if(!token){showToast('\u8bf7\u8f93\u5165Token',true);return;}
+  API.saveGithubToken(token);
+  closeModal();
+  showToast('Token\u5df2\u4fdd\u5b58');
+}
+
+function manualSync(){
+  showToast('\u6b63\u5728\u540c\u6b65...');
+  API._syncFromRemote().then(function(ok){
+    showToast(ok?'\u540c\u6b65\u6210\u529f':'\u540c\u6b65\u5931\u8d25',!ok);
+    if(ok)renderPage(state.currentPage);
+  });
+}
+
+// ===== Photo Viewer =====
+function openPhoto(idx){
+  var p=PHOTOS[idx];
+  if(!p)return;
+  openModal('<div style="text-align:center">'+
+    '<span class="modal-close" onclick="closeModal()" style="position:absolute;top:8px;right:12px;font-size:24px;color:#fff;z-index:10">&times;</span>'+
+    '<img src="'+p.url+'" style="max-width:100%;border-radius:8px" alt="'+esc(p.title)+'">'+
+    '<div style="margin-top:12px"><div style="font-size:16px;font-weight:600">'+esc(p.title)+'</div>'+
+    '<div style="font-size:13px;color:var(--gray)">\u6444\u5f70\uff1a'+esc(p.author)+'</div></div>'+
+    '</div>');
 }
 
 // ===== Init =====
 API._init();
-// Set login background
 $('loginBg').style.backgroundImage='url('+HERO_PHOTO+')';
-// Sync from cloud first, then try restore session
-(async function(){
+(function(){
   try{
-    await API._syncFromRemote();
-    const restored=await tryRestoreSession();
-    if(restored){enterApp();}
+    API._syncFromRemote().then(function(){
+      return tryRestoreSession();
+    }).then(function(restored){
+      if(restored)enterApp();
+    }).catch(function(e){console.error('Init error:',e);});
   }catch(e){console.error('Init error:',e);}
 })();
+
+// Close modal on overlay click
+$('modalOverlay').addEventListener('click',function(e){
+  if(e.target===$('modalOverlay'))closeModal();
+});
 </script>
 </body>
 </html>
