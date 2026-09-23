@@ -188,13 +188,12 @@ textarea{resize:vertical;min-height:80px}
     <div class="logo">&#128247;</div>
     <h1>留声光影</h1>
     <p class="sub">用镜头记录世界，用光影讲述故事</p>
-    <button class="login-btn btn-gold" onclick="doAdminLogin()">管理员登录</button>
-    <button class="login-btn btn-ghost" onclick="doGuestLogin()">访客进入</button>
-    <div id="adminLoginForm" style="margin-top:16px;display:none">
+    <div id="adminLoginForm" style="margin-top:20px;text-align:left">
       <input id="loginUser" placeholder="账号" style="margin-bottom:8px" autocomplete="username">
       <input id="loginPass" type="password" placeholder="密码" autocomplete="current-password">
-      <button class="login-btn btn-gold" onclick="adminLoginSubmit()">确认登录</button>
+      <button class="login-btn btn-gold" onclick="adminLoginSubmit()">管理员登录</button>
     </div>
+    <button class="login-btn btn-ghost" onclick="doGuestLogin()">访客进入</button>
     <p class="login-hint">留声光影摄影社团 · 成员作品展示与活动管理</p>
   </div>
 </div>
@@ -389,14 +388,16 @@ function showToast(msg,err){const t=$('toast');t.textContent=msg;t.className=err
 function isAdmin(){return state.role==='admin';}
 
 // ===== Login =====
-function doAdminLogin(){$('adminLoginForm').style.display='block';$('loginUser').focus();}
+// Admin form is always visible now
 function doGuestLogin(){
   API.guestLogin().then(r=>{state.role='guest';state.user='访客';state.token=r.token;enterApp();});
 }
 function adminLoginSubmit(){
-  const u=$('loginUser').value.trim();const p=$('loginPass').value.trim();
-  if(!u||!p){showToast('请输入账号和密码',true);return;}
-  API.adminLogin(u,p).then(r=>{state.role='admin';state.user=r.user;state.token=r.token;enterApp();}).catch(e=>{showToast(e.message,true);});
+  try{
+    const u=$('loginUser').value.trim();const p=$('loginPass').value.trim();
+    if(!u||!p){showToast('请输入账号和密码',true);return;}
+    API.adminLogin(u,p).then(r=>{state.role='admin';state.user=r.user;state.token=r.token;enterApp();}).catch(e=>{showToast(e.message,true);});
+  }catch(e){showToast('登录出错: '+e.message,true);}
 }
 function tryRestoreSession(){
   const t=localStorage.getItem('photoClubSession');
@@ -762,11 +763,11 @@ API._init();
 $('loginBg').style.backgroundImage='url('+HERO_PHOTO+')';
 // Sync from cloud first, then try restore session
 (async function(){
-  // Try cloud sync to get latest password/data
-  await API._syncFromRemote();
-  // Now try restore session with up-to-date data
-  const restored=await tryRestoreSession();
-  if(restored){enterApp();}
+  try{
+    await API._syncFromRemote();
+    const restored=await tryRestoreSession();
+    if(restored){enterApp();}
+  }catch(e){console.error('Init error:',e);}
 })();
 </script>
 </body>
