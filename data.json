@@ -15,6 +15,12 @@
       "contact": "",
       "points": 0,
       "created_at": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": 11,
+      "name": "吴巍",
+      "role": "社长",
+      "points": 0
     }
   ],
   "pointsHistory": [],
