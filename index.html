@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
 <title>留声光影 - 摄影社团</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -135,7 +137,7 @@ input,textarea,select{font-family:inherit;outline:none}
 .modal .modal-close{float:right;font-size:22px;color:var(--gray);cursor:pointer;line-height:1}
 
 /* ===== Login ===== */
-.login-screen{position:fixed;inset:0;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.login-screen{position:fixed;inset:0;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:#0e0e0e}
 .login-bg{position:absolute;inset:0;background-size:cover;background-position:center}
 .login-bg::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.65)}
 .login-box{position:relative;z-index:2;text-align:center;padding:24px;width:100%;max-width:360px}
@@ -1338,7 +1340,9 @@ function openPhoto(idx){
 
 // ===== Init =====
 API._init();
-$('loginBg').style.backgroundImage='url("'+photoUrl(HERO_PHOTO)+'")';
+try{
+  $('loginBg').style.backgroundImage='url("'+photoUrl(HERO_PHOTO)+'")';
+}catch(e){console.error('Bg error:',e);}
 (function(){
   try{
     API._syncFromRemote().then(function(){
@@ -1348,6 +1352,13 @@ $('loginBg').style.backgroundImage='url("'+photoUrl(HERO_PHOTO)+'")';
     }).catch(function(e){console.error('Init error:',e);});
   }catch(e){console.error('Init error:',e);}
 })();
+// Safety: if login screen is still visible after 3s, ensure it's interactive
+setTimeout(function(){
+  var ls=document.getElementById('loginScreen');
+  if(ls&&ls.style.display!=='none'){
+    ls.style.opacity='1';
+  }
+},3000);
 
 // Close modal on overlay click
 $('modalOverlay').addEventListener('click',function(e){
