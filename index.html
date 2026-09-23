@@ -446,9 +446,24 @@ var SEED_DATA = {
   },
   sessions: {},
   members: [
-    {id:1, name:"\u5434\u5d34", role:"\u793e\u957f", points:0},
-    {id:2, name:"\u53f6\u84d3", role:"\u6838\u5fc3\u6210\u5458", points:0},
-    {id:3, name:"\u9648\u5b87", role:"\u6210\u5458", points:0}
+    {id:11,name:"吴巍",role:"社长",points:0},
+    {id:12,name:"王金环",role:"成员",points:0},
+    {id:13,name:"李小强",role:"成员",points:0},
+    {id:14,name:"柴津玲",role:"成员",points:0},
+    {id:15,name:"沈丽红",role:"成员",points:0},
+    {id:16,name:"马骏",role:"成员",points:0},
+    {id:17,name:"叶蓓",role:"成员",points:0},
+    {id:18,name:"李文",role:"成员",points:0},
+    {id:19,name:"宋斌斌",role:"成员",points:0},
+    {id:20,name:"王征",role:"成员",points:0},
+    {id:21,name:"吕佳敏",role:"成员",points:0},
+    {id:22,name:"吕缘情",role:"成员",points:0},
+    {id:23,name:"李双",role:"成员",points:0},
+    {id:24,name:"孔浩美",role:"成员",points:0},
+    {id:25,name:"刘浩然",role:"成员",points:0},
+    {id:26,name:"聂胜来",role:"成员",points:0},
+    {id:27,name:"付子昱",role:"成员",points:0},
+    {id:28,name:"张丽娟",role:"成员",points:0}
   ],
   pointsHistory: [],
   activities: [
@@ -577,16 +592,16 @@ var API = {
       var localMembers=this._data.members||[];
       var remoteMembers=r.members||[];
       var mergedMembers=[];
-      var seenIds={};
+      var seenNames={};
       var i;
-      for(i=0;i<localMembers.length;i++){
-        mergedMembers.push(localMembers[i]);
-        seenIds[localMembers[i].id]=true;
-      }
       for(i=0;i<remoteMembers.length;i++){
-        if(!seenIds[remoteMembers[i].id]){
-          mergedMembers.push(remoteMembers[i]);
-          seenIds[remoteMembers[i].id]=true;
+        mergedMembers.push(remoteMembers[i]);
+        seenNames[remoteMembers[i].name]=true;
+      }
+      for(i=0;i<localMembers.length;i++){
+        if(!seenNames[localMembers[i].name]){
+          mergedMembers.push(localMembers[i]);
+          seenNames[localMembers[i].name]=true;
         }
       }
       r.members=mergedMembers;
