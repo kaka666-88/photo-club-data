@@ -25,12 +25,13 @@ input,textarea,select{font-family:inherit;outline:none}
 /* ===== Top Bar ===== */
 .topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(14,14,14,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--dark3)}
 .topbar .logo{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:700;color:var(--gold)}
+.topbar .logo img{width:28px;height:28px;border-radius:4px}
 .topbar .logo span{font-size:12px;color:var(--gray);font-weight:400}
 .topbar .actions{display:flex;gap:8px;align-items:center}
 .topbar .avatar{width:32px;height:32px;border-radius:50%;background:var(--dark3);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--gold);border:1px solid var(--gold)}
 
 /* ===== Bottom Nav ===== */
-.bottomnav{position:fixed;bottom:0;left:0;right:0;z-index:200;display:flex;background:rgba(14,14,14,.95);backdrop-filter:blur(10px);border-top:1px solid var(--dark3);height:56px}
+.bottomnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:1000px;z-index:200;display:flex;background:rgba(14,14,14,.95);backdrop-filter:blur(10px);border-top:1px solid var(--dark3);height:56px}
 .bottomnav .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--gray);font-size:10px;cursor:pointer;transition:color .2s;-webkit-user-select:none;user-select:none}
 .bottomnav .nav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2}
 .bottomnav .nav-item.active{color:var(--gold)}
@@ -39,6 +40,11 @@ input,textarea,select{font-family:inherit;outline:none}
 .hero{position:relative;height:42vh;min-height:280px;overflow:hidden}
 .hero img{width:100%;height:100%;object-fit:cover}
 .hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.3) 0%,rgba(0,0,0,.7) 100%)}
+.hero-slide{position:absolute;inset:0;opacity:0;transition:opacity 1s ease;object-fit:cover;width:100%;height:100%}
+.hero-slide.active{opacity:1}
+.hero-dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);z-index:3;display:flex;gap:6px}
+.hero-dots .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4);cursor:pointer;transition:background .3s}
+.hero-dots .dot.active{background:var(--gold)}
 .hero .hero-text{position:absolute;bottom:24px;left:0;right:0;text-align:center;z-index:2}
 .hero .hero-text h1{font-size:28px;color:#fff;letter-spacing:2px;text-shadow:0 2px 8px rgba(0,0,0,.6)}
 .hero .hero-text p{font-size:13px;color:rgba(255,255,255,.8);margin-top:4px}
@@ -166,12 +172,10 @@ input,textarea,select{font-family:inherit;outline:none}
 @media(min-width:768px){
   .section{max-width:800px;margin:0 auto}
   .topbar{max-width:800px;margin:0 auto;left:0;right:0}
-  .bottomnav{max-width:800px;margin:0 auto;left:50%;transform:translateX(-50%);width:100%}
 }
 @media(min-width:1024px){
   .section{max-width:1000px}
   .topbar{max-width:1000px}
-  .bottomnav{max-width:1000px}
 }
 </style>
 </head>
@@ -200,7 +204,7 @@ input,textarea,select{font-family:inherit;outline:none}
 
 <!-- Top Bar -->
 <div class="topbar">
-  <div class="logo">留声光影 <span>摄影社团</span></div>
+  <div class="logo"><img src="https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/club_logo.png" alt="logo">留声光影 <span>摄影社团</span></div>
   <div class="actions">
     <div class="avatar" id="userAvatar">访</div>
   </div>
@@ -208,11 +212,16 @@ input,textarea,select{font-family:inherit;outline:none}
 
 <!-- ===== Home Page ===== -->
 <div id="page-home" class="page active">
-  <div class="hero">
-    <img id="heroImg" src="" alt="">
+  <div class="hero" id="heroCarousel">
+    <div id="heroSlides" style="position:absolute;inset:0"></div>
     <div class="hero-text">
       <h1>留声光影</h1>
       <p>用镜头记录世界，用光影讲述故事</p>
+    </div>
+    <div id="heroDots" class="hero-dots"></div>
+    <div id="heroAdmin" style="display:none;position:absolute;top:12px;right:12px;z-index:5;display:flex;gap:8px">
+      <button class="btn btn-gold btn-sm" onclick="showUploadHero()">上传轮播图</button>
+      <button class="btn btn-ghost btn-sm" onclick="showDeleteHero()" style="background:rgba(0,0,0,.5);color:#fff">删除</button>
     </div>
   </div>
   <div class="section">
@@ -848,6 +857,7 @@ function enterApp(){
   }else{
     $('setRole').textContent='\u8bbf\u5ba2';
   }
+  initHeroCarousel();
   renderPage('home');
 }
 
@@ -894,9 +904,114 @@ function renderPage(page){
   }
 }
 
+// ===== Hero Carousel =====
+var heroSlides = [];
+var heroTimer = null;
+var heroIdx = 0;
+
+function initHeroCarousel(){
+  var saved = localStorage.getItem('heroSlides');
+  if(saved){
+    try{heroSlides = JSON.parse(saved);}catch(e){heroSlides = [];}
+  }
+  if(!heroSlides.length){
+    heroSlides = BG_PHOTOS.slice(0, 4);
+  }
+  renderHeroSlides();
+  startHeroTimer();
+}
+
+function renderHeroSlides(){
+  var container = $('heroSlides');
+  var dots = $('heroDots');
+  if(!container) return;
+  var html = '';
+  for(var i = 0; i < heroSlides.length; i++){
+    html += '<img class="hero-slide' + (i === heroIdx ? ' active' : '') + '" src="' + photoUrl(heroSlides[i]) + '" alt="" loading="lazy">';
+  }
+  container.innerHTML = html;
+  var dotsHtml = '';
+  for(var j = 0; j < heroSlides.length; j++){
+    dotsHtml += '<div class="dot' + (j === heroIdx ? ' active' : '') + '" onclick="goHeroSlide(' + j + ')"></div>';
+  }
+  dots.innerHTML = dotsHtml;
+  // Show admin controls
+  if(isAdmin()){
+    $('heroAdmin').style.display = 'flex';
+  }
+}
+
+function startHeroTimer(){
+  if(heroTimer) clearInterval(heroTimer);
+  heroTimer = setInterval(function(){
+    heroIdx = (heroIdx + 1) % heroSlides.length;
+    updateHeroSlide();
+  }, 5000);
+}
+
+function updateHeroSlide(){
+  var slides = document.querySelectorAll('.hero-slide');
+  var dots = document.querySelectorAll('.hero-dots .dot');
+  for(var i = 0; i < slides.length; i++){
+    if(slides[i]) slides[i].classList.toggle('active', i === heroIdx);
+    if(dots[i]) dots[i].classList.toggle('active', i === heroIdx);
+  }
+}
+
+function goHeroSlide(idx){
+  heroIdx = idx;
+  updateHeroSlide();
+  startHeroTimer();
+}
+
+function showUploadHero(){
+  openModal('<h3>上传轮播图 <span class="modal-close" onclick="closeModal()">&times;</span></h3>' +
+    '<div class="form-group"><label>图片URL</label><input id="heroUrl" placeholder="粘贴图片URL或从下方选择"></div>' +
+    '<p style="font-size:12px;color:var(--gray);margin-bottom:8px">或从已有作品中选择：</p>' +
+    '<div id="heroPhotoPicker" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-height:300px;overflow-y:auto"></div>' +
+    '<button class="btn btn-gold" style="width:100%;margin-top:12px" onclick="submitAddHero()">添加</button>');
+  var picker = $('heroPhotoPicker');
+  var html = '';
+  for(var i = 0; i < PHOTOS.length; i++){
+    html += '<div style="cursor:pointer;border:2px solid transparent;border-radius:8px;overflow:hidden" onclick="document.getElementById(\'heroUrl\').value=PHOTOS[' + i + '].url;this.parentElement.querySelectorAll(\'div\').forEach(function(d){d.style.border=\'2px solid transparent\'});this.style.border=\'2px solid var(--gold)\'"><img src="' + photoUrl(PHOTOS[i].url) + '" style="width:100%;height:60px;object-fit:cover" loading="lazy"></div>';
+  }
+  picker.innerHTML = html;
+}
+
+function submitAddHero(){
+  var url = $('heroUrl').value.trim();
+  if(!url){showToast('请选择或输入图片URL', true); return;}
+  heroSlides.push(url);
+  localStorage.setItem('heroSlides', JSON.stringify(heroSlides));
+  closeModal();
+  renderHeroSlides();
+  showToast('轮播图已添加');
+}
+
+function showDeleteHero(){
+  if(heroSlides.length <= 1){showToast('至少保留一张轮播图', true); return;}
+  var html = '<h3>删除轮播图 <span class="modal-close" onclick="closeModal()">&times;</span></h3>';
+  for(var i = 0; i < heroSlides.length; i++){
+    html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:8px;background:var(--dark2);border-radius:8px">' +
+      '<img src="' + photoUrl(heroSlides[i]) + '" style="width:60px;height:40px;object-fit:cover;border-radius:4px">' +
+      '<span style="flex:1;font-size:13px">轮播图 ' + (i+1) + '</span>' +
+      '<button class="btn btn-red btn-sm" onclick="deleteHeroSlide(' + i + ')">删除</button>' +
+      '</div>';
+  }
+  openModal(html);
+}
+
+function deleteHeroSlide(idx){
+  heroSlides.splice(idx, 1);
+  localStorage.setItem('heroSlides', JSON.stringify(heroSlides));
+  if(heroIdx >= heroSlides.length) heroIdx = 0;
+  closeModal();
+  renderHeroSlides();
+  showToast('轮播图已删除');
+}
+
 function renderHome(){
-  // Hero image
-  $('heroImg').src=photoUrl(HERO_PHOTO);
+  // Hero carousel handled by initHeroCarousel
   // Stats
   var members=API.getMembers();
   var acts=API.getActivities();
