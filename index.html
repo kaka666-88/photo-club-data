@@ -760,8 +760,11 @@ function closeModal(e){
 API._init();
 // Set login background
 $('loginBg').style.backgroundImage='url('+HERO_PHOTO+')';
-// Try restore session
+// Sync from cloud first, then try restore session
 (async function(){
+  // Try cloud sync to get latest password/data
+  await API._syncFromRemote();
+  // Now try restore session with up-to-date data
   const restored=await tryRestoreSession();
   if(restored){enterApp();}
 })();
