@@ -491,6 +491,82 @@
       "redeemed": 0,
       "detailImgs": [],
       "price": "20"
+    },
+    {
+      "name": "2000",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/古镇夜景_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "2000"
+    },
+    {
+      "name": "11",
+      "points": 11,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/古镇夜景_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "11"
+    },
+    {
+      "name": "33",
+      "points": 33,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/双朵春胭_沈丽红_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "33"
+    },
+    {
+      "name": "55",
+      "points": 66,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/向阳而生_吴巍_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "66"
+    },
+    {
+      "name": "光影明信片",
+      "desc": "精选社团作品印制",
+      "points": 50,
+      "img": ""
+    },
+    {
+      "name": "留声光影马克杯",
+      "desc": "限量定制保温杯",
+      "points": 80,
+      "img": ""
+    },
+    {
+      "name": "社团帆布包",
+      "desc": "棉麻材质印花logo",
+      "points": 100,
+      "img": ""
+    },
+    {
+      "name": "摄影短巾",
+      "desc": "超细纤维明信半帽巾",
+      "points": 60,
+      "img": ""
+    },
+    {
+      "name": "光影手贴纸贴",
+      "desc": "可拆贴手贴本",
+      "points": 40,
+      "img": ""
+    },
+    {
+      "name": "社团贴纸套装",
+      "desc": "6款不同主题贴纸",
+      "points": 70,
+      "img": ""
     }
   ],
   "activities": [
