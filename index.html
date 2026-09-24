@@ -887,6 +887,7 @@ function adminLoginSubmit(){
     saveSession();
     enterApp();
   }).catch(function(e){showToast(e.message,true);});
+}
 
 function showRegisterForm(){
   var box=document.querySelector('.login-box');
@@ -945,7 +946,6 @@ function memberLoginSubmit(){
       enterApp();
     }).catch(function(e2){showToast('账号或密码错误',true);});
   });
-}
 }
 
 function doGuestLogin(){
