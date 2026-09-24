@@ -1179,24 +1179,79 @@ function renderShop(){
   var grid=$('shopGrid');if(!grid)return;
   var items=(API._data.shop||[]);
   var html='';
+  if(isAdmin()){
+    html+='<div style="margin-bottom:12px">';
+    html+='<button class="btn btn-gold" style="width:100%;height:40px" onclick="addShopItem()">+ \u4e0a\u4f20\u5546\u54c1</button>';
+    html+='</div>';
+  }
   for(var i=0;i<items.length;i++){
     var it=items[i];
-    html+='<div style="background:var(--dark2);border-radius:12px;overflow:hidden;border:1px solid var(--dark3)">';
-    html+='<div style="height:140px;background:var(--dark3);display:flex;align-items:center;justify-content:center">';
-    if(it.img){html+='<img src="'+it.img+'" style="width:100%;height:100%;object-fit:cover">';}else{html+='<span style="font-size:32px">📷</span>';}
-    html+='</div>';
-    html+='<div style="padding:10px">';
-    html+='<div style="font-size:14px;font-weight:600;margin-bottom:4px">'+it.name+'</div>';
-    html+='<div style="font-size:12px;color:var(--gray);margin-bottom:8px">'+it.desc+'</div>';
-    html+='<div style="display:flex;justify-content:space-between;align-items:center">';
-    html+='<span style="color:var(--gold);font-size:13px;font-weight:700">'+it.points+' 积分</span>';
-    html+='<button class="btn btn-gold btn-sm" onclick="redeemItem('+i+')" style="font-size:11px;padding:4px 10px">兑换</button>';
+    html+='<div style="background:var(--dark2);border-radius:12px;overflow:hidden;border:1px solid var(--dark3);margin-bottom:12px;cursor:pointer" onclick="showShopDetail('+i+')">';
+    html+='<div style="height:200px;background:var(--dark3);position:relative">';
+    if(it.img){
+      html+='<img src="'+it.img+'" style="width:100%;height:100%;object-fit:cover">';
+    }else{
+      html+='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><span style="font-size:48px;opacity:.3">\u{1F4F7}</span></div>';
+    }
+    if(isAdmin()){
+      html+='<button class="btn btn-red btn-sm" style="position:absolute;top:8px;right:8px;font-size:11px;padding:4px 8px;z-index:2" onclick="event.stopPropagation();deleteShopItem('+i+')">\u5220\u9664</button>';
+    }
+    html+='<div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.8));padding:8px 12px">';
+    html+='<span style="color:var(--gold);font-size:18px;font-weight:700">'+it.points+' \u79ef\u5206</span>';
+    if(it.price){
+      html+='<span style="color:rgba(255,255,255,.5);font-size:12px;text-decoration:line-through;margin-left:8px">\u00a5'+it.price+'</span>';
+    }
+    html+='</div></div>';
+    html+='<div style="padding:12px">';
+    html+='<div style="font-size:15px;font-weight:600;margin-bottom:4px;line-height:1.4">'+it.name+'</div>';
+    var desc=it.desc||'';
+    if(desc.length>40){desc=desc.substring(0,40)+'...';}
+    html+='<div style="font-size:12px;color:var(--gray);line-height:1.5">'+desc+'</div>';
+    html+='<div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center">';
+    html+='<span style="font-size:11px;color:var(--gray)">'+(it.redeemed||0)+'\u5df2\u5151\u6362</span>';
+    html+='<span style="font-size:12px;color:var(--gold)">\u67e5\u770b\u8be6\u60c5 \u203a</span>';
     html+='</div></div></div>';
   }
-  if(isAdmin()){
-    html+='<div style="background:var(--dark2);border-radius:12px;overflow:hidden;border:1px dashed var(--gold);display:flex;align-items:center;justify-content:center;min-height:180px;cursor:pointer" onclick="addShopItem()"><span style="color:var(--gold);font-size:13px">+ 添加商品</span></div>';
+  if(items.length===0){
+    html+='<div style="text-align:center;padding:60px 20px;color:var(--gray)">';
+    html+='<div style="font-size:48px;margin-bottom:12px;opacity:.3">\u{1F6D2}</div>';
+    html+='<div>\u5546\u57ce\u8fd8\u6ca1\u6709\u5546\u54c1</div>';
+    if(isAdmin()){html+='<div style="margin-top:8px;font-size:12px;color:var(--gold)">\u70b9\u51fb\u4e0a\u65b9\u201c\u4e0a\u4f20\u5546\u54c1\u201d\u6dfb\u52a0</div>';}
+    html+='</div>';
   }
   grid.innerHTML=html;
+}
+
+function showShopDetail(idx){
+  var items=API._data.shop||[];if(!items[idx])return;
+  var it=items[idx];
+  var html='<div style="position:relative">';
+  html+='<div style="width:100%;height:240px;background:var(--dark3);border-radius:12px;overflow:hidden;margin-bottom:16px">';
+  if(it.img){
+    html+='<img src="'+it.img+'" style="width:100%;height:100%;object-fit:cover">';
+  }else{
+    html+='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><span style="font-size:64px;opacity:.3">\u{1F4F7}</span></div>';
+  }
+  html+='</div>';
+  html+='<div style="margin-bottom:12px">';
+  html+='<span style="color:var(--gold);font-size:28px;font-weight:700">'+it.points+' \u79ef\u5206</span>';
+  if(it.price){html+='<span style="color:var(--gray);font-size:14px;text-decoration:line-through;margin-left:12px">\u00a5'+it.price+'</span>';}
+  html+='</div>';
+  html+='<div style="font-size:18px;font-weight:700;margin-bottom:12px">'+it.name+'</div>';
+  var detail=it.detail||it.desc||'';
+  if(detail){
+    html+='<div style="background:var(--dark2);border-radius:8px;padding:12px;margin-bottom:16px">';
+    html+='<div style="font-size:12px;color:var(--gold);margin-bottom:8px;font-weight:600">\u5b9d\u8d1d\u8be6\u60c5</div>';
+    html+='<div style="font-size:13px;color:var(--gray);line-height:1.8;white-space:pre-wrap">'+detail+'</div>';
+    html+='</div>';
+  }
+  html+='<div style="display:flex;gap:16px;margin-bottom:16px;font-size:12px;color:var(--gray)">';
+  html+='<span>\u5df2\u5151\u6362: '+(it.redeemed||0)+'</span>';
+  if(it.stock!==undefined&&it.stock!==null){html+='<span>\u5e93\u5b58: '+it.stock+'</span>';}
+  html+='</div>';
+  html+='<button class="btn btn-gold" style="width:100%;height:44px;font-size:16px" onclick="redeemItem('+idx+')">\u7acb\u5373\u5151\u6362</button>';
+  html+='</div>';
+  openModal('<h3>\u5546\u54c1\u8be6\u60c5 <span class="modal-close" onclick="closeModal()">\u00d7</span></h3>'+html);
 }
 
 function redeemItem(idx){
@@ -1204,39 +1259,99 @@ function redeemItem(idx){
   var item=items[idx];
   var mem=API.getMembers();var found=null;
   for(var i=0;i<mem.length;i++){if(mem[i].name===state.user){found=mem[i];break;}}
-  if(!found){showToast('请先登录',true);return;}
+  if(!found){showToast('\u8bf7\u5148\u767b\u5f55',true);return;}
   var pts=found.points||0;
-  if(pts<item.points){showToast('积分不足，需'+item.points+'积分',true);return;}
-  if(!confirm('确认兑换「'+item.name+'」？消耗'+item.points+'积分'))return;
+  if(pts<item.points){showToast('\u79ef\u5206\u4e0d\u8db3\uff0c\u9700'+item.points+'\u79ef\u5206',true);return;}
+  if(item.stock!==undefined&&item.stock!==null&&item.stock<=0){showToast('\u5e93\u5b58\u4e0d\u8db3',true);return;}
+  if(!confirm('\u786e\u8ba4\u5151\u6362\u300c'+item.name+'\u300d\uff1f\u6d88\u8017'+item.points+'\u79ef\u5206'))return;
   found.points=pts-item.points;
   if(!API._data.pointsHistory)API._data.pointsHistory=[];
-  API._data.pointsHistory.push({name:state.user,action:'兑换:'+item.name,points:-item.points,date:new Date().toLocaleDateString()});
+  API._data.pointsHistory.push({name:state.user,action:'\u5151\u6362:'+item.name,points:-item.points,date:new Date().toLocaleDateString()});
+  if(item.redeemed===undefined)item.redeemed=0;
+  item.redeemed++;
+  if(item.stock!==undefined&&item.stock!==null)item.stock--;
   API._saveLocal();API._writeRemote();
-  renderShop();renderPoints();
-  showToast('兑换成功');
+  closeModal();renderShop();renderPoints();
+  showToast('\u5151\u6362\u6210\u529f');
 }
 
 function addShopItem(){
-  openModal('<h3>添加商品 <span class="modal-close" onclick="closeModal()">&times;</span></h3>');
-  var body='<div class="form-group"><label>名称</label><input id="shopName" placeholder="商品名称"></div>';
-  body+='<div class="form-group"><label>描述</label><input id="shopDesc" placeholder="商品描述"></div>';
-  body+='<div class="form-group"><label>所需积分</label><input id="shopPts" type="number" placeholder="如 50"></div>';
-  body+='<div class="form-group"><label>图片URL（可选）</label><input id="shopImg" placeholder="图片链接"></div>';
-  body+='<button class="btn btn-gold" style="width:100%" onclick="submitShopItem()">添加</button>';
-  appendModalBody(body);
+  var body='<h3>\u4e0a\u4f20\u5546\u54c1 <span class="modal-close" onclick="closeModal()">\u00d7</span></h3>';
+  body+='<div id="shopImgPreview" style="width:100%;height:160px;background:var(--dark3);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;overflow:hidden">';
+  body+='<span style="color:var(--gray);font-size:13px">\u70b9\u51fb\u4e0b\u65b9\u9009\u62e9\u56fe\u7247\u6216\u7c98\u8d34URL</span>';
+  body+='</div>';
+  body+='<div style="margin-bottom:8px">';
+  body+='<label style="font-size:12px;color:var(--gold);margin-bottom:4px;display:block">\u9009\u62e9\u793e\u56e2\u4f5c\u54c1</label>';
+  body+='<div id="shopPhotoPicker" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-height:120px;overflow-y:auto"></div>';
+  body+='</div>';
+  body+='<div class="form-group"><label>\u56fe\u7247URL\uff08\u53ef\u9009\uff09</label><input id="shopImg" placeholder="\u7c98\u8d34\u56fe\u7247\u94fe\u63a5" oninput="previewShopImg(this.value)"></div>';
+  body+='<div class="form-group"><label>\u5546\u54c1\u540d\u79f0</label><input id="shopName" placeholder="\u5982\uff1a\u7559\u58f0\u5149\u5f71\u660e\u4fe1\u7247"></div>';
+  body+='<div class="form-group"><label>\u5151\u6362\u79ef\u5206</label><input id="shopPts" type="number" placeholder="\u5982 50"></div>';
+  body+='<div class="form-group"><label>\u539f\u4ef7\uff08\u53ef\u9009\uff0c\u5212\u7ebf\u5c55\u793a\uff09</label><input id="shopPrice" type="number" placeholder="\u5982 29.9"></div>';
+  body+='<div class="form-group"><label>\u7b80\u77ed\u63cf\u8ff0</label><input id="shopDesc" placeholder="\u4e00\u53e5\u8bdd\u63cf\u8ff0\u5546\u54c1"></div>';
+  body+='<div class="form-group"><label>\u5b9d\u8d1b\u8be6\u60c5</label>';
+  body+='<textarea id="shopDetail" rows="4" placeholder="\u8be6\u7ec6\u4ecb\u7ecd\u5546\u54c1\u7279\u70b9\u3001\u6750\u8d28\u3001\u5c3a\u5bf8\u7b49" style="width:100%;background:var(--dark3);border:1px solid var(--dark3);border-radius:8px;padding:10px;color:#fff;font-size:13px;resize:vertical"></textarea>';
+  body+='</div>';
+  body+='<div class="form-group"><label>\u5e93\u5b58\u6570\u91cf\uff08\u53ef\u9009\uff09</label><input id="shopStock" type="number" placeholder="\u4e0d\u586b\u8868\u793a\u4e0d\u9650"></div>';
+  body+='<button class="btn btn-gold" style="width:100%;height:44px;font-size:15px;margin-top:8px" onclick="submitShopItem()">\u53d1\u5e03\u5546\u54c1</button>';
+  openModal(body);
+  var picker=$('shopPhotoPicker');
+  if(picker&&typeof PHOTOS!=='undefined'){
+    var phtml='';
+    for(var i=0;i<PHOTOS.length;i++){
+      phtml+='<div style="cursor:pointer;border:2px solid transparent;border-radius:6px;overflow:hidden" onclick="selectShopImg(this,'+i+')"><img src="'+photoUrl(PHOTOS[i].url)+'" style="width:100%;height:40px;object-fit:cover"></div>';
+    }
+    picker.innerHTML=phtml;
+  }
+}
+
+function selectShopImg(el,idx){
+  var url=PHOTOS[idx].url;
+  $('shopImg').value=url;
+  previewShopImg(url);
+  var s=el.parentNode.children;
+  for(var i=0;i<s.length;i++){s[i].style.border='2px solid transparent';}
+  el.style.border='2px solid var(--gold)';
+}
+
+function previewShopImg(url){
+  var prev=$('shopImgPreview');
+  if(!prev)return;
+  if(url){
+    prev.innerHTML='<img src="'+url+'" style="width:100%;height:100%;object-fit:cover">';
+  }else{
+    prev.innerHTML='<span style="color:var(--gray);font-size:13px">\u70b9\u51fb\u4e0b\u65b9\u9009\u62e9\u56fe\u7247\u6216\u7c98\u8d34URL</span>';
+  }
 }
 
 function submitShopItem(){
   var name=$('shopName').value.trim();
-  var desc=$('shopDesc').value.trim();
   var pts=parseInt($('shopPts').value)||0;
+  var price=$('shopPrice').value.trim();
+  var desc=$('shopDesc').value.trim();
+  var detail=$('shopDetail').value.trim();
   var img=$('shopImg').value.trim();
-  if(!name){showToast('请输入名称',true);return;}
+  var stockInput=$('shopStock').value.trim();
+  var stock=stockInput?parseInt(stockInput):null;
+  if(!name){showToast('\u8bf7\u8f93\u5165\u5546\u54c1\u540d\u79f0',true);return;}
+  if(pts<=0){showToast('\u8bf7\u8f93\u5165\u6709\u6548\u79ef\u5206',true);return;}
   if(!API._data.shop)API._data.shop=[];
-  API._data.shop.push({name:name,desc:desc,points:pts,img:img});
+  var item={name:name,points:pts,desc:desc,detail:detail,img:img,redeemed:0};
+  if(price)item.price=price;
+  if(stock!==null)item.stock=stock;
+  API._data.shop.push(item);
   API._saveLocal();API._writeRemote();
   closeModal();renderShop();
-  showToast('商品已添加');
+  showToast('\u5546\u54c1\u5df2\u53d1\u5e03');
+}
+
+function deleteShopItem(idx){
+  var items=API._data.shop||[];if(!items[idx])return;
+  if(!confirm('\u786e\u8ba4\u5220\u9664\u300c'+items[idx].name+'\u300d\uff1f'))return;
+  items.splice(idx,1);
+  API._saveLocal();API._writeRemote();
+  renderShop();
+  showToast('\u5546\u54c1\u5df2\u5220\u9664');
 }
 
 function renderSettings(){
