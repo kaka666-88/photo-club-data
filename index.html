@@ -645,6 +645,37 @@ var API = {
       }
       r.members=mergedMembers;
       r.sessions=ls;
+      // Merge shop: keep local items that are not in remote
+      var localShop=this._data.shop||[];
+      var remoteShop=r.shop||[];
+      var shopSeen={};
+      for(i=0;i<remoteShop.length;i++){shopSeen[remoteShop[i].name]=true;}
+      for(i=0;i<localShop.length;i++){
+        if(!shopSeen[localShop[i].name]){
+          remoteShop.push(localShop[i]);
+          shopSeen[localShop[i].name]=true;
+        }
+      }
+      r.shop=remoteShop;
+      // Merge registrations: keep local that are not in remote
+      var localRegs=this._data.registrations||[];
+      var remoteRegs=r.registrations||[];
+      var regSeen={};
+      for(i=0;i<remoteRegs.length;i++){regSeen[remoteRegs[i].username]=true;}
+      for(i=0;i<localRegs.length;i++){
+        if(!regSeen[localRegs[i].username]){
+          remoteRegs.push(localRegs[i]);
+          regSeen[localRegs[i].username]=true;
+        }
+      }
+      r.registrations=remoteRegs;
+      // Merge pointsHistory: keep local that are not in remote
+      var localPH=this._data.pointsHistory||[];
+      var remotePH=r.pointsHistory||[];
+      for(i=0;i<localPH.length;i++){
+        remotePH.push(localPH[i]);
+      }
+      r.pointsHistory=remotePH;
       var all=[].concat(r.members||[],r.activities||[],r.knowledge||[],r.news||[],r.tips||[]);
       var maxId=0;
       for(i=0;i<all.length;i++){if(all[i].id>maxId)maxId=all[i].id;}
