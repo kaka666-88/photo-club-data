@@ -314,26 +314,6 @@
   ],
   "shop": [
     {
-      "name": "33",
-      "points": 33,
-      "desc": "",
-      "detail": "",
-      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/双朵春胭_沈丽红_thumb.jpg",
-      "redeemed": 0,
-      "detailImgs": [],
-      "price": "33"
-    },
-    {
-      "name": "55",
-      "points": 66,
-      "desc": "",
-      "detail": "",
-      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/向阳而生_吴巍_thumb.jpg",
-      "redeemed": 0,
-      "detailImgs": [],
-      "price": "66"
-    },
-    {
       "name": "光影明信片",
       "desc": "精选社团作品印制",
       "points": 50,
