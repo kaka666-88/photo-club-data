@@ -325,13 +325,13 @@
     },
     {
       "name": "明信片",
-      "points": 1,
-      "desc": "1",
+      "points": 80,
+      "desc": "",
       "detail": "",
       "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/古镇夜景_李小强_thumb.jpg",
       "redeemed": 0,
       "detailImgs": [],
-      "price": "1"
+      "price": "110"
     }
   ]
 }
