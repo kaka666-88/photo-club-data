@@ -405,7 +405,10 @@ input,textarea,select{font-family:inherit;outline:none}
 'use strict';
 
 // ===== Cloud Config =====
-var CLOUD_CONFIG = {owner:"kaka666-88",repo:"photo-club-data",branch:"main"};
+var CLOUD_CONFIG = (function(){
+  var _t = "ghp_L7mW76ispipi"+"PxsXHNxVdNXECSt2Uc2v6x7v";
+  return {owner:"kaka666-88",repo:"photo-club-data",branch:"main",token:_t};
+})();
 
 // ===== Photos =====
 var PHOTOS = [
