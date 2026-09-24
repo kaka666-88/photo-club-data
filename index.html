@@ -436,7 +436,7 @@ var PHOTOS = [
   {title:"颐和园",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/颐和园_李小强_thumb.jpg"}
 ];
 
-var HERO_PHOTO = PHOTOS[18].url;
+var HERO_PHOTO = "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80";
 
 function photoUrl(url){
   try{
@@ -447,7 +447,12 @@ function photoUrl(url){
   }catch(e){}
   return url;
 }
-var BG_PHOTOS = [PHOTOS[0].url, PHOTOS[18].url, PHOTOS[24].url, PHOTOS[35].url];
+var BG_PHOTOS = [
+  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80",
+  "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&q=80",
+  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=1920&q=80",
+  "https://images.unsplash.com/photo-1428515613728-6b4607e44363?w=1920&q=80"
+];
 
 // ===== Seed Data =====
 var SEED_DATA = {
@@ -914,7 +919,7 @@ var heroTimer = null;
 var heroIdx = 0;
 
 function initHeroCarousel(){
-  var saved = localStorage.getItem('heroSlides');
+  var saved = localStorage.getItem('heroSlides_v2');
   if(saved){
     try{heroSlides = JSON.parse(saved);}catch(e){heroSlides = [];}
   }
@@ -988,7 +993,7 @@ function submitAddHero(){
   var url = $('heroUrl').value.trim();
   if(!url){showToast('请选择或输入图片URL', true); return;}
   heroSlides.push(url);
-  localStorage.setItem('heroSlides', JSON.stringify(heroSlides));
+  localStorage.setItem('heroSlides_v2', JSON.stringify(heroSlides));
   closeModal();
   renderHeroSlides();
   showToast('轮播图已添加');
@@ -1009,7 +1014,7 @@ function showDeleteHero(){
 
 function deleteHeroSlide(idx){
   heroSlides.splice(idx, 1);
-  localStorage.setItem('heroSlides', JSON.stringify(heroSlides));
+  localStorage.setItem('heroSlides_v2', JSON.stringify(heroSlides));
   if(heroIdx >= heroSlides.length) heroIdx = 0;
   closeModal();
   renderHeroSlides();
