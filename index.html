@@ -566,7 +566,14 @@ var API = {
     return !!(c&&c.token);
   },
   ghCfg: function(){
-    try{var c=JSON.parse(localStorage.getItem('photoClubGithub')||'{}');return c;}catch(e){return {};}
+    try{
+      var c=JSON.parse(localStorage.getItem('photoClubGithub')||'{}');
+      if(!c.owner&&CLOUD_CONFIG.owner)c.owner=CLOUD_CONFIG.owner;
+      if(!c.repo&&CLOUD_CONFIG.repo)c.repo=CLOUD_CONFIG.repo;
+      if(!c.branch&&CLOUD_CONFIG.branch)c.branch=CLOUD_CONFIG.branch;
+      if(!c.token&&CLOUD_CONFIG.token)c.token=CLOUD_CONFIG.token;
+      return c;
+    }catch(e){return CLOUD_CONFIG||{};}
   },
   _apiUrl: function(){
     var c=this.ghCfg();
