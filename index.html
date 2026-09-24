@@ -720,6 +720,32 @@ var API = {
     return Promise.resolve({user:'\u8bbf\u5ba2',token:token});
   },
 
+  memberRegister: function(name,pass,realName){
+    if(!name||!pass)return Promise.reject(new Error('请填写账号和密码'));
+    if(name==='admin')return Promise.reject(new Error('该账号不可用'));
+    var regs=this._data.registrations||[];
+    for(var i=0;i<regs.length;i++){if(regs[i].username===name)return Promise.reject(new Error('该账号已注册'));}
+    var mem=this.getMembers();
+    for(var j=0;j<mem.length;j++){if(mem[j].username===name)return Promise.reject(new Error('该账号已存在'));}
+    regs.push({id:Date.now(),username:name,password:pass,realName:realName||name,status:'pending',date:new Date().toLocaleDateString()});
+    this._data.registrations=regs;
+    this._saveLocal();this._writeRemote();
+    return Promise.resolve({ok:true});
+  },
+  memberLogin: function(name,pass){
+    var mem=this.getMembers();
+    for(var i=0;i<mem.length;i++){
+      if(mem[i].username===name&&mem[i].password===pass){
+        var token='member_'+Date.now();
+        this._data.sessions=this._data.sessions||{};
+        this._data.sessions[token]={user:mem[i].name,role:'member',ts:Date.now()};
+        this._saveLocal();
+        return Promise.resolve({user:mem[i].name,token:token});
+      }
+    }
+    return Promise.reject(new Error('账号或密码错误'));
+  },
+
   // ===== Members =====
   getMembers: function(){return this._data.members||[];},
   addMember: function(name,role){
@@ -860,6 +886,65 @@ function adminLoginSubmit(){
     saveSession();
     enterApp();
   }).catch(function(e){showToast(e.message,true);});
+
+function showRegisterForm(){
+  var box=document.querySelector('.login-box');
+  box.innerHTML='<img src="https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/club_logo.png?v=7" alt="留声光影" style="width:107px;height:107px;border-radius:14px;margin:0 auto 16px;display:block;filter:drop-shadow(0 0 10px rgba(201,169,110,.5))">'+
+    '<h1>注册账号</h1>'+
+    '<p class="sub">填写你的信息，管理员审核后即可登录</p>'+
+    '<div class="form-group"><input id="regUser" placeholder="登录账号" style="margin-bottom:8px"></div>'+
+    '<div class="form-group"><input id="regPass" type="password" placeholder="设置密码" style="margin-bottom:8px"></div>'+
+    '<div class="form-group"><input id="regName" placeholder="姓名（真实姓名）" style="margin-bottom:8px"></div>'+
+    '<div id="regErr" class="err-msg"></div>'+
+    '<button class="btn btn-gold" onclick="submitRegister()">提交注册</button>'+
+    '<div class="guest-btn" onclick="backToLogin()">返回登录</div>';
+}
+
+function backToLogin(){
+  var box=document.querySelector('.login-box');
+  box.innerHTML='<img src="https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/club_logo.png?v=7" alt="留声光影" style="width:107px;height:107px;border-radius:14px;margin:0 auto 16px;display:block;filter:drop-shadow(0 0 10px rgba(201,169,110,.5))">'+
+    '<h1>留声光影</h1>'+
+    '<p class="sub">用镜头记录世界，用光影讲述故事</p>'+
+    '<div class="form-group"><input id="loginUser" placeholder="账号" autocomplete="username" style="margin-bottom:8px"></div>'+
+    '<div class="form-group"><input id="loginPass" type="password" placeholder="密码" autocomplete="current-password"></div>'+
+    '<div id="loginErr" class="err-msg"></div>'+
+    '<button class="btn btn-gold" onclick="memberLoginSubmit()">登录</button>'+
+    '<div class="guest-btn" onclick="doGuestLogin()">访客浏览</div>'+
+    '<div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1);font-size:13px;color:rgba(255,255,255,.5)">社团成员？<a onclick="showRegisterForm()" style="color:var(--gold);cursor:pointer;text-decoration:none">注册账号</a></div>';
+}
+
+function submitRegister(){
+  var u=$('regUser').value.trim();
+  var p=$('regPass').value.trim();
+  var n=$('regName').value.trim();
+  if(!u||!p){showToast('请填写账号和密码',true);return;}
+  if(u==='admin'){showToast('该账号不可用',true);return;}
+  API.memberRegister(u,p,n).then(function(){
+    showToast('注册提交成功！等待管理员审核');
+    backToLogin();
+  }).catch(function(e){showToast(e.message,true);});
+}
+
+function memberLoginSubmit(){
+  var u=$('loginUser').value.trim();
+  var p=$('loginPass').value.trim();
+  if(!u||!p){showToast('请输入账号和密码',true);return;}
+  API.memberLogin(u,p).then(function(r){
+    state.role='member';state.user=r.user;state.token=r.token;
+    localStorage.setItem('photoClubMemberUser',u);
+    localStorage.setItem('photoClubMemberPass',p);
+    saveSession();
+    enterApp();
+  }).catch(function(e){
+    API.adminLogin(u,p).then(function(r){
+      state.role='admin';state.user=r.user;state.token=r.token;
+      localStorage.setItem('photoClubAdminUser',u);
+      localStorage.setItem('photoClubAdminPass',p);
+      saveSession();
+      enterApp();
+    }).catch(function(e2){showToast('账号或密码错误',true);});
+  });
+}
 }
 
 function doGuestLogin(){
@@ -1272,7 +1357,8 @@ function redeemItem(idx){
   var item=items[idx];
   var mem=API.getMembers();var found=null;
   for(var i=0;i<mem.length;i++){if(mem[i].name===state.user){found=mem[i];break;}}
-  if(!found){showToast('\u8bf7\u5148\u767b\u5f55',true);return;}
+  if(!found){showToast('\u8bf7\u5148\u767b\u5f55\u6210\u5458\u8d26\u53f7',true);return;}
+  if(state.role==='guest'){showToast('\u8bbf\u5ba2\u65e0\u6cd5\u5151\u6362\uff0c\u8bf7\u6ce8\u518c\u6210\u4e3a\u793e\u56e2\u6210\u5458',true);return;}
   var pts=found.points||0;
   if(pts<item.points){showToast('\u79ef\u5206\u4e0d\u8db3\uff0c\u9700'+item.points+'\u79ef\u5206',true);return;}
   if(item.stock!==undefined&&item.stock!==null&&item.stock<=0){showToast('\u5e93\u5b58\u4e0d\u8db3',true);return;}
@@ -1466,6 +1552,51 @@ function renderSettings(){
   if(isAdmin()){
     $('setClubName').textContent=API._data.settings.club_name||'-';
   }
+  // Registration review for admin
+  if(isAdmin()){
+    var regs=API._data.registrations||[];
+    var pending=regs.filter(function(r){return r.status==='pending';});
+    if(pending.length){
+      var regHtml='<div class="set-section"><h4>注册审核 ('+pending.length+')</h4>';
+      for(var i=0;i<regs.length;i++){
+        if(regs[i].status!=='pending')continue;
+        var r=regs[i];
+        regHtml+='<div class="set-item" style="flex-direction:column;align-items:flex-start">';
+        regHtml+='<div style="width:100%;display:flex;justify-content:space-between;align-items:center">';
+        regHtml+='<div><div style="font-weight:600">'+r.realName+' ('+r.username+')</div><div style="font-size:12px;color:var(--gray)">'+r.date+'</div></div>';
+        regHtml+='<div style="display:flex;gap:6px">';
+        regHtml+='<button class="btn btn-gold btn-sm" onclick="approveReg('+i+')">通过</button>';
+        regHtml+='<button class="btn btn-red btn-sm" onclick="rejectReg('+i+')">拒绝</button>';
+        regHtml+='</div></div></div>';
+      }
+      regHtml+='</div>';
+      var settingsDiv=document.querySelector('#page-settings .section');
+      if(settingsDiv){settingsDiv.insertAdjacentHTML('beforeend',regHtml);}
+    }
+  }
+
+
+function approveReg(idx){
+  var regs=API._data.registrations||[];if(!regs[idx])return;
+  var r=regs[idx];
+  // Add as member with username/password
+  var mem={id:API._nextId++,name:r.realName,username:r.username,password:r.password,points:0,role:'member'};
+  API._data.members=API._data.members||[];
+  API._data.members.push(mem);
+  regs[idx].status='approved';
+  API._saveLocal();API._writeRemote();
+  renderSettings();
+  showToast('已通过 '+r.realName+' 的注册');
+}
+
+function rejectReg(idx){
+  var regs=API._data.registrations||[];if(!regs[idx])return;
+  regs[idx].status='rejected';
+  API._saveLocal();API._writeRemote();
+  renderSettings();
+  showToast('已拒绝注册');
+}
+
 }
 
 // ===== Modals =====
