@@ -6,6 +6,7 @@
     "club_name": "留声光影",
     "club_desc": "用镜头记录世界，用光影讲述故事"
   },
+  "_deleted": {},
   "members": [
     {
       "id": 11,
@@ -120,7 +121,448 @@
       "points": 0
     }
   ],
-  "pointsHistory": [],
+  "shop": [
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    },
+    {
+      "name": "202",
+      "points": 20,
+      "desc": "",
+      "detail": "",
+      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "redeemed": 0,
+      "detailImgs": [],
+      "price": "20"
+    }
+  ],
   "activities": [
     {
       "id": 1,
@@ -153,7 +595,6 @@
       "created_at": "2026-08-01T00:00:00.000Z"
     }
   ],
-  "knowledge": [],
   "news": [
     {
       "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
@@ -164,76 +605,316 @@
       "date": "2026-09-23"
     },
     {
-      "title": "佳能发布EOS R8 Mark II全画幅专微相机",
-      "summary": "佳能发布全画幅专微EOS R8 Mark II，搭载2420万像素CMOS与DIGIC X处理器，新增机身五轴防抖（最高7.5级协同防抖），支持40张/秒电子快门连拍和预连拍功能，机身约546g。",
-      "source": "今日头条",
-      "url": "http://m.toutiao.com/group/7686014511542698535/?upstream_biz=VolcEngine",
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
       "category": "器材发布",
-      "date": "2026-09-16"
+      "date": "2026-09-23"
     },
     {
-      "title": "适马发布85mm F1.2 Art与20-60mm F2.8-4两款全画幅镜头",
-      "summary": "适马正式官宣两款新镜头：85mm F1.2 DG DN Art人像大光圈定焦（同类最轻约905g，美国售价$1599）和20-60mm F2.8-4 DG DN Contemporary便携标准变焦，均提供索尼E卡口与L卡口版本。",
-      "source": "影像中国网",
-      "url": "http://m.cpanet.cn/detail_news_143753.html",
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
       "category": "器材发布",
-      "date": "2026-09-08"
+      "date": "2026-09-23"
     },
     {
-      "title": "徕卡发布Summicron-M 66 f/2复刻改良版镜头",
-      "summary": "徕卡致敬1960年代专为美国海军打造的Elcan 66mm f/2间谍镜头，推出复刻改良版Summicron-M 66 f/2，限量发售660枚，采用66mm罕见焦距，光圈环旋转方向与常规M镜头相反。",
-      "source": "徕卡相机",
-      "url": "https://www.leica-camera.cn/press/Summicron-M-66-f2",
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
       "category": "器材发布",
-      "date": "2026-09-03"
+      "date": "2026-09-23"
     },
     {
-      "title": "2026年度全球旅游摄影大赛(TPOTY)征稿启动",
-      "summary": "由Travel Photographer of the Year Ltd主办的2026年度旅游摄影大赛全球征稿中，面向职业摄影师、摄影爱好者及初学者，设冒险与旅行、文化传统与庆典等组别，代理截稿10月7日。",
-      "source": "中国摄影网",
-      "url": "https://m.cnphotos.net/exhibit/show-2004.html",
-      "category": "摄影比赛",
-      "date": "2026-09-18"
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
     },
     {
-      "title": "2026松典影像大赛正式开启征稿",
-      "summary": "以'轻松dian·趣拍生活'为主题的2026松典影像大赛9月15日开启，设青春放映室、亲爱的你啊、路的不期而遇等五大赛道，金奖奖金3万元，征稿期至11月15日，小红书与摄想家APP双平台投稿。",
-      "source": "中国商报网",
-      "url": "http://www.zgswcn.com/news.html?aid=370807",
-      "category": "摄影比赛",
-      "date": "2026-09-16"
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
     },
     {
-      "title": "2026'影像北京 绿道追光'摄影大赛全网征稿",
-      "summary": "北京市文旅局主办的摄影大赛覆盖52条北京旅游休闲绿道，围绕生态之美、人文之韵、活力之姿三大主题，分三大赛区征集，3月29日至9月30日全网征稿，面向全社会公开征集。",
-      "source": "北京市人民政府",
-      "url": "https://www.beijing.gov.cn/fuwu/bmfw/sy/jrts/202604/t20260409_4578272.html",
-      "category": "摄影比赛",
-      "date": "2026-04-09"
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
     },
     {
-      "title": "富士胶片株洲冶炼厂主题摄影展亮相上海X-SPACE",
-      "summary": "富士胶片共创'地方记忆'主题摄影展在上海X-SPACE展出，聚焦株洲冶炼厂工业记忆与人文影像。同期富士胶片7项作品荣获2026红点品牌与传达设计大奖。",
-      "source": "富士胶片",
-      "url": "https://www.fujifilm.com.cn/cn/zh-hans/news/list/3/all",
-      "category": "摄影展览",
-      "date": "2026-09-17"
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
     },
     {
-      "title": "AI摄影技术趋势：计算摄影与生成式影像的路线之争",
-      "summary": "2026年AI摄影已从辅助调色演变为贯穿拍摄全流程的核心能力。计算摄影强调多帧融合逼近光学极限，生成式影像则利用扩散模型重建画面，两者在夜景、人像、色彩等场景呈现差异化策略。",
-      "source": "什么值得买",
-      "url": "https://post.m.smzdm.com/p/ad74mw2z/",
-      "category": "技术趋势",
-      "date": "2026-09-18"
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
     },
     {
-      "title": "中国文艺网：从传统滤镜到AI大模型的摄影创作变革",
-      "summary": "专业摄影AI大模型正从通用泛化走向垂直专业，能精准识别场景、主体、光影关系并动态优化，已从'被动修图'延伸至'美学指导'层面，可分析构图优劣、提供拍摄建议，进入智能化新阶段。",
-      "source": "中国文学艺术界联合会",
-      "url": "http://www.cflac.org.cn/new_dtxw/202608/t20260811_1368637.html",
-      "category": "技术趋势",
-      "date": "2026-08-11"
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
+    },
+    {
+      "title": "影石发布云台相机Luna Ultra更新，拓展长焦拍摄与人像记录能力",
+      "summary": "影石Insta360对旗舰云台相机Luna Ultra完成硬件配件与软件功能升级，新增增距镜使最高变焦达22.5倍（等效450mm），新增舞台模式适配演唱会场景，国内定价4358元。",
+      "source": "新华网",
+      "url": "http://www.xinhuanet.com/tech/20260923/f5b7589b395c49979aec3866ab8987d6/c.html",
+      "category": "器材发布",
+      "date": "2026-09-23"
     }
   ],
   "tips": [
@@ -294,6 +975,7 @@
       "content": "风光摄影是记录自然之美的艺术，需要耐心和技巧。\n\n时间选择：黄金时刻和蓝调时刻最佳。日出前30分钟到达机位，日落后等待蓝调。\n\n构图要点：前景构图增加层次感（石头、花草、水面）；三分法地平线放在上或下三分之一；引导线（道路、河流）引导视线。\n\n参数设置：光圈F/8-F/11保证全景清晰；ISO 100保证画质；使用三脚架允许慢门。\n\n滤镜使用：ND减光镜拍流水拉丝效果；GND渐变镜平衡天空与地面光比；CPL偏振镜消除反光增加饱和度。\n\n慢门流水：ND镜+三脚架，快门1-10秒，拍出丝滑水流效果。\n\n全景接片：固定焦段拍多张，后期拼接成宽幅全景。注意重叠区域30%以上。"
     }
   ],
+  "knowledge": [],
   "registrations": [
     {
       "id": 1790224440738,
@@ -312,92 +994,5 @@
       "date": "2026/9/24"
     }
   ],
-  "shop": [
-    {
-      "name": "202",
-      "points": 20,
-      "desc": "",
-      "detail": "",
-      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
-      "redeemed": 0,
-      "detailImgs": [],
-      "price": "20"
-    },
-    {
-      "name": "2000",
-      "points": 20,
-      "desc": "",
-      "detail": "",
-      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/古镇夜景_李小强_thumb.jpg",
-      "redeemed": 0,
-      "detailImgs": [],
-      "price": "2000"
-    },
-    {
-      "name": "11",
-      "points": 11,
-      "desc": "",
-      "detail": "",
-      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/古镇夜景_李小强_thumb.jpg",
-      "redeemed": 0,
-      "detailImgs": [],
-      "price": "11"
-    },
-    {
-      "name": "33",
-      "points": 33,
-      "desc": "",
-      "detail": "",
-      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/双朵春胭_沈丽红_thumb.jpg",
-      "redeemed": 0,
-      "detailImgs": [],
-      "price": "33"
-    },
-    {
-      "name": "55",
-      "points": 66,
-      "desc": "",
-      "detail": "",
-      "img": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/向阳而生_吴巍_thumb.jpg",
-      "redeemed": 0,
-      "detailImgs": [],
-      "price": "66"
-    },
-    {
-      "name": "光影明信片",
-      "desc": "精选社团作品印制",
-      "points": 50,
-      "img": ""
-    },
-    {
-      "name": "留声光影马克杯",
-      "desc": "限量定制保温杯",
-      "points": 80,
-      "img": ""
-    },
-    {
-      "name": "社团帆布包",
-      "desc": "棉麻材质印花logo",
-      "points": 100,
-      "img": ""
-    },
-    {
-      "name": "摄影短巾",
-      "desc": "超细纤维明信半帽巾",
-      "points": 60,
-      "img": ""
-    },
-    {
-      "name": "光影手贴纸贴",
-      "desc": "可拆贴手贴本",
-      "points": 40,
-      "img": ""
-    },
-    {
-      "name": "社团贴纸套装",
-      "desc": "6款不同主题贴纸",
-      "points": 70,
-      "img": ""
-    }
-  ]
+  "pointsHistory": []
 }
