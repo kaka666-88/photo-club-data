@@ -742,22 +742,73 @@ var API = {
     if(!this._isConfigured())return false;
     if(!this._hasToken()){console.warn('No token');return false;}
     var c=this.ghCfg();
-    try{
-      var sha=null;
+    var maxRetries=3;
+    for(var attempt=0;attempt<maxRetries;attempt++){
       try{
-        var gr=await fetch(this._apiUrl(),{headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github.v3+json'}});
-        if(gr.ok){var fd=await gr.json();sha=fd.sha;this._remoteSha=sha;}
-      }catch(e){}
-      var d=JSON.parse(JSON.stringify(this._data));
-      delete d.sessions;
-      // Safety: never write empty data (prevents cloud wipe)
-      if(!d.members||d.members.length===0){console.warn('Skip write: no members');return false;}
-      var content=this._encodeBase64(JSON.stringify(d,null,2));
-      var body=JSON.stringify({message:'Update '+new Date().toISOString(),content:content,sha:sha||undefined,branch:c.branch});
-      var pr=await fetch(this._apiUrl(),{method:'PUT',headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:body});
-      if(pr.ok){var res=await pr.json();this._remoteSha=res.content.sha;this._skipNextSync=true;this._lastSync=Date.now();return true;}
-      var et=await pr.text();console.error('Write failed:',pr.status,et);showToast('\u540c\u6b65\u5931\u8d25:'+pr.status,true);return false;
-    }catch(e){console.error('Write error:',e);return false;}
+        var sha=null;var remoteData=null;
+        var gr=await fetch(this._apiUrl()+'?ref='+c.branch+'&t='+Date.now(),{headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github.v3+json'}});
+        if(gr.ok){
+          var fd=await gr.json();sha=fd.sha;this._remoteSha=sha;
+          var rawText=this._decodeBase64(fd.content.replace(/\n/g,''));
+          if(rawText&&rawText.trim()){try{remoteData=JSON.parse(rawText);}catch(e){remoteData=null;}}
+        }
+        var localData=JSON.parse(JSON.stringify(this._data));
+        delete localData.sessions;
+        if(!localData.members||localData.members.length===0){console.warn('Skip write: no members');return false;}
+        var merged;
+        if(remoteData){
+          merged=remoteData;
+          var remoteMembers=merged.members||[];
+          var localMembers=localData.members||[];
+          var memSeen={};var mergedMembers=[];
+          for(var i=0;i<remoteMembers.length;i++){
+            var rm=remoteMembers[i];var lm=null;
+            for(var j=0;j<localMembers.length;j++){if(localMembers[j].name===rm.name){lm=localMembers[j];break;}}
+            if(lm&&(lm.username||lm.password)){mergedMembers.push(lm);}else{mergedMembers.push(rm);}
+            memSeen[rm.name]=true;
+          }
+          for(var k=0;k<localMembers.length;k++){if(!memSeen[localMembers[k].name]){mergedMembers.push(localMembers[k]);}}
+          merged.members=mergedMembers;
+          var remoteShop=merged.shop||[];
+          var localShop=localData.shop||[];
+          var shopSeen={};
+          for(var s=0;s<remoteShop.length;s++){shopSeen[remoteShop[s].name]=true;}
+          for(var t=0;t<localShop.length;t++){if(!shopSeen[localShop[t].name]){remoteShop.push(localShop[t]);shopSeen[localShop[t].name]=true;}}
+          merged.shop=remoteShop;
+          var remoteRegs=merged.registrations||[];
+          var localRegs=localData.registrations||[];
+          var regSeen={};
+          for(var r=0;r<remoteRegs.length;r++){regSeen[remoteRegs[r].username]=true;}
+          for(var rr=0;rr<localRegs.length;rr++){if(!regSeen[localRegs[rr].username]){remoteRegs.push(localRegs[rr]);regSeen[localRegs[rr].username]=true;}}
+          merged.registrations=remoteRegs;
+          var remotePH=merged.pointsHistory||[];
+          var localPH=localData.pointsHistory||[];
+          merged.pointsHistory=remotePH.concat(localPH);
+          if(localData.settings){merged.settings=localData.settings;}
+          if(localData.activities&&localData.activities.length>=(merged.activities||[]).length){merged.activities=localData.activities;}
+          if(localData.tips&&localData.tips.length>=(merged.tips||[]).length){merged.tips=localData.tips;}
+          if(localData.news&&localData.news.length>=(merged.news||[]).length){merged.news=localData.news;}
+          if(localData.knowledge&&localData.knowledge.length>=(merged.knowledge||[]).length){merged.knowledge=localData.knowledge;}
+        }else{
+          merged=localData;
+        }
+        delete merged.sessions;
+        var contentStr=JSON.stringify(merged,null,2);
+        var contentB64=this._encodeBase64(contentStr);
+        var body=JSON.stringify({message:'Sync '+new Date().toISOString(),content:contentB64,sha:sha||undefined,branch:c.branch});
+        var pr=await fetch(this._apiUrl(),{method:'PUT',headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:body});
+        if(pr.ok){
+          var res=await pr.json();this._remoteSha=res.content.sha;this._skipNextSync=true;this._lastSync=Date.now();
+          merged.sessions=this._data.sessions||{};
+          this._data=merged;
+          this._savingFromRemote=true;this._saveLocal();this._savingFromRemote=false;
+          return true;
+        }
+        if(pr.status===409&&attempt<maxRetries-1){console.warn('409 retry '+attempt);await new Promise(function(r){setTimeout(r,500);});continue;}
+        var et=await pr.text();console.error('Write failed:',pr.status,et);return false;
+      }catch(e){console.error('Write error attempt '+attempt+':',e);if(attempt<maxRetries-1){await new Promise(function(r){setTimeout(r,500);});continue;}return false;}
+    }
+    return false;
   },
 
   // ===== Auth =====
