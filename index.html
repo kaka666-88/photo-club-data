@@ -1277,9 +1277,11 @@ function redeemItem(idx){
 
 function addShopItem(){
   var body='<h3>\u4e0a\u4f20\u5546\u54c1 <span class="modal-close" onclick="closeModal()">\u00d7</span></h3>';
-  body+='<div id="shopImgPreview" style="width:100%;height:160px;background:var(--dark3);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;overflow:hidden">';
-  body+='<span style="color:var(--gray);font-size:13px">\u70b9\u51fb\u4e0b\u65b9\u9009\u62e9\u56fe\u7247\u6216\u7c98\u8d34URL</span>';
+  body+='<div id="shopImgPreview" style="width:100%;height:160px;background:var(--dark3);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;overflow:hidden;position:relative">';
+  body+='<span style="color:var(--gray);font-size:13px">\u70b9\u51fb\u4e0b\u65b9\u9009\u62e9\u56fe\u7247\u6216\u4e0a\u4f20\u672c\u5730\u56fe\u7247</span>';
   body+='</div>';
+  body+='<input type="file" id="shopFileInput" accept="image/*" style="display:none" onchange="handleShopFile(this)">';
+  body+='<button class="btn btn-ghost btn-sm" style="width:100%;margin-bottom:8px" onclick="document.getElementById(\'shopFileInput\').click()">\u{1F4E5} \u4e0a\u4f20\u672c\u5730\u56fe\u7247</button>';
   body+='<div style="margin-bottom:8px">';
   body+='<label style="font-size:12px;color:var(--gold);margin-bottom:4px;display:block">\u9009\u62e9\u793e\u56e2\u4f5c\u54c1</label>';
   body+='<div id="shopPhotoPicker" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-height:120px;overflow-y:auto"></div>';
@@ -1289,7 +1291,7 @@ function addShopItem(){
   body+='<div class="form-group"><label>\u5151\u6362\u79ef\u5206</label><input id="shopPts" type="number" placeholder="\u5982 50"></div>';
   body+='<div class="form-group"><label>\u539f\u4ef7\uff08\u53ef\u9009\uff0c\u5212\u7ebf\u5c55\u793a\uff09</label><input id="shopPrice" type="number" placeholder="\u5982 29.9"></div>';
   body+='<div class="form-group"><label>\u7b80\u77ed\u63cf\u8ff0</label><input id="shopDesc" placeholder="\u4e00\u53e5\u8bdd\u63cf\u8ff0\u5546\u54c1"></div>';
-  body+='<div class="form-group"><label>\u5b9d\u8d1b\u8be6\u60c5</label>';
+  body+='<div class="form-group"><label>\u5b9d\u8d1d\u8be6\u60c5</label>';
   body+='<textarea id="shopDetail" rows="4" placeholder="\u8be6\u7ec6\u4ecb\u7ecd\u5546\u54c1\u7279\u70b9\u3001\u6750\u8d28\u3001\u5c3a\u5bf8\u7b49" style="width:100%;background:var(--dark3);border:1px solid var(--dark3);border-radius:8px;padding:10px;color:#fff;font-size:13px;resize:vertical"></textarea>';
   body+='</div>';
   body+='<div class="form-group"><label>\u5e93\u5b58\u6570\u91cf\uff08\u53ef\u9009\uff09</label><input id="shopStock" type="number" placeholder="\u4e0d\u586b\u8868\u793a\u4e0d\u9650"></div>';
@@ -1312,6 +1314,19 @@ function selectShopImg(el,idx){
   var s=el.parentNode.children;
   for(var i=0;i<s.length;i++){s[i].style.border='2px solid transparent';}
   el.style.border='2px solid var(--gold)';
+}
+
+function handleShopFile(input){
+  var file=input.files[0];
+  if(!file)return;
+  if(file.size>5*1024*1024){showToast('\u56fe\u7247\u4e0d\u80fd\u8d85\u8fc75MB',true);return;}
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var dataUrl=e.target.result;
+    $('shopImg').value=dataUrl;
+    previewShopImg(dataUrl);
+  };
+  reader.readAsDataURL(file);
 }
 
 function previewShopImg(url){
