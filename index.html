@@ -1248,6 +1248,16 @@ function showShopDetail(idx){
     html+='<div style="font-size:13px;color:var(--gray);line-height:1.8;white-space:pre-wrap">'+detail+'</div>';
     html+='</div>';
   }
+  var dImgs=it.detailImgs||[];
+  if(dImgs.length){
+    html+='<div style="margin-bottom:16px">';
+    html+='<div style="font-size:12px;color:var(--gold);margin-bottom:8px;font-weight:600">\u8be6\u60c5\u56fe\u7247</div>';
+    html+='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">';
+    for(var di=0;di<dImgs.length;di++){
+      html+='<img src="'+dImgs[di]+'" style="width:100%;border-radius:8px;cursor:pointer" onclick="window.open(this.src)">';
+    }
+    html+='</div></div>';
+  }
   html+='<div style="display:flex;gap:16px;margin-bottom:16px;font-size:12px;color:var(--gray)">';
   html+='<span>\u5df2\u5151\u6362: '+(it.redeemed||0)+'</span>';
   if(it.stock!==undefined&&it.stock!==null){html+='<span>\u5e93\u5b58: '+it.stock+'</span>';}
@@ -1296,6 +1306,9 @@ function addShopItem(){
   body+='<div class="form-group"><label>\u7b80\u77ed\u63cf\u8ff0</label><input id="shopDesc" placeholder="\u4e00\u53e5\u8bdd\u63cf\u8ff0\u5546\u54c1"></div>';
   body+='<div class="form-group"><label>\u5b9d\u8d1d\u8be6\u60c5</label>';
   body+='<textarea id="shopDetail" rows="4" placeholder="\u8be6\u7ec6\u4ecb\u7ecd\u5546\u54c1\u7279\u70b9\u3001\u6750\u8d28\u3001\u5c3a\u5bf8\u7b49" style="width:100%;background:var(--dark3);border:1px solid var(--dark3);border-radius:8px;padding:10px;color:#fff;font-size:13px;resize:vertical"></textarea>';
+  body+='<input type="file" id="shopDetailFile" accept="image/*" style="display:none" onchange="handleDetailFile(this)">';
+  body+='<button class="btn btn-ghost btn-sm" style="width:100%;margin-top:8px" onclick="document.getElementById(\'shopDetailFile\').click()">\u{1F4CE} \u4e0a\u4f20\u8be6\u60c5\u56fe\u7247</button>';
+  body+='<div id="shopDetailImgs" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>';
   body+='</div>';
   body+='<div class="form-group"><label>\u5e93\u5b58\u6570\u91cf\uff08\u53ef\u9009\uff09</label><input id="shopStock" type="number" placeholder="\u4e0d\u586b\u8868\u793a\u4e0d\u9650"></div>';
   body+='<button class="btn btn-gold" style="width:100%;height:44px;font-size:15px;margin-top:8px" onclick="submitShopItem()">\u53d1\u5e03\u5546\u54c1</button>';
@@ -1317,6 +1330,38 @@ function selectShopImg(el,idx){
   var s=el.parentNode.children;
   for(var i=0;i<s.length;i++){s[i].style.border='2px solid transparent';}
   el.style.border='2px solid var(--gold)';
+}
+
+var detailImages=[];
+
+function handleDetailFile(input){
+  var file=input.files[0];
+  if(!file)return;
+  if(file.size>3*1024*1024){showToast('\u56fe\u7247\u4e0d\u80fd\u8d85\u8fc73MB',true);return;}
+  var reader=new FileReader();
+  reader.onload=function(e){
+    detailImages.push(e.target.result);
+    renderDetailImgs();
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+
+function renderDetailImgs(){
+  var c=$('shopDetailImgs');if(!c)return;
+  var html='';
+  for(var i=0;i<detailImages.length;i++){
+    html+='<div style="position:relative;width:72px;height:72px">';
+    html+='<img src="'+detailImages[i]+'" style="width:72px;height:72px;object-fit:cover;border-radius:6px">';
+    html+='<button onclick="removeDetailImg('+i+')" style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;background:#e74c3c;color:#fff;border:none;font-size:11px;cursor:pointer">\u00d7</button>';
+    html+='</div>';
+  }
+  c.innerHTML=html;
+}
+
+function removeDetailImg(idx){
+  detailImages.splice(idx,1);
+  renderDetailImgs();
 }
 
 function handleShopFile(input){
@@ -1354,7 +1399,7 @@ function submitShopItem(){
   if(!name){showToast('\u8bf7\u8f93\u5165\u5546\u54c1\u540d\u79f0',true);return;}
   if(pts<=0){showToast('\u8bf7\u8f93\u5165\u6709\u6548\u79ef\u5206',true);return;}
   if(!API._data.shop)API._data.shop=[];
-  var item={name:name,points:pts,desc:desc,detail:detail,img:img,redeemed:0};
+  var item={name:name,points:pts,desc:desc,detail:detail,img:img,redeemed:0,detailImgs:detailImages.slice()};
   if(price)item.price=price;
   if(stock!==null)item.stock=stock;
   API._data.shop.push(item);
@@ -1375,6 +1420,7 @@ function editShopItem(idx){
   $('shopDetail').value=it.detail||'';
   $('shopStock').value=(it.stock!==undefined&&it.stock!==null)?it.stock:'';
   if(it.img){previewShopImg(it.img);}
+  detailImages=(it.detailImgs||[]).slice();renderDetailImgs();
   var btn=document.querySelector('#modalOverlay button[onclick="submitShopItem()"]');
   if(btn){
     btn.textContent='\u4fdd\u5b58\u4fee\u6539';
@@ -1399,6 +1445,7 @@ function submitEditShopItem(idx){
   items[idx].desc=desc;
   items[idx].detail=detail;
   items[idx].img=img;
+  items[idx].detailImgs=detailImages.slice();
   if(price)items[idx].price=price;else delete items[idx].price;
   if(stock!==null)items[idx].stock=stock;else delete items[idx].stock;
   API._saveLocal();API._writeRemote();
