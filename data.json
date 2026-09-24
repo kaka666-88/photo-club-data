@@ -1,1 +1,283 @@
-{"settings": {"admin_user": "admin", "admin_pass": "admin666", "club_name": "留声光影", "club_desc": "用镜头记录世界，用光影讲述故事"}, "members": [{"id": 11, "name": "吴巍", "points": 0, "role": "member"}, {"id": 12, "name": "王金环", "points": 0, "role": "member"}, {"id": 13, "name": "李小强", "points": 0, "role": "member"}, {"id": 14, "name": "柴津玲", "points": 0, "role": "member"}, {"id": 15, "name": "沈丽红", "points": 0, "role": "member"}, {"id": 16, "name": "马骏", "points": 0, "role": "member"}, {"id": 17, "name": "叶蓓", "points": 0, "role": "member"}, {"id": 18, "name": "李文", "points": 0, "role": "member"}, {"id": 19, "name": "宋斌斌", "points": 0, "role": "member"}, {"id": 20, "name": "王征", "points": 0, "role": "member"}, {"id": 21, "name": "吕佳敏", "points": 0, "role": "member"}, {"id": 22, "name": "吕缘情", "points": 0, "role": "member"}, {"id": 23, "name": "李双", "points": 0, "role": "member"}, {"id": 24, "name": "孔浩美", "points": 0, "role": "member"}, {"id": 25, "name": "刘浩然", "points": 0, "role": "member"}, {"id": 26, "name": "聂胜来", "points": 0, "role": "member"}, {"id": 27, "name": "付子昱", "points": 0, "role": "member"}, {"id": 28, "name": "张丽娟", "points": 0, "role": "member"}], "activities": [{"id": 1, "title": "9月月底研习会：光影构图实战", "date": "2026-09-28", "location": "社团活动室", "desc": "本期研习会主题为光影构图实战，请大家带好相机参加。"}, {"id": 2, "title": "10月外拍活动：秋色故宫", "date": "2026-10-15", "location": "故宫博物院", "desc": "秋季外拍活动，拍摄故宫秋色。"}, {"id": 3, "title": "周常打卡：每日一拍", "date": "2026-09-30", "location": "线上", "desc": "每日拍摄一张作品，分享到群内打卡。"}], "knowledge": [{"id": 1, "title": "曝光三要素", "content": "光圈、快门、ISO是曝光的三大要素。光圈控制进光量和景深，快门控制曝光时间和运动模糊，ISO控制感光度。三者需要平衡配合。"}, {"id": 2, "title": "构图法则", "content": "三分法、引导线、框架构图是常用的构图技巧。三分法将画面分为九宫格，主体放在交叉点上。"}, {"id": 3, "title": "光线运用", "content": "顺光、侧光、逆光各有特点。黄金时刻（日出日落前后）光线最柔和。"}, {"id": 4, "title": "后期修图", "content": "后期修图包括调色、裁剪、锐化等。建议RAW格式拍摄，后期空间更大。"}], "tips": [{"id": 1, "title": "曝光三要素", "content": "光圈、快门、ISO是曝光的三大要素。"}, {"id": 2, "title": "构图法则", "content": "三分法、引导线、框架构图。"}, {"id": 3, "title": "光线运用", "content": "顺光、侧光、逆光各有特点。"}, {"id": 4, "title": "后期修图", "content": "RAW格式拍摄，后期空间更大。"}, {"id": 5, "title": "手机摄影", "content": "善用网格线构图，注意光线方向。"}, {"id": 6, "title": "人像摄影", "content": "大光圈虚化背景，注意眼神光。"}, {"id": 7, "title": "微距摄影", "content": "使用微距镜头或微距模式，注意景深极浅。"}, {"id": 8, "title": "风光摄影", "content": "广角镜头+小光圈+三脚架，黄金时刻拍摄。"}], "news": [{"id": 1, "title": "2026平遥国际摄影大展即将开幕", "date": "2026-09-15", "content": "一年一度的平遥国际摄影大展将在9月19日开幕。"}, {"id": 2, "title": "索尼世界摄影大赛2026开放报名", "date": "2026-09-10", "content": "索尼世界摄影大赛2026赛季已开放报名。"}, {"id": 3, "title": "中国摄影金像奖评选启动", "date": "2026-09-05", "content": "中国摄影界最高奖项金像奖评选启动。"}, {"id": 4, "title": "上海国际影像展10月举办", "date": "2026-09-20", "content": "上海国际影像展将于10月举办。"}, {"id": 5, "title": "胶片摄影回潮趋势明显", "date": "2026-09-01", "content": "近年来胶片摄影重新受到年轻摄影师追捧。"}], "pointsHistory": [], "shop": [{"name": "光影明信片", "desc": "精选社团作品印制", "points": 50, "img": "", "redeemed": 0}, {"name": "留声光影马克杯", "desc": "限量定制保温杯", "points": 80, "img": "", "redeemed": 0}, {"name": "社团帆布包", "desc": "棉麻材质印花logo", "points": 100, "img": "", "redeemed": 0}, {"name": "摄影短巾", "desc": "超细纤维明信半巾", "points": 60, "img": "", "redeemed": 0}, {"name": "光影手账纸胶带", "desc": "可拆贴手账本", "points": 40, "img": "", "redeemed": 0}, {"name": "社团贴纸套装", "desc": "6款不同主题贴纸", "points": 70, "img": "", "redeemed": 0}], "registrations": []}
+{
+  "settings": {
+    "admin_user": "admin",
+    "admin_pass": "admin666",
+    "club_name": "留声光影",
+    "club_desc": "用镜头记录世界，用光影讲述故事"
+  },
+  "members": [
+    {
+      "id": 11,
+      "name": "吴巍",
+      "points": 0,
+      "role": "member"
+    },
+    {
+      "id": 12,
+      "name": "王金环",
+      "points": 0,
+      "role": "member"
+    },
+    {
+      "id": 13,
+      "name": "李小强",
+      "points": 0,
+      "role": "member"
+    },
+    {
+      "id": 14,
+      "name": "柴津玲",
+      "points": 0,
+      "role": "member"
+    },
+    {
+      "id": 15,
+      "name": "沈丽红",
+      "points": 0,
+      "role": "member"
+    },
+    {
+      "id": 16,
+      "name": "马骏",
+      "points": 0,
+      "role": "member"
+    },
+    {
+      "id": 17,
+      "name": "叶蓓",
+      "points": 0,
+      "role": "member"
+    },
+    {
+      "id": 18,
+      "name": "李文",
+      "points": 0,
+      "role": "member"
+    },
+    {
+      "id": 19,
+      "name": "宋斌斌",
+      "points": 0,
+      "role": "member"
+    },
+    {
+      "id": 20,
+      "name": "王征",
+      "points": 0,
+      "role": "member"
+    },
+    {
+      "id": 21,
+      "name": "吕佳敏",
+      "points": 0,
+      "role": "member"
+    },
+    {
+      "id": 22,
+      "name": "吕缘情",
+      "points": 0,
+      "role": "member"
+    },
+    {
+      "id": 23,
+      "name": "李双",
+      "points": 0,
+      "role": "member"
+    },
+    {
+      "id": 24,
+      "name": "孔浩美",
+      "points": 0,
+      "role": "member"
+    },
+    {
+      "id": 25,
+      "name": "刘浩然",
+      "points": 0,
+      "role": "member"
+    },
+    {
+      "id": 26,
+      "name": "聂胜来",
+      "points": 0,
+      "role": "member"
+    },
+    {
+      "id": 27,
+      "name": "付子昱",
+      "points": 0,
+      "role": "member"
+    },
+    {
+      "id": 28,
+      "name": "张丽娟",
+      "points": 0,
+      "role": "member"
+    }
+  ],
+  "activities": [
+    {
+      "id": 1,
+      "title": "9月月底研习会：光影构图实战",
+      "date": "2026-09-28",
+      "location": "社团活动室",
+      "desc": "本期研习会主题为光影构图实战，请大家带好相机参加。"
+    },
+    {
+      "id": 2,
+      "title": "10月外拍活动：秋色故宫",
+      "date": "2026-10-15",
+      "location": "故宫博物院",
+      "desc": "秋季外拍活动，拍摄故宫秋色。"
+    },
+    {
+      "id": 3,
+      "title": "周常打卡：每日一拍",
+      "date": "2026-09-30",
+      "location": "线上",
+      "desc": "每日拍摄一张作品，分享到群内打卡。"
+    }
+  ],
+  "knowledge": [
+    {
+      "id": 1,
+      "title": "曝光三要素",
+      "content": "光圈、快门、ISO是曝光的三大要素。光圈控制进光量和景深，快门控制曝光时间和运动模糊，ISO控制感光度。三者需要平衡配合。"
+    },
+    {
+      "id": 2,
+      "title": "构图法则",
+      "content": "三分法、引导线、框架构图是常用的构图技巧。三分法将画面分为九宫格，主体放在交叉点上。"
+    },
+    {
+      "id": 3,
+      "title": "光线运用",
+      "content": "顺光、侧光、逆光各有特点。黄金时刻（日出日落前后）光线最柔和。"
+    },
+    {
+      "id": 4,
+      "title": "后期修图",
+      "content": "后期修图包括调色、裁剪、锐化等。建议RAW格式拍摄，后期空间更大。"
+    }
+  ],
+  "tips": [
+    {
+      "id": 1,
+      "title": "曝光三要素",
+      "content": "光圈、快门、ISO是曝光的三大要素。"
+    },
+    {
+      "id": 2,
+      "title": "构图法则",
+      "content": "三分法、引导线、框架构图。"
+    },
+    {
+      "id": 3,
+      "title": "光线运用",
+      "content": "顺光、侧光、逆光各有特点。"
+    },
+    {
+      "id": 4,
+      "title": "后期修图",
+      "content": "RAW格式拍摄，后期空间更大。"
+    },
+    {
+      "id": 5,
+      "title": "手机摄影",
+      "content": "善用网格线构图，注意光线方向。"
+    },
+    {
+      "id": 6,
+      "title": "人像摄影",
+      "content": "大光圈虚化背景，注意眼神光。"
+    },
+    {
+      "id": 7,
+      "title": "微距摄影",
+      "content": "使用微距镜头或微距模式，注意景深极浅。"
+    },
+    {
+      "id": 8,
+      "title": "风光摄影",
+      "content": "广角镜头+小光圈+三脚架，黄金时刻拍摄。"
+    }
+  ],
+  "news": [
+    {
+      "id": 1,
+      "title": "2026平遥国际摄影大展即将开幕",
+      "date": "2026-09-15",
+      "content": "一年一度的平遥国际摄影大展将在9月19日开幕。"
+    },
+    {
+      "id": 2,
+      "title": "索尼世界摄影大赛2026开放报名",
+      "date": "2026-09-10",
+      "content": "索尼世界摄影大赛2026赛季已开放报名。"
+    },
+    {
+      "id": 3,
+      "title": "中国摄影金像奖评选启动",
+      "date": "2026-09-05",
+      "content": "中国摄影界最高奖项金像奖评选启动。"
+    },
+    {
+      "id": 4,
+      "title": "上海国际影像展10月举办",
+      "date": "2026-09-20",
+      "content": "上海国际影像展将于10月举办。"
+    },
+    {
+      "id": 5,
+      "title": "胶片摄影回潮趋势明显",
+      "date": "2026-09-01",
+      "content": "近年来胶片摄影重新受到年轻摄影师追捧。"
+    }
+  ],
+  "pointsHistory": [],
+  "shop": [
+    {
+      "name": "光影明信片",
+      "desc": "精选社团作品印制",
+      "points": 50,
+      "img": "",
+      "redeemed": 0
+    },
+    {
+      "name": "留声光影马克杯",
+      "desc": "限量定制保温杯",
+      "points": 80,
+      "img": "",
+      "redeemed": 0
+    },
+    {
+      "name": "社团帆布包",
+      "desc": "棉麻材质印花logo",
+      "points": 100,
+      "img": "",
+      "redeemed": 0
+    },
+    {
+      "name": "摄影短巾",
+      "desc": "超细纤维明信半巾",
+      "points": 60,
+      "img": "",
+      "redeemed": 0
+    },
+    {
+      "name": "光影手账纸胶带",
+      "desc": "可拆贴手账本",
+      "points": 40,
+      "img": "",
+      "redeemed": 0
+    },
+    {
+      "name": "社团贴纸套装",
+      "desc": "6款不同主题贴纸",
+      "points": 70,
+      "img": "",
+      "redeemed": 0
+    }
+  ],
+  "registrations": []
+}
