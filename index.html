@@ -617,6 +617,100 @@ var API = {
     this._scheduleWrite();
   },
 
+  _mergeArray: function(localArr, remoteArr, idKey){
+    idKey=idKey||'id';
+    var merged=[];
+    var seen={};
+    var all=(remoteArr||[]).concat(localArr||[]);
+    for(var i=0;i<all.length;i++){
+      var item=all[i];
+      if(!item)continue;
+      var key=item[idKey];
+      if(key===undefined||key===null)key='__noid_'+i;
+      if(seen[key])continue;
+      seen[key]=true;
+      var lv=null, rv=null;
+      for(var j=0;j<(localArr||[]).length;j++){
+        if((localArr[j]||{})[idKey]===item[idKey]){lv=localArr[j];break;}
+      }
+      for(var k=0;k<(remoteArr||[]).length;k++){
+        if((remoteArr[k]||{})[idKey]===item[idKey]){rv=remoteArr[k];break;}
+      }
+      if(lv&&rv){
+        var lt=lv.updatedAt||0;
+        var rt=rv.updatedAt||0;
+        merged.push(lt>=rt?lv:rv);
+      }else{
+        merged.push(lv||rv);
+      }
+    }
+    return merged;
+  },
+  _mergeDeleted: function(localDel, remoteDel){
+    var merged={};
+    var all=Object.assign({}, remoteDel||{}, localDel||{});
+    for(var key in all){
+      if(!all.hasOwnProperty(key))continue;
+      var lv=(localDel||{})[key]||0;
+      var rv=(remoteDel||{})[key]||0;
+      merged[key]=Math.max(lv, rv);
+    }
+    return merged;
+  },
+  _isDeleted: function(item, deleted, idKey){
+    idKey=idKey||'id';
+    if(!deleted||!item)return false;
+    var id=item[idKey];
+    if(id===undefined||id===null)return false;
+    var d=deleted[id];
+    if(!d)return false;
+    var u=item.updatedAt||0;
+    return u<=d;
+  },
+  _mergeData: function(localData, remoteData){
+    var merged={};
+    merged.sessions=localData.sessions||{};
+    merged.settings=localData.settings||remoteData.settings||{};
+    var localDel=localData._deleted||{};
+    var remoteDel=remoteData._deleted||{};
+    var deleted=this._mergeDeleted(localDel, remoteDel);
+    merged._deleted=deleted;
+    var arrays=['members','shop','activities','news','tips','knowledge','registrations'];
+    for(var a=0;a<arrays.length;a++){
+      var key=arrays[a];
+      var localArr=localData[key]||[];
+      var remoteArr=remoteData[key]||[];
+      var idKey=key==='registrations'?'username':'id';
+      var mergedArr=this._mergeArray(localArr, remoteArr, idKey);
+      var self=this;
+      mergedArr=mergedArr.filter(function(item){
+        return !self._isDeleted(item, deleted, idKey);
+      });
+      merged[key]=mergedArr;
+    }
+    var localPH=localData.pointsHistory||[];
+    var remotePH=remoteData.pointsHistory||[];
+    var phSeen={};
+    var phMerged=[];
+    var phAll=remotePH.concat(localPH);
+    for(var p=0;p<phAll.length;p++){
+      var rec=phAll[p];
+      if(!rec)continue;
+      var pid=rec.id;
+      if(pid===undefined||pid===null)pid='__noph_'+p;
+      if(phSeen[pid])continue;
+      phSeen[pid]=true;
+      phMerged.push(rec);
+    }
+    merged.pointsHistory=phMerged;
+    var allItems=[].concat(merged.members||[],merged.activities||[],merged.news||[],merged.tips||[],merged.knowledge||[],merged.shop||[]);
+    var maxId=0;
+    for(var m=0;m<allItems.length;m++){
+      if(allItems[m]&&allItems[m].id&&allItems[m].id>maxId)maxId=allItems[m].id;
+    }
+    this._nextId=maxId+1;
+    return merged;
+  },
   _scheduleWrite: function(){
     var self=this;
     if(this._writeTimer)clearTimeout(this._writeTimer);
@@ -637,73 +731,42 @@ var API = {
     try{
       var r=await this._readRemote();
       if(!r)return false;
+      // Preserve local sessions before merge
       var ls=this._data.sessions||{};
-      var localMembers=this._data.members||[];
-      var remoteMembers=r.members||[];
-      var mergedMembers=[];
-      var seenNames={};
-      var i;
-      // Build a map of local members by name for quick lookup
-      var localByName={};
-      for(i=0;i<localMembers.length;i++){localByName[localMembers[i].name]=localMembers[i];}
-      for(i=0;i<remoteMembers.length;i++){
-        var rm=remoteMembers[i];
-        var lm=localByName[rm.name];
-        // If local has same member with username/password, use local version (keep credentials)
-        if(lm&&(lm.username||lm.password)){
-          mergedMembers.push(lm);
-        }else{
-          mergedMembers.push(rm);
-        }
-        seenNames[rm.name]=true;
-      }
-      for(i=0;i<localMembers.length;i++){
-        if(!seenNames[localMembers[i].name]){
-          mergedMembers.push(localMembers[i]);
-          seenNames[localMembers[i].name]=true;
-        }
-      }
-      r.members=mergedMembers;
-      r.sessions=ls;
-      // Merge shop: keep local items that are not in remote
-      var localShop=this._data.shop||[];
-      var remoteShop=r.shop||[];
-      var shopSeen={};
-      for(i=0;i<remoteShop.length;i++){shopSeen[remoteShop[i].name]=true;}
-      for(i=0;i<localShop.length;i++){
-        if(!shopSeen[localShop[i].name]){
-          remoteShop.push(localShop[i]);
-          shopSeen[localShop[i].name]=true;
-        }
-      }
-      r.shop=remoteShop;
-      // Merge registrations: keep local that are not in remote
-      var localRegs=this._data.registrations||[];
-      var remoteRegs=r.registrations||[];
-      var regSeen={};
-      for(i=0;i<remoteRegs.length;i++){regSeen[remoteRegs[i].username]=true;}
-      for(i=0;i<localRegs.length;i++){
-        if(!regSeen[localRegs[i].username]){
-          remoteRegs.push(localRegs[i]);
-          regSeen[localRegs[i].username]=true;
-        }
-      }
-      r.registrations=remoteRegs;
-      // Merge pointsHistory: keep local that are not in remote
-      var localPH=this._data.pointsHistory||[];
-      var remotePH=r.pointsHistory||[];
-      for(i=0;i<localPH.length;i++){
-        remotePH.push(localPH[i]);
-      }
-      r.pointsHistory=remotePH;
-      var all=[].concat(r.members||[],r.activities||[],r.knowledge||[],r.news||[],r.tips||[]);
-      var maxId=0;
-      for(i=0;i<all.length;i++){if(all[i].id>maxId)maxId=all[i].id;}
-      this._nextId=maxId+1;
-      // Check if local had shop/registrations that need to be written back
+      // Use _mergeData for field-level merge by id + updatedAt
+      var localCopy=JSON.parse(JSON.stringify(this._data));
+      var remoteCopy=JSON.parse(JSON.stringify(r));
+      var merged=this._mergeData(localCopy, remoteCopy);
+      merged.sessions=ls;
+      // Check if merge produced changes that need write-back
       var needWrite=false;
-      if((this._data.shop||[]).length>0&&(r.shop||[]).length<(localShop.length))needWrite=true;
-      this._data=r;
+      if(this._hasToken()){
+        // If local had items not in remote, or local has newer updatedAt on any item
+        var localArrs=['members','shop','activities','news','tips','knowledge','registrations'];
+        for(var a=0;a<localArrs.length;a++){
+          var key=localArrs[a];
+          var localArr=localCopy[key]||[];
+          var remoteArr=remoteCopy[key]||[];
+          var idKey=key==='registrations'?'username':'id';
+          for(var i=0;i<localArr.length;i++){
+            var found=false;
+            for(var j=0;j<remoteArr.length;j++){
+              if((remoteArr[j]||{})[idKey]===(localArr[i]||{})[idKey]){found=true;
+                if((localArr[i].updatedAt||0)>(remoteArr[j].updatedAt||0))needWrite=true;
+                break;
+              }
+            }
+            if(!found)needWrite=true;
+          }
+          // Check for deletions
+          var localDel=localCopy._deleted||{};
+          var remoteDel=remoteCopy._deleted||{};
+          for(var dk in localDel){
+            if(localDel.hasOwnProperty(dk)&&!remoteDel[dk])needWrite=true;
+          }
+        }
+      }
+      this._data=merged;
       this._savingFromRemote=true;
       this._saveLocal();
       this._savingFromRemote=false;
@@ -757,38 +820,7 @@ var API = {
         if(!localData.members||localData.members.length===0){console.warn('Skip write: no members');return false;}
         var merged;
         if(remoteData){
-          merged=remoteData;
-          var remoteMembers=merged.members||[];
-          var localMembers=localData.members||[];
-          var memSeen={};var mergedMembers=[];
-          for(var i=0;i<remoteMembers.length;i++){
-            var rm=remoteMembers[i];var lm=null;
-            for(var j=0;j<localMembers.length;j++){if(localMembers[j].name===rm.name){lm=localMembers[j];break;}}
-            if(lm&&(lm.username||lm.password)){mergedMembers.push(lm);}else{mergedMembers.push(rm);}
-            memSeen[rm.name]=true;
-          }
-          for(var k=0;k<localMembers.length;k++){if(!memSeen[localMembers[k].name]){mergedMembers.push(localMembers[k]);}}
-          merged.members=mergedMembers;
-          var remoteShop=merged.shop||[];
-          var localShop=localData.shop||[];
-          var shopSeen={};
-          for(var s=0;s<remoteShop.length;s++){shopSeen[remoteShop[s].name]=true;}
-          for(var t=0;t<localShop.length;t++){if(!shopSeen[localShop[t].name]){remoteShop.push(localShop[t]);shopSeen[localShop[t].name]=true;}}
-          merged.shop=remoteShop;
-          var remoteRegs=merged.registrations||[];
-          var localRegs=localData.registrations||[];
-          var regSeen={};
-          for(var r=0;r<remoteRegs.length;r++){regSeen[remoteRegs[r].username]=true;}
-          for(var rr=0;rr<localRegs.length;rr++){if(!regSeen[localRegs[rr].username]){remoteRegs.push(localRegs[rr]);regSeen[localRegs[rr].username]=true;}}
-          merged.registrations=remoteRegs;
-          var remotePH=merged.pointsHistory||[];
-          var localPH=localData.pointsHistory||[];
-          merged.pointsHistory=remotePH.concat(localPH);
-          if(localData.settings){merged.settings=localData.settings;}
-          if(localData.activities&&localData.activities.length>=(merged.activities||[]).length){merged.activities=localData.activities;}
-          if(localData.tips&&localData.tips.length>=(merged.tips||[]).length){merged.tips=localData.tips;}
-          if(localData.news&&localData.news.length>=(merged.news||[]).length){merged.news=localData.news;}
-          if(localData.knowledge&&localData.knowledge.length>=(merged.knowledge||[]).length){merged.knowledge=localData.knowledge;}
+          merged=this._mergeData(localData, remoteData);
         }else{
           merged=localData;
         }
@@ -839,7 +871,8 @@ var API = {
     for(var i=0;i<regs.length;i++){if(regs[i].username===name)return Promise.reject(new Error('该账号已注册'));}
     var mem=this.getMembers();
     for(var j=0;j<mem.length;j++){if(mem[j].username===name)return Promise.reject(new Error('该账号已存在'));}
-    regs.push({id:Date.now(),username:name,password:pass,realName:realName||name,status:'pending',date:new Date().toLocaleDateString()});
+    var now=Date.now();
+    regs.push({id:now,username:name,password:pass,realName:realName||name,status:'pending',date:new Date().toLocaleDateString(),updatedAt:now});
     this._data.registrations=regs;
     this._saveLocal();this._writeRemote();
     return Promise.resolve({ok:true});
@@ -861,7 +894,7 @@ var API = {
   // ===== Members =====
   getMembers: function(){return this._data.members||[];},
   addMember: function(name,role){
-    var m={id:this._nextId++,name:name,role:role,points:0};
+    var m={id:this._nextId++,name:name,role:role,points:0,updatedAt:Date.now()};
     this._data.members=this._data.members||[];
     this._data.members.push(m);
     this._saveLocal();
@@ -872,6 +905,8 @@ var API = {
     return m;
   },
   deleteMember: function(id){
+    this._data._deleted=this._data._deleted||{};
+    this._data._deleted[id]=Date.now();
     this._data.members=(this._data.members||[]).filter(function(m){return m.id!==id;});
     this._saveLocal();this._writeRemote();
   },
@@ -890,7 +925,7 @@ var API = {
       r.id=self._nextId++;
       self._data.pointsHistory.push(r);
       var m=(self._data.members||[]).find(function(x){return x.name===r.name;});
-      if(m){m.points=(m.points||0)+(r.points||0);}
+      if(m){m.points=(m.points||0)+(r.points||0);m.updatedAt=Date.now();}
     });
     this._saveLocal();this._writeRemote();
   },
@@ -898,7 +933,7 @@ var API = {
   // ===== Activities =====
   getActivities: function(){return this._data.activities||[];},
   addActivity: function(act){
-    act.id=this._nextId++;
+    act.id=this._nextId++;act.updatedAt=Date.now();
     this._data.activities=this._data.activities||[];
     this._data.activities.unshift(act);
     this._saveLocal();this._writeRemote();
@@ -907,7 +942,7 @@ var API = {
   updateActivity: function(id,updates){
     var acts=this._data.activities||[];
     for(var i=0;i<acts.length;i++){
-      if(acts[i].id===id){Object.assign(acts[i],updates);break;}
+      if(acts[i].id===id){Object.assign(acts[i],updates);acts[i].updatedAt=Date.now();break;}
     }
     this._saveLocal();this._writeRemote();
   },
@@ -920,7 +955,7 @@ var API = {
   getNews: function(){return this._data.news||[];},
   addNews: function(item){
     item.id=this._nextId++;
-    item.created_at=new Date().toISOString();
+    item.created_at=new Date().toISOString();item.updatedAt=Date.now();
     this._data.news=this._data.news||[];
     this._data.news.unshift(item);
     if(this._data.news.length>50)this._data.news=this._data.news.slice(0,50);
@@ -933,6 +968,7 @@ var API = {
     if(updates.admin_pass)s.admin_pass=updates.admin_pass;
     if(updates.club_name)s.club_name=updates.club_name;
     if(updates.club_desc!==undefined)s.club_desc=updates.club_desc;
+    s.updatedAt=Date.now();
     this._saveLocal();this._writeRemote();
     return Promise.resolve({message:'\u8bbe\u7f6e\u5df2\u4fdd\u5b58'});
   },
@@ -1597,7 +1633,7 @@ function submitShopItem(){
   if(!name){showToast('\u8bf7\u8f93\u5165\u5546\u54c1\u540d\u79f0',true);return;}
   if(pts<=0){showToast('\u8bf7\u8f93\u5165\u6709\u6548\u79ef\u5206',true);return;}
   if(!API._data.shop)API._data.shop=[];
-  var item={name:name,points:pts,desc:desc,detail:detail,img:img,redeemed:0,detailImgs:detailImages.slice()};
+  var item={id:Date.now(),name:name,points:pts,desc:desc,detail:detail,img:img,redeemed:0,detailImgs:detailImages.slice(),updatedAt:Date.now()};
   if(price)item.price=price;
   if(stock!==null)item.stock=stock;
   API._data.shop.push(item);
@@ -1646,6 +1682,7 @@ function submitEditShopItem(idx){
   items[idx].detailImgs=detailImages.slice();
   if(price)items[idx].price=price;else delete items[idx].price;
   if(stock!==null)items[idx].stock=stock;else delete items[idx].stock;
+  items[idx].updatedAt=Date.now();
   API._saveLocal();API._writeRemote();
   closeModal();renderShop();
   showToast('\u5546\u54c1\u5df2\u66f4\u65b0');
@@ -1654,7 +1691,10 @@ function submitEditShopItem(idx){
 function deleteShopItem(idx){
   var items=API._data.shop||[];if(!items[idx])return;
   if(!confirm('\u786e\u8ba4\u5220\u9664\u300c'+items[idx].name+'\u300d\uff1f'))return;
+  var delId=items[idx].id;
   items.splice(idx,1);
+  API._data._deleted=API._data._deleted||{};
+  if(delId)API._data._deleted[delId]=Date.now();
   API._saveLocal();API._writeRemote();
   renderShop();
   showToast('\u5546\u54c1\u5df2\u5220\u9664');
@@ -1692,10 +1732,10 @@ function approveReg(idx){
   var regs=API._data.registrations||[];if(!regs[idx])return;
   var r=regs[idx];
   // Add as member with username/password
-  var mem={id:API._nextId++,name:r.realName,username:r.username,password:r.password,points:0,role:'member'};
+  var mem={id:API._nextId++,name:r.realName,username:r.username,password:r.password,points:0,role:'member',updatedAt:Date.now()};
   API._data.members=API._data.members||[];
   API._data.members.push(mem);
-  regs[idx].status='approved';
+  regs[idx].status='approved';regs[idx].updatedAt=Date.now();
   API._saveLocal();API._writeRemote();
   renderSettings();
   showToast('已通过 '+r.realName+' 的注册');
@@ -1703,7 +1743,7 @@ function approveReg(idx){
 
 function rejectReg(idx){
   var regs=API._data.registrations||[];if(!regs[idx])return;
-  regs[idx].status='rejected';
+  regs[idx].status='rejected';regs[idx].updatedAt=Date.now();
   API._saveLocal();API._writeRemote();
   renderSettings();
   showToast('已拒绝注册');
