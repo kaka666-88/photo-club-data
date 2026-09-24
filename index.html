@@ -633,9 +633,19 @@ var API = {
       var mergedMembers=[];
       var seenNames={};
       var i;
+      // Build a map of local members by name for quick lookup
+      var localByName={};
+      for(i=0;i<localMembers.length;i++){localByName[localMembers[i].name]=localMembers[i];}
       for(i=0;i<remoteMembers.length;i++){
-        mergedMembers.push(remoteMembers[i]);
-        seenNames[remoteMembers[i].name]=true;
+        var rm=remoteMembers[i];
+        var lm=localByName[rm.name];
+        // If local has same member with username/password, use local version (keep credentials)
+        if(lm&&(lm.username||lm.password)){
+          mergedMembers.push(lm);
+        }else{
+          mergedMembers.push(rm);
+        }
+        seenNames[rm.name]=true;
       }
       for(i=0;i<localMembers.length;i++){
         if(!seenNames[localMembers[i].name]){
