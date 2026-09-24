@@ -750,6 +750,8 @@ var API = {
       }catch(e){}
       var d=JSON.parse(JSON.stringify(this._data));
       delete d.sessions;
+      // Safety: never write empty data (prevents cloud wipe)
+      if(!d.members||d.members.length===0){console.warn('Skip write: no members');return false;}
       var content=this._encodeBase64(JSON.stringify(d,null,2));
       var body=JSON.stringify({message:'Update '+new Date().toISOString(),content:content,sha:sha||undefined,branch:c.branch});
       var pr=await fetch(this._apiUrl(),{method:'PUT',headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:body});
