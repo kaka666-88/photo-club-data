@@ -591,6 +591,12 @@ var API = {
   },
 
   _init: function(){
+    var DATA_VERSION=2;
+    var savedVer=parseInt(localStorage.getItem('photoClubDataVer')||'0',10);
+    if(savedVer!==DATA_VERSION){
+      localStorage.removeItem('photoClubData');
+      localStorage.setItem('photoClubDataVer',String(DATA_VERSION));
+    }
     var saved=localStorage.getItem('photoClubData');
     if(saved){
       try{this._data=JSON.parse(saved);}catch(e){this._data=null;}
@@ -789,8 +795,15 @@ var API = {
         var r=await fetch(this._apiUrl()+'?ref='+c.branch+'&t='+Date.now(),{headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github.v3+json'}});
         if(!r.ok)return null;
         var fd=await r.json();
-        text=this._decodeBase64(fd.content.replace(/\n/g,''));
         this._remoteSha=fd.sha;
+        // Large files (>1MB) return empty content; fall back to raw URL
+        if(fd.content){
+          text=this._decodeBase64(fd.content.replace(/\n/g,''));
+        }else{
+          var rr=await fetch(this._rawUrl());
+          if(!rr.ok)return null;
+          text=await rr.text();
+        }
       }else{
         var r2=await fetch(this._rawUrl());
         if(!r2.ok)return null;
@@ -812,7 +825,14 @@ var API = {
         var gr=await fetch(this._apiUrl()+'?ref='+c.branch+'&t='+Date.now(),{headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github.v3+json'}});
         if(gr.ok){
           var fd=await gr.json();sha=fd.sha;this._remoteSha=sha;
-          var rawText=this._decodeBase64(fd.content.replace(/\n/g,''));
+          var rawText='';
+          if(fd.content){
+            rawText=this._decodeBase64(fd.content.replace(/\n/g,''));
+          }else{
+            // Large file: fall back to raw URL
+            var rraw=await fetch(this._rawUrl());
+            if(rraw.ok){rawText=await rraw.text();}
+          }
           if(rawText&&rawText.trim()){try{remoteData=JSON.parse(rawText);}catch(e){remoteData=null;}}
         }
         var localData=JSON.parse(JSON.stringify(this._data));
@@ -822,7 +842,8 @@ var API = {
         if(remoteData){
           merged=this._mergeData(localData, remoteData);
         }else{
-          merged=localData;
+          console.warn('Skip write: cannot read remote data for merge');
+          return false;
         }
         delete merged.sessions;
         var contentStr=JSON.stringify(merged,null,2);
