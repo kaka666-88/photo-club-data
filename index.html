@@ -680,11 +680,18 @@ var API = {
       var maxId=0;
       for(i=0;i<all.length;i++){if(all[i].id>maxId)maxId=all[i].id;}
       this._nextId=maxId+1;
+      // Check if local had shop/registrations that need to be written back
+      var needWrite=false;
+      if((this._data.shop||[]).length>0&&(r.shop||[]).length<(localShop.length))needWrite=true;
       this._data=r;
       this._savingFromRemote=true;
       this._saveLocal();
       this._savingFromRemote=false;
       this._lastSync=Date.now();
+      if(needWrite&&this._hasToken()){
+        this._savingFromRemote=false;
+        this._writeRemote();
+      }
       if(state.role&&typeof renderPage==='function'){renderPage(state.currentPage);}
       return true;
     }catch(e){console.error('Sync error:',e);return false;}
