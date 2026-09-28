@@ -6,6 +6,7 @@
     "club_desc": "用镜头记录世界，用光影讲述故事"
   },
   "_deleted": {
+    "900008": 1790571705978,
     "1790571634099": 1790571644493
   },
   "members": [
@@ -332,14 +333,6 @@
       "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/吉祥如意_王征_thumb.jpg",
       "category": "主题拍摄",
       "id": 900007,
-      "updatedAt": 1
-    },
-    {
-      "title": "向阳而生",
-      "author": "吴巍",
-      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/向阳而生_吴巍_thumb.jpg",
-      "category": "自然风光",
-      "id": 900008,
       "updatedAt": 1
     },
     {
