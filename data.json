@@ -1,1 +1,604 @@
-{"settings":{"admin_user":"admin","admin_pass":"admin666","club_name":"留声光影","club_desc":"用镜头记录世界，用光影讲述故事"},"sessions":{},"members":[{"id":11,"name":"吴巍","role":"社长","points":0,"updatedAt":1},{"id":12,"name":"王金环","role":"成员","points":0,"updatedAt":1},{"id":13,"name":"李小强","role":"成员","points":0,"updatedAt":1},{"id":14,"name":"柴津玲","role":"成员","points":0,"updatedAt":1},{"id":15,"name":"沈丽红","role":"成员","points":0,"updatedAt":1},{"id":16,"name":"马骏","role":"成员","points":0,"updatedAt":1},{"id":17,"name":"叶蓓","role":"成员","points":0,"updatedAt":1},{"id":18,"name":"李文","role":"成员","points":0,"updatedAt":1},{"id":19,"name":"宋斌斌","role":"成员","points":0,"updatedAt":1},{"id":20,"name":"王征","role":"成员","points":0,"updatedAt":1},{"id":21,"name":"吕佳敏","role":"成员","points":0,"updatedAt":1},{"id":22,"name":"吕缘情","role":"成员","points":0,"updatedAt":1},{"id":23,"name":"李双","role":"成员","points":0,"updatedAt":1},{"id":24,"name":"孔浩美","role":"成员","points":0,"updatedAt":1},{"id":25,"name":"刘浩然","role":"成员","points":0,"updatedAt":1},{"id":26,"name":"聂胜来","role":"成员","points":0,"updatedAt":1},{"id":27,"name":"付子昱","role":"成员","points":0,"updatedAt":1},{"id":28,"name":"张丽娟","role":"成员","points":0,"updatedAt":1}],"pointsHistory":[],"activities":[{"id":1,"title":"9月月底研习会：光影计划","desc":"本期研习会主题为光影计划，包括自然光、人工光与混合光的运用。","status":"upcoming","date":"2026-09-28","location":"社团活动室","updatedAt":1},{"id":2,"title":"8月研习会回顾：人像摄影","desc":"上月研习会主题为人像摄影，成员们展示了优秀作品。","status":"done","date":"2026-08-25","location":"社团活动室","updatedAt":1},{"id":3,"title":"周常打卡：城市街拍","desc":"每周一个主题，本周主题城市街拍，拍摄城市生活中的决定性瞬间。","status":"active","date":"2026-09-23","location":"全城市","updatedAt":1}],"knowledge":[{"id":1,"title":"摄影曝光三要素","content":"曝光是摄影的核心技术基础，由光圈、快门、ISO三个要素共同决定。","category":"曝光控制","tags":"光圈,快门,ISO","updatedAt":1},{"id":2,"title":"构图基本原则","content":"构图是摄影的视觉语言。","category":"构图技法","tags":"三分法,引导线,框架","updatedAt":1},{"id":3,"title":"光线的运用","content":"光线是摄影的灵魂。","category":"光影技法","tags":"黄金时刻,逆光,剪影","updatedAt":1},{"id":4,"title":"后期修图基础","content":"后期是摄影的第二次创作。","category":"后期处理","tags":"调色,裁剪,修图","updatedAt":1}],"news":[{"id":1,"title":"索尼发布A9M3相机，支持全局快门","summary":"索尼正式发布A9M3，搭载全球首款全画幅全局快门传感器，可实现无果冻效应拍摄。","source":"摄影世界","url":"https://www.sohu.com","image":"","created_at":1727404800000,"updatedAt":1},{"id":2,"title":"2026年国家地理摄影大赛开启报名","summary":"2026年国家地理摄影大赛已开启报名，面向全球摄影师征集自然、人文、建筑类作品。","source":"国家地理","url":"https://www.nationalgeographic.com","image":"","created_at":1727491200000,"updatedAt":1},{"id":3,"title":"佳能RF卡口新镜头阵容扩充","summary":"佳能发布了RF24-105mm F2.8 L IS USM Z和RF35mm F1.4 L VCM，进一步完善RF卡口镜头群。","source":"佳能中国","url":"https://www.canon.com.cn","image":"","created_at":1727577600000,"updatedAt":1},{"id":4,"title":"富士X-H2S固件升级提升对焦性能","summary":"富士发布X-H2S新固件，改善了动物追踪对焦性能，并新增了视频拍摄功能。","source":"富士数码","url":"https://www.fujifilm.com","image":"","created_at":1727664000000,"updatedAt":1},{"id":5,"title":"北京国际摄影周10月开幕","summary":"2026北京国际摄影周将于10月在中国美术馆开幕，展出国内外摄影师作品百余幅。","source":"中国摄影报","url":"https://www.cpanet.cn","image":"","created_at":1727750400000,"updatedAt":1}],"tips":[{"id":1,"title":"微距摄影入门","content":"微距摄影可以发现微观世界的美。","category":"微距摄影","tags":"微距,景深,对焦","updatedAt":1},{"id":2,"title":"手机摄影技巧","content":"手机也能拍出大片。","category":"手机摄影","tags":"手机,网格,HDR","updatedAt":1},{"id":3,"title":"风光人像要点","content":"风光人像是最受欢迎的摄影题材。","category":"人像摄影","tags":"人像,黄金时刻,光圈","updatedAt":1}],"shop":[{"id":100001,"name":"光影明信片","desc":"精选社团作品印制","points":50,"img":"","updatedAt":1},{"id":100002,"name":"留声光影马克杯","desc":"限量定制保温杯","points":80,"img":"","updatedAt":1},{"id":100003,"name":"社团帆布包","desc":"棉麻材质印花logo","points":100,"img":"","updatedAt":1},{"id":100004,"name":"摄影短巾","desc":"超细纤维明信半帽巾","points":60,"img":"","updatedAt":1},{"id":100005,"name":"光影手贴纸贴","desc":"可拆贴手贴本","points":40,"img":"","updatedAt":1},{"id":100006,"name":"社团贴纸套装","desc":"6款不同主题贴纸","points":70,"img":"","updatedAt":1}],"registrations":[],"photos":[],"_deleted":{}}
+{
+  "settings": {
+    "admin_user": "admin",
+    "admin_pass": "admin666",
+    "club_name": "留声光影",
+    "club_desc": "用镜头记录世界，用光影讲述故事"
+  },
+  "_deleted": {
+    "900008": 1790571705978,
+    "900010": 1790571719749,
+    "900014": 1790571717667,
+    "900033": 1790571728807,
+    "900037": 1790571735335,
+    "900038": 1790571980043,
+    "1790571634099": 1790571644493
+  },
+  "members": [
+    {
+      "id": 11,
+      "name": "吴巍",
+      "role": "社长",
+      "points": 0,
+      "updatedAt": 1
+    },
+    {
+      "id": 12,
+      "name": "王金环",
+      "role": "成员",
+      "points": 0,
+      "updatedAt": 1
+    },
+    {
+      "id": 13,
+      "name": "李小强",
+      "role": "成员",
+      "points": 0,
+      "updatedAt": 1
+    },
+    {
+      "id": 14,
+      "name": "柴津玲",
+      "role": "成员",
+      "points": 0,
+      "updatedAt": 1
+    },
+    {
+      "id": 15,
+      "name": "沈丽红",
+      "role": "成员",
+      "points": 0,
+      "updatedAt": 1
+    },
+    {
+      "id": 16,
+      "name": "马骏",
+      "role": "成员",
+      "points": 0,
+      "updatedAt": 1
+    },
+    {
+      "id": 17,
+      "name": "叶蓓",
+      "role": "成员",
+      "points": 0,
+      "updatedAt": 1
+    },
+    {
+      "id": 18,
+      "name": "李文",
+      "role": "成员",
+      "points": 0,
+      "updatedAt": 1
+    },
+    {
+      "id": 19,
+      "name": "宋斌斌",
+      "role": "成员",
+      "points": 0,
+      "updatedAt": 1
+    },
+    {
+      "id": 20,
+      "name": "王征",
+      "role": "成员",
+      "points": 0,
+      "updatedAt": 1
+    },
+    {
+      "id": 21,
+      "name": "吕佳敏",
+      "role": "成员",
+      "points": 0,
+      "updatedAt": 1
+    },
+    {
+      "id": 22,
+      "name": "吕缘情",
+      "role": "成员",
+      "points": 0,
+      "updatedAt": 1
+    },
+    {
+      "id": 23,
+      "name": "李双",
+      "role": "成员",
+      "points": 0,
+      "updatedAt": 1
+    },
+    {
+      "id": 24,
+      "name": "孔浩美",
+      "role": "成员",
+      "points": 0,
+      "updatedAt": 1
+    },
+    {
+      "id": 25,
+      "name": "刘浩然",
+      "role": "成员",
+      "points": 0,
+      "updatedAt": 1
+    },
+    {
+      "id": 26,
+      "name": "聂胜来",
+      "role": "成员",
+      "points": 0,
+      "updatedAt": 1
+    },
+    {
+      "id": 27,
+      "name": "付子昱",
+      "role": "成员",
+      "points": 0,
+      "updatedAt": 1
+    },
+    {
+      "id": 28,
+      "name": "张丽娟",
+      "role": "成员",
+      "points": 0,
+      "updatedAt": 1
+    }
+  ],
+  "shop": [
+    {
+      "id": 100001,
+      "name": "光影明信片",
+      "desc": "精选社团作品印制",
+      "points": 50,
+      "img": "",
+      "updatedAt": 1
+    },
+    {
+      "id": 100002,
+      "name": "留声光影马克杯",
+      "desc": "限量定制保温杯",
+      "points": 80,
+      "img": "",
+      "updatedAt": 1
+    },
+    {
+      "id": 100003,
+      "name": "社团帆布包",
+      "desc": "棉麻材质印花logo",
+      "points": 100,
+      "img": "",
+      "updatedAt": 1
+    },
+    {
+      "id": 100004,
+      "name": "摄影短巾",
+      "desc": "超细纤维明信半帽巾",
+      "points": 60,
+      "img": "",
+      "updatedAt": 1
+    },
+    {
+      "id": 100005,
+      "name": "光影手贴纸贴",
+      "desc": "可拆贴手贴本",
+      "points": 40,
+      "img": "",
+      "updatedAt": 1
+    },
+    {
+      "id": 100006,
+      "name": "社团贴纸套装",
+      "desc": "6款不同主题贴纸",
+      "points": 70,
+      "img": "",
+      "updatedAt": 1
+    }
+  ],
+  "activities": [
+    {
+      "id": 1,
+      "title": "9月月底研习会：光影计划",
+      "desc": "本期研习会主题为光影计划，包括自然光、人工光与混合光的运用。",
+      "status": "upcoming",
+      "date": "2026-09-28",
+      "location": "社团活动室",
+      "updatedAt": 1
+    },
+    {
+      "id": 2,
+      "title": "8月研习会回顾：人像摄影",
+      "desc": "上月研习会主题为人像摄影，成员们展示了优秀作品。",
+      "status": "done",
+      "date": "2026-08-25",
+      "location": "社团活动室",
+      "updatedAt": 1
+    },
+    {
+      "id": 3,
+      "title": "周常打卡：城市街拍",
+      "desc": "每周一个主题，本周主题城市街拍，拍摄城市生活中的决定性瞬间。",
+      "status": "active",
+      "date": "2026-09-23",
+      "location": "全城市",
+      "updatedAt": 1
+    }
+  ],
+  "news": [
+    {
+      "id": 1,
+      "title": "索尼发布A9M3相机，支持全局快门",
+      "summary": "索尼正式发布A9M3，搭载全球首款全画幅全局快门传感器，可实现无果冻效应拍摄。",
+      "source": "摄影世界",
+      "url": "https://www.sohu.com",
+      "image": "",
+      "created_at": 1727404800000,
+      "updatedAt": 1
+    },
+    {
+      "id": 2,
+      "title": "2026年国家地理摄影大赛开启报名",
+      "summary": "2026年国家地理摄影大赛已开启报名，面向全球摄影师征集自然、人文、建筑类作品。",
+      "source": "国家地理",
+      "url": "https://www.nationalgeographic.com",
+      "image": "",
+      "created_at": 1727491200000,
+      "updatedAt": 1
+    },
+    {
+      "id": 3,
+      "title": "佳能RF卡口新镜头阵容扩充",
+      "summary": "佳能发布了RF24-105mm F2.8 L IS USM Z和RF35mm F1.4 L VCM，进一步完善RF卡口镜头群。",
+      "source": "佳能中国",
+      "url": "https://www.canon.com.cn",
+      "image": "",
+      "created_at": 1727577600000,
+      "updatedAt": 1
+    },
+    {
+      "id": 4,
+      "title": "富士X-H2S固件升级提升对焦性能",
+      "summary": "富士发布X-H2S新固件，改善了动物追踪对焦性能，并新增了视频拍摄功能。",
+      "source": "富士数码",
+      "url": "https://www.fujifilm.com",
+      "image": "",
+      "created_at": 1727664000000,
+      "updatedAt": 1
+    },
+    {
+      "id": 5,
+      "title": "北京国际摄影周10月开幕",
+      "summary": "2026北京国际摄影周将于10月在中国美术馆开幕，展出国内外摄影师作品百余幅。",
+      "source": "中国摄影报",
+      "url": "https://www.cpanet.cn",
+      "image": "",
+      "created_at": 1727750400000,
+      "updatedAt": 1
+    }
+  ],
+  "tips": [
+    {
+      "id": 1,
+      "title": "微距摄影入门",
+      "content": "微距摄影可以发现微观世界的美。\n\n镜头选择：专用微距镜头或带微距功能的镜头。\n\n光圈设置：f/8-f/16，保证足够景深。\n\n对焦：手动对焦，小心对焦点偏移。\n\n光线：自然光或柔光灯，避免闪光。\n\n稳定性：使用三脚架，ISO适当提高。",
+      "category": "微距摄影",
+      "tags": "微距,景深,对焦",
+      "updatedAt": 1
+    },
+    {
+      "id": 2,
+      "title": "手机摄影技巧",
+      "content": "手机也能拍出大片。\n\n清理镜头：拍前擦干净镜头。\n\n开启网格：帮助构图和对称。\n\n手动调整曝光：点击屏幕对焦，上下滑动调整亮度。\n\n善用HDR：高对比场景使用HDR模式。\n\n后期APP：Snapseed、VSCO、Lightroom移动版。",
+      "category": "手机摄影",
+      "tags": "手机,网格,HDR",
+      "updatedAt": 1
+    },
+    {
+      "id": 3,
+      "title": "风光人像要点",
+      "content": "风光人像是最受欢迎的摄影题材。\n\n时间选择：黄金时刻最佳，光线柔和。\n\n地点选择：背景干净，避免杂乱。\n\n引导：让模特自然走动，抓拍自然瞬间。\n\n构图：三分法或尽量不把头部放在上三分之一。\n\n光圈：f/1.8-f/2.8虚化背景。\n\n快门：1/200s以上冻结动作。",
+      "category": "人像摄影",
+      "tags": "人像,黄金时刻,光圈",
+      "updatedAt": 1
+    }
+  ],
+  "knowledge": [
+    {
+      "id": 1,
+      "title": "摄影曝光三要素",
+      "content": "曝光是摄影的核心技术基础，由光圈、快门、ISO三个要素共同决定。\n\n光圈控制镜头进光孔的大小，f值越小光圈越大进光越多景深越浅。人像常用大光圈虚化背景。\n\n快门控制感光时间长短，高速快门冻结运动，慢速快门拍出流丝。\n\nISO控制感光器灵敏度，ISO越高画面越亮但噪点越多。日光下ISO100-400，夜间ISO1600-6400。",
+      "category": "曝光控制",
+      "tags": "光圈,快门,ISO",
+      "updatedAt": 1
+    },
+    {
+      "id": 2,
+      "title": "构图基本法则",
+      "content": "构图是摄影的视觉语言。\n\n三分法：将画面分为九宫格，主体放在交叉点上。\n\n引导线：用线条、道路、河流等引导视线。\n\n框架构图：用前景或窗口框住主体。\n\n对称构图：利用水面、玻璃等创造对称。\n\n前景构图：用前景增加画面层次感。",
+      "category": "构图技法",
+      "tags": "三分法,引导线,框架",
+      "updatedAt": 1
+    },
+    {
+      "id": 3,
+      "title": "光线的运用",
+      "content": "光线是摄影的灵魂。\n\n黄金时刻：日出后和日落前一小时，光线柔和色温暖。\n\n逆光剪影：强光下拍剪影，轮廓清晰。\n\n侧光：光从侧面打来，塑造立体感。\n\n顶光：光从上方打来，适合拍建筑。\n\n辱光下不拍人像，适合建筑几何和黑白影调。",
+      "category": "光影技法",
+      "tags": "黄金时刻,逆光,剪影",
+      "updatedAt": 1
+    },
+    {
+      "id": 4,
+      "title": "后期修图基础",
+      "content": "后期是摄影的第二次创作。\n\n调色：调整色温、对比度、高光、阴影。\n\n裁剪：二次构图，去除多余元素。\n\n局部调整：使用笔刷工具局部提亮或压暗。\n\n常用软件：Lightroom、Snapseed、VSCO。\n\n建议原则：先调整光影，再调色彩，最后裁剪。",
+      "category": "后期处理",
+      "tags": "调色,裁剪,修图",
+      "updatedAt": 1
+    }
+  ],
+  "registrations": [],
+  "photos": [
+    {
+      "title": "中国建筑之美",
+      "author": "李小强",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/中国建筑之美_李小强_thumb.jpg",
+      "category": "建筑风光",
+      "id": 900001,
+      "updatedAt": 1
+    },
+    {
+      "title": "人物特写",
+      "author": "吕佳敏",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_吕佳敏_thumb.jpg",
+      "category": "人像纪实",
+      "id": 900002,
+      "updatedAt": 1
+    },
+    {
+      "title": "人物特写",
+      "author": "李小强",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",
+      "category": "人像纪实",
+      "id": 900003,
+      "updatedAt": 1
+    },
+    {
+      "title": "光影黄昏",
+      "author": "叶蓓",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/光影黄昏_叶蓓_thumb.jpg",
+      "category": "自然风光",
+      "id": 900004,
+      "updatedAt": 1
+    },
+    {
+      "title": "双朵春胭",
+      "author": "沈丽红",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/双朵春胭_沈丽红_thumb.jpg",
+      "category": "人像纪实",
+      "id": 900005,
+      "updatedAt": 1
+    },
+    {
+      "title": "古镇夜景",
+      "author": "李小强",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/古镇夜景_李小强_thumb.jpg",
+      "category": "建筑风光",
+      "id": 900006,
+      "updatedAt": 1
+    },
+    {
+      "title": "吉祥如意",
+      "author": "王征",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/吉祥如意_王征_thumb.jpg",
+      "category": "主题拍摄",
+      "id": 900007,
+      "updatedAt": 1
+    },
+    {
+      "title": "城与天空",
+      "author": "吴巍",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/城与天空_吴巍_thumb.jpg",
+      "category": "建筑风光",
+      "id": 900009,
+      "updatedAt": 1
+    },
+    {
+      "title": "夕阳映彩霞",
+      "author": "马骏",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/夕阳映彩霞_马骏_thumb.jpg",
+      "category": "自然风光",
+      "id": 900011,
+      "updatedAt": 1
+    },
+    {
+      "title": "夜色微光",
+      "author": "吴巍",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/夜色微光_吴巍_thumb.jpg",
+      "category": "主题拍摄",
+      "id": 900012,
+      "updatedAt": 1
+    },
+    {
+      "title": "宛平城下",
+      "author": "吴巍",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/宛平城下_吴巍_thumb.jpg",
+      "category": "建筑风光",
+      "id": 900013,
+      "updatedAt": 1
+    },
+    {
+      "title": "山里人家",
+      "author": "柴津玲",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/山里人家_柴津玲_thumb.jpg",
+      "category": "人像纪实",
+      "id": 900015,
+      "updatedAt": 1
+    },
+    {
+      "title": "建筑纪实",
+      "author": "李乐薇",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/建筑纪实_李乐薇_thumb.jpg",
+      "category": "建筑风光",
+      "id": 900016,
+      "updatedAt": 1
+    },
+    {
+      "title": "当下",
+      "author": "叶蓓",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/当下_叶蓓_thumb.jpg",
+      "category": "主题拍摄",
+      "id": 900017,
+      "updatedAt": 1
+    },
+    {
+      "title": "方寸工位",
+      "author": "李乐薇",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/方寸工位_李乐薇_thumb.jpg",
+      "category": "主题拍摄",
+      "id": 900018,
+      "updatedAt": 1
+    },
+    {
+      "title": "海景",
+      "author": "叶蓓",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/海景_叶蓓_thumb.jpg",
+      "category": "自然风光",
+      "id": 900019,
+      "updatedAt": 1
+    },
+    {
+      "title": "湖光山色",
+      "author": "李小强",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/湖光山色_李小强_thumb.jpg",
+      "category": "自然风光",
+      "id": 900020,
+      "updatedAt": 1
+    },
+    {
+      "title": "烟雨长桥",
+      "author": "王金环",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/烟雨长桥_王金环_thumb.jpg",
+      "category": "建筑风光",
+      "id": 900021,
+      "updatedAt": 1
+    },
+    {
+      "title": "特写",
+      "author": "叶蓓",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/特写_叶蓓_thumb.jpg",
+      "category": "人像纪实",
+      "id": 900022,
+      "updatedAt": 1
+    },
+    {
+      "title": "玉渊潭樱花",
+      "author": "李小强",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/玉渊潭樱花_李小强_thumb.jpg",
+      "category": "自然风光",
+      "id": 900023,
+      "updatedAt": 1
+    },
+    {
+      "title": "盛放的生命",
+      "author": "沈丽红",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/盛放的生命_沈丽红_thumb.jpg",
+      "category": "主题拍摄",
+      "id": 900024,
+      "updatedAt": 1
+    },
+    {
+      "title": "研习会现场",
+      "author": "社团",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/研习会现场_社团_thumb.jpg",
+      "category": "主题拍摄",
+      "id": 900025,
+      "updatedAt": 1
+    },
+    {
+      "title": "秋日物语",
+      "author": "李小强",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/秋日物语_李小强_thumb.jpg",
+      "category": "自然风光",
+      "id": 900026,
+      "updatedAt": 1
+    },
+    {
+      "title": "窗前",
+      "author": "叶蓓",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/窗前_叶蓓_thumb.jpg",
+      "category": "人像纪实",
+      "id": 900027,
+      "updatedAt": 1
+    },
+    {
+      "title": "童趣",
+      "author": "李乐薇",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/童趣_李乐薇_thumb.jpg",
+      "category": "人像纪实",
+      "id": 900028,
+      "updatedAt": 1
+    },
+    {
+      "title": "线下实拍",
+      "author": "吴巍",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/线下实拍_吴巍_thumb.jpg",
+      "category": "主题拍摄",
+      "id": 900029,
+      "updatedAt": 1
+    },
+    {
+      "title": "线下实拍",
+      "author": "李小强",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/线下实拍_李小强_thumb.jpg",
+      "category": "主题拍摄",
+      "id": 900030,
+      "updatedAt": 1
+    },
+    {
+      "title": "线下实拍",
+      "author": "沈丽红",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/线下实拍_沈丽红_thumb.jpg",
+      "category": "主题拍摄",
+      "id": 900031,
+      "updatedAt": 1
+    },
+    {
+      "title": "莲花",
+      "author": "李小强",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/莲花_李小强_thumb.jpg",
+      "category": "自然风光",
+      "id": 900032,
+      "updatedAt": 1
+    },
+    {
+      "title": "赤诚",
+      "author": "叶蓓",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/赤诚_叶蓓_thumb.jpg",
+      "category": "人像纪实",
+      "id": 900034,
+      "updatedAt": 1
+    },
+    {
+      "title": "都市之光",
+      "author": "柴津玲",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/都市之光_柴津玲_thumb.jpg",
+      "category": "建筑风光",
+      "id": 900035,
+      "updatedAt": 1
+    },
+    {
+      "title": "霞光满天",
+      "author": "沈丽红",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/霞光满天_沈丽红_thumb.jpg",
+      "category": "自然风光",
+      "id": 900036,
+      "updatedAt": 1
+    },
+    {
+      "id": 1790571830721,
+      "title": "国联股份数字经济总部",
+      "author": "李小强",
+      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/upload_1790571805883_李小强.jpg",
+      "category": "建筑风光",
+      "updatedAt": 1790571830721
+    }
+  ],
+  "pointsHistory": []
+}
