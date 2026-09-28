@@ -5,7 +5,9 @@
     "club_name": "留声光影",
     "club_desc": "用镜头记录世界，用光影讲述故事"
   },
-  "_deleted": {},
+  "_deleted": {
+    "1790571634099": 1790571644493
+  },
   "members": [
     {
       "id": 11,
@@ -579,14 +581,6 @@
       "category": "建筑风光",
       "id": 900038,
       "updatedAt": 1
-    },
-    {
-      "id": 1790571634099,
-      "title": "hh",
-      "author": "ff",
-      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/upload_1790571618068_05社团周边伴手礼 ——定制款温显功能电镀不锈钢水杯.png",
-      "category": "人像纪实",
-      "updatedAt": 1790571634099
     }
   ],
   "pointsHistory": []
