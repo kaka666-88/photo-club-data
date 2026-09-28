@@ -1623,8 +1623,19 @@ function handleDetailFile(input){
   if(file.size>3*1024*1024){showToast('\u56fe\u7247\u4e0d\u80fd\u8d85\u8fc73MB',true);return;}
   var reader=new FileReader();
   reader.onload=function(e){
-    detailImages.push(e.target.result);
+    var tempUrl=e.target.result;
+    detailImages.push(tempUrl);
     renderDetailImgs();
+    uploadPhotoToGithub(file,function(url){
+      if(url){
+        var idx=detailImages.indexOf(tempUrl);
+        if(idx>=0)detailImages[idx]=url;
+        renderDetailImgs();
+        showToast('详情图已上传');
+      }else{
+        showToast('详情图上传失败',true);
+      }
+    });
   };
   reader.readAsDataURL(file);
   input.value='';
