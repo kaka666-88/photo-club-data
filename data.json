@@ -7,6 +7,8 @@
   },
   "_deleted": {
     "900008": 1790571705978,
+    "900010": 1790571719749,
+    "900014": 1790571717667,
     "1790571634099": 1790571644493
   },
   "members": [
@@ -344,14 +346,6 @@
       "updatedAt": 1
     },
     {
-      "title": "夏日山野",
-      "author": "刘衡源",
-      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/夏日山野_刘衡源_thumb.jpg",
-      "category": "自然风光",
-      "id": 900010,
-      "updatedAt": 1
-    },
-    {
       "title": "夕阳映彩霞",
       "author": "马骏",
       "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/夕阳映彩霞_马骏_thumb.jpg",
@@ -373,14 +367,6 @@
       "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/宛平城下_吴巍_thumb.jpg",
       "category": "建筑风光",
       "id": 900013,
-      "updatedAt": 1
-    },
-    {
-      "title": "山花特写",
-      "author": "刘衡源",
-      "url": "https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/山花特写_刘衡源_thumb.jpg",
-      "category": "自然风光",
-      "id": 900014,
       "updatedAt": 1
     },
     {
