@@ -1298,7 +1298,7 @@ function renderHome(){
   for(var si=0;si<shopPreview.length;si++){
     var it=shopPreview[si];
     shopHtml+='<div style="background:var(--dark2);border-radius:12px;overflow:hidden;border:1px solid var(--dark3);cursor:pointer" onclick="switchPage(\'shop\')">';
-    shopHtml+='<div style="height:120px;background:var(--dark3);position:relative">';
+    shopHtml+='<div style="height:240px;background:var(--dark3);position:relative">';
     if(it.img){shopHtml+='<img src="'+it.img+'" style="width:100%;height:100%;object-fit:cover">';}
     else{shopHtml+='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><span style="font-size:36px;opacity:.3">\u{1F4F7}</span></div>';}
     shopHtml+='<div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.8));padding:4px 8px"><span style="color:var(--gold);font-size:14px;font-weight:700">'+it.points+' \u79ef\u5206</span></div>';
