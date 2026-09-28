@@ -196,20 +196,25 @@ input,textarea,select{font-family:inherit;outline:none}
 <!-- ===== Login Screen ===== -->
 <div id="loginScreen" class="login-screen">
   <div id="loginBg" class="login-bg"></div>
-  <div class="login-box">
+  <div class="login-box" id="loginBox">
     <img src="https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/club_logo.png?v=7" alt="留声光影" style="width:107px;height:107px;border-radius:14px;margin:0 auto 16px;display:block;filter:drop-shadow(0 0 10px rgba(201,169,110,.5))">
     <h1>留声光影</h1>
     <p class="sub">用镜头记录世界，用光影讲述故事</p>
-    <div class="form-group">
-      <input id="loginUser" placeholder="账号" autocomplete="username" style="margin-bottom:8px">
+    <div id="loginMain">
+      <button class="btn btn-gold" style="width:100%;margin-top:8px" onclick="doGuestLogin()">进入主页</button>
+      <div class="guest-btn" onclick="showAdminLogin()">管理员登录</div>
     </div>
-    <div class="form-group">
-      <input id="loginPass" type="password" placeholder="密码" autocomplete="current-password">
+    <div id="loginAdmin" style="display:none">
+      <div class="form-group">
+        <input id="loginUser" placeholder="账号" autocomplete="username" style="margin-bottom:8px">
+      </div>
+      <div class="form-group">
+        <input id="loginPass" type="password" placeholder="密码" autocomplete="current-password">
+      </div>
+      <div id="loginErr" class="err-msg"></div>
+      <button class="btn btn-gold" onclick="adminLoginSubmit()">登录</button>
+      <div class="guest-btn" onclick="backToLoginMain()">返回</div>
     </div>
-    <div id="loginErr" class="err-msg"></div>
-    <button class="btn btn-gold" onclick="memberLoginSubmit()">登录</button>
-    <div class="guest-btn" onclick="doGuestLogin()">访客浏览</div>
-    <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1);font-size:13px;color:rgba(255,255,255,.5)">社团成员？<span onclick="showRegisterForm()" style="color:var(--gold);cursor:pointer;text-decoration:underline">注册账号</span></div>
   </div>
 </div>
 
@@ -1060,63 +1065,16 @@ function adminLoginSubmit(){
   }).catch(function(e){showToast(e.message,true);});
 }
 
-function showRegisterForm(){
-  var box=document.querySelector('.login-box');
-  box.innerHTML='<img src="https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/club_logo.png?v=7" alt="留声光影" style="width:107px;height:107px;border-radius:14px;margin:0 auto 16px;display:block;filter:drop-shadow(0 0 10px rgba(201,169,110,.5))">'+
-    '<h1>注册账号</h1>'+
-    '<p class="sub">填写你的信息，管理员审核后即可登录</p>'+
-    '<div class="form-group"><input id="regUser" placeholder="登录账号" style="margin-bottom:8px"></div>'+
-    '<div class="form-group"><input id="regPass" type="password" placeholder="设置密码" style="margin-bottom:8px"></div>'+
-    '<div class="form-group"><input id="regName" placeholder="姓名（真实姓名）" style="margin-bottom:8px"></div>'+
-    '<div id="regErr" class="err-msg"></div>'+
-    '<button class="btn btn-gold" onclick="submitRegister()">提交注册</button>'+
-    '<div class="guest-btn" onclick="backToLogin()">返回登录</div>';
+function showAdminLogin(){
+  $('loginMain').style.display='none';
+  $('loginAdmin').style.display='block';
+  $('loginUser').value='';
+  $('loginPass').value='';
+  $('loginErr').textContent='';
 }
-
-function backToLogin(){
-  var box=document.querySelector('.login-box');
-  box.innerHTML='<img src="https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/club_logo.png?v=7" alt="留声光影" style="width:107px;height:107px;border-radius:14px;margin:0 auto 16px;display:block;filter:drop-shadow(0 0 10px rgba(201,169,110,.5))">'+
-    '<h1>留声光影</h1>'+
-    '<p class="sub">用镜头记录世界，用光影讲述故事</p>'+
-    '<div class="form-group"><input id="loginUser" placeholder="账号" autocomplete="username" style="margin-bottom:8px"></div>'+
-    '<div class="form-group"><input id="loginPass" type="password" placeholder="密码" autocomplete="current-password"></div>'+
-    '<div id="loginErr" class="err-msg"></div>'+
-    '<button class="btn btn-gold" onclick="memberLoginSubmit()">登录</button>'+
-    '<div class="guest-btn" onclick="doGuestLogin()">访客浏览</div>'+
-    '<div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1);font-size:13px;color:rgba(255,255,255,.5)">社团成员？<a onclick="showRegisterForm()" style="color:var(--gold);cursor:pointer;text-decoration:none">注册账号</a></div>';
-}
-
-function submitRegister(){
-  var u=$('regUser').value.trim();
-  var p=$('regPass').value.trim();
-  var n=$('regName').value.trim();
-  if(!u||!p){showToast('请填写账号和密码',true);return;}
-  if(u==='admin'){showToast('该账号不可用',true);return;}
-  API.memberRegister(u,p,n).then(function(){
-    showToast('注册提交成功！等待管理员审核');
-    backToLogin();
-  }).catch(function(e){showToast(e.message,true);});
-}
-
-function memberLoginSubmit(){
-  var u=$('loginUser').value.trim();
-  var p=$('loginPass').value.trim();
-  if(!u||!p){showToast('请输入账号和密码',true);return;}
-  API.memberLogin(u,p).then(function(r){
-    state.role='member';state.user=r.user;state.token=r.token;
-    localStorage.setItem('photoClubMemberUser',u);
-    localStorage.setItem('photoClubMemberPass',p);
-    saveSession();
-    enterApp();
-  }).catch(function(e){
-    API.adminLogin(u,p).then(function(r){
-      state.role='admin';state.user=r.user;state.token=r.token;
-      localStorage.setItem('photoClubAdminUser',u);
-      localStorage.setItem('photoClubAdminPass',p);
-      saveSession();
-      enterApp();
-    }).catch(function(e2){showToast('账号或密码错误',true);});
-  });
+function backToLoginMain(){
+  $('loginAdmin').style.display='none';
+  $('loginMain').style.display='block';
 }
 
 function doGuestLogin(){
@@ -1155,6 +1113,8 @@ function logout(){
   $('app').style.display='none';
   $('bottomNav').style.display='none';
   $('loginScreen').style.display='flex';
+  $('loginMain').style.display='block';
+  $('loginAdmin').style.display='none';
   $('loginUser').value='';
   $('loginPass').value='';
 }
