@@ -68,6 +68,12 @@ input,textarea,select{font-family:inherit;outline:none}
 .gallery-grid .photo-card .photo-info .author{color:rgba(255,255,255,.6)}
 @media(min-width:768px){.gallery-grid{grid-template-columns:repeat(3,1fr)}}
 @media(min-width:1024px){.gallery-grid{grid-template-columns:repeat(4,1fr)}}
+.gallery-tabs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.gallery-tab{padding:6px 16px;border-radius:20px;font-size:13px;white-space:nowrap;cursor:pointer;background:var(--dark2);color:var(--gray);transition:all .2s;border:1px solid transparent}
+.gallery-tab.active{background:rgba(201,169,110,.15);color:var(--gold);border-color:rgba(201,169,110,.3)}
+.gallery-tab:hover{color:var(--text)}
+.photo-card .photo-del{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.7);color:#fff;font-size:14px;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:5}
+.photo-card .photo-del.show{display:flex}
 
 /* ===== Cards ===== */
 .card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px}
@@ -245,7 +251,14 @@ input,textarea,select{font-family:inherit;outline:none}
 <!-- ===== Gallery Page ===== -->
 <div id="page-gallery" class="page">
   <div class="section">
-    <div class="section-title">作品展示</div>
+    <div class="section-title">作品展示<span id="galleryAdminBar" style="display:none"><button class="btn btn-gold btn-sm" onclick="showUploadPhoto()">上传作品</button> <button class="btn btn-ghost btn-sm" onclick="showDeletePhotos()">管理作品</button></span></div>
+    <div class="gallery-tabs" id="galleryTabs">
+      <div class="gallery-tab active" onclick="filterGallery('all')">全部</div>
+      <div class="gallery-tab" onclick="filterGallery('人像纪实')">人像纪实</div>
+      <div class="gallery-tab" onclick="filterGallery('自然风光')">自然风光</div>
+      <div class="gallery-tab" onclick="filterGallery('建筑风光')">建筑风光</div>
+      <div class="gallery-tab" onclick="filterGallery('主题拍摄')">主题拍摄</div>
+    </div>
     <div class="gallery-grid" id="fullGallery"></div>
   </div>
 </div>
@@ -396,44 +409,44 @@ var CLOUD_CONFIG = (function(){
 
 // ===== Photos =====
 var PHOTOS = [
-  {title:"中国建筑之美",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/中国建筑之美_李小强_thumb.jpg"},
-  {title:"人物特写",author:"吕佳敏",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_吕佳敏_thumb.jpg"},
-  {title:"人物特写",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg"},
-  {title:"光影黄昏",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/光影黄昏_叶蓓_thumb.jpg"},
-  {title:"双朵春胭",author:"沈丽红",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/双朵春胭_沈丽红_thumb.jpg"},
-  {title:"古镇夜景",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/古镇夜景_李小强_thumb.jpg"},
-  {title:"吉祥如意",author:"王征",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/吉祥如意_王征_thumb.jpg"},
-  {title:"向阳而生",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/向阳而生_吴巍_thumb.jpg"},
-  {title:"城与天空",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/城与天空_吴巍_thumb.jpg"},
-  {title:"夏日山野",author:"刘衡源",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/夏日山野_刘衡源_thumb.jpg"},
-  {title:"夕阳映彩霞",author:"马骏",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/夕阳映彩霞_马骏_thumb.jpg"},
-  {title:"夜色微光",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/夜色微光_吴巍_thumb.jpg"},
-  {title:"宛平城下",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/宛平城下_吴巍_thumb.jpg"},
-  {title:"山花特写",author:"刘衡源",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/山花特写_刘衡源_thumb.jpg"},
-  {title:"山里人家",author:"柴津玲",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/山里人家_柴津玲_thumb.jpg"},
-  {title:"建筑纪实",author:"李乐薇",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/建筑纪实_李乐薇_thumb.jpg"},
-  {title:"当下",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/当下_叶蓓_thumb.jpg"},
-  {title:"方寸工位",author:"李乐薇",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/方寸工位_李乐薇_thumb.jpg"},
-  {title:"海景",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/海景_叶蓓_thumb.jpg"},
-  {title:"湖光山色",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/湖光山色_李小强_thumb.jpg"},
-  {title:"烟雨长桥",author:"王金环",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/烟雨长桥_王金环_thumb.jpg"},
-  {title:"特写",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/特写_叶蓓_thumb.jpg"},
-  {title:"玉渊潭樱花",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/玉渊潭樱花_李小强_thumb.jpg"},
-  {title:"盛放的生命",author:"沈丽红",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/盛放的生命_沈丽红_thumb.jpg"},
-  {title:"研习会现场",author:"社团",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/研习会现场_社团_thumb.jpg"},
-  {title:"秋日物语",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/秋日物语_李小强_thumb.jpg"},
-  {title:"窗前",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/窗前_叶蓓_thumb.jpg"},
-  {title:"童趣",author:"李乐薇",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/童趣_李乐薇_thumb.jpg"},
-  {title:"线下实拍",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/线下实拍_吴巍_thumb.jpg"},
-  {title:"线下实拍",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/线下实拍_李小强_thumb.jpg"},
-  {title:"线下实拍",author:"沈丽红",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/线下实拍_沈丽红_thumb.jpg"},
-  {title:"莲花",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/莲花_李小强_thumb.jpg"},
-  {title:"街景",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/街景_叶蓓_thumb.jpg"},
-  {title:"赤诚",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/赤诚_叶蓓_thumb.jpg"},
-  {title:"都市之光",author:"柴津玲",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/都市之光_柴津玲_thumb.jpg"},
-  {title:"霞光满天",author:"沈丽红",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/霞光满天_沈丽红_thumb.jpg"},
-  {title:"青砖",author:"柴津玲",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/青砖_柴津玲_thumb.jpg"},
-  {title:"颐和园",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/颐和园_李小强_thumb.jpg"}
+  {title:"中国建筑之美",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/中国建筑之美_李小强_thumb.jpg",category:"建筑风光"},
+  {title:"人物特写",author:"吕佳敏",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_吕佳敏_thumb.jpg",category:"人像纪实"},
+  {title:"人物特写",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",category:"人像纪实"},
+  {title:"光影黄昏",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/光影黄昏_叶蓓_thumb.jpg",category:"自然风光"},
+  {title:"双朵春胭",author:"沈丽红",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/双朵春胭_沈丽红_thumb.jpg",category:"人像纪实"},
+  {title:"古镇夜景",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/古镇夜景_李小强_thumb.jpg",category:"建筑风光"},
+  {title:"吉祥如意",author:"王征",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/吉祥如意_王征_thumb.jpg",category:"主题拍摄"},
+  {title:"向阳而生",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/向阳而生_吴巍_thumb.jpg",category:"自然风光"},
+  {title:"城与天空",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/城与天空_吴巍_thumb.jpg",category:"建筑风光"},
+  {title:"夏日山野",author:"刘衡源",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/夏日山野_刘衡源_thumb.jpg",category:"自然风光"},
+  {title:"夕阳映彩霞",author:"马骏",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/夕阳映彩霞_马骏_thumb.jpg",category:"自然风光"},
+  {title:"夜色微光",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/夜色微光_吴巍_thumb.jpg",category:"主题拍摄"},
+  {title:"宛平城下",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/宛平城下_吴巍_thumb.jpg",category:"建筑风光"},
+  {title:"山花特写",author:"刘衡源",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/山花特写_刘衡源_thumb.jpg",category:"自然风光"},
+  {title:"山里人家",author:"柴津玲",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/山里人家_柴津玲_thumb.jpg",category:"人像纪实"},
+  {title:"建筑纪实",author:"李乐薇",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/建筑纪实_李乐薇_thumb.jpg",category:"建筑风光"},
+  {title:"当下",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/当下_叶蓓_thumb.jpg",category:"主题拍摄"},
+  {title:"方寸工位",author:"李乐薇",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/方寸工位_李乐薇_thumb.jpg",category:"主题拍摄"},
+  {title:"海景",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/海景_叶蓓_thumb.jpg",category:"自然风光"},
+  {title:"湖光山色",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/湖光山色_李小强_thumb.jpg",category:"自然风光"},
+  {title:"烟雨长桥",author:"王金环",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/烟雨长桥_王金环_thumb.jpg",category:"建筑风光"},
+  {title:"特写",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/特写_叶蓓_thumb.jpg",category:"人像纪实"},
+  {title:"玉渊潭樱花",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/玉渊潭樱花_李小强_thumb.jpg",category:"自然风光"},
+  {title:"盛放的生命",author:"沈丽红",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/盛放的生命_沈丽红_thumb.jpg",category:"主题拍摄"},
+  {title:"研习会现场",author:"社团",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/研习会现场_社团_thumb.jpg",category:"主题拍摄"},
+  {title:"秋日物语",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/秋日物语_李小强_thumb.jpg",category:"自然风光"},
+  {title:"窗前",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/窗前_叶蓓_thumb.jpg",category:"人像纪实"},
+  {title:"童趣",author:"李乐薇",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/童趣_李乐薇_thumb.jpg",category:"人像纪实"},
+  {title:"线下实拍",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/线下实拍_吴巍_thumb.jpg",category:"主题拍摄"},
+  {title:"线下实拍",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/线下实拍_李小强_thumb.jpg",category:"主题拍摄"},
+  {title:"线下实拍",author:"沈丽红",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/线下实拍_沈丽红_thumb.jpg",category:"主题拍摄"},
+  {title:"莲花",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/莲花_李小强_thumb.jpg",category:"自然风光"},
+  {title:"街景",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/街景_叶蓓_thumb.jpg",category:"建筑风光"},
+  {title:"赤诚",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/赤诚_叶蓓_thumb.jpg",category:"人像纪实"},
+  {title:"都市之光",author:"柴津玲",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/都市之光_柴津玲_thumb.jpg",category:"建筑风光"},
+  {title:"霞光满天",author:"沈丽红",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/霞光满天_沈丽红_thumb.jpg",category:"自然风光"},
+  {title:"青砖",author:"柴津玲",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/青砖_柴津玲_thumb.jpg",category:"建筑风光"},
+  {title:"颐和园",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/颐和园_李小强_thumb.jpg",category:"建筑风光"}
 ];
 
 var HERO_PHOTO = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80";
@@ -508,7 +521,8 @@ var SEED_DATA = {
     {id:100004,name:"摄影短巾",desc:"超细纤维明信半帽巾",points:60,img:"",updatedAt:1},
     {id:100005,name:"光影手贴纸贴","desc":"可拆贴手贴本","points":40,img:"",updatedAt:1},
     {id:100006,name:"社团贴纸套装","desc":"6款不同主题贴纸",points:70,img:"",updatedAt:1}
-  ]
+  ],
+  photos: []
 };
 
 // ===== State =====
@@ -665,7 +679,7 @@ var API = {
     var remoteDel=remoteData._deleted||{};
     var deleted=this._mergeDeleted(localDel, remoteDel);
     merged._deleted=deleted;
-    var arrays=['members','shop','activities','news','tips','knowledge','registrations'];
+    var arrays=['members','shop','activities','news','tips','knowledge','registrations','photos'];
     for(var a=0;a<arrays.length;a++){
       var key=arrays[a];
       var localArr=localData[key]||[];
@@ -732,7 +746,7 @@ var API = {
       var needWrite=false;
       if(this._hasToken()){
         // If local had items not in remote, or local has newer updatedAt on any item
-        var localArrs=['members','shop','activities','news','tips','knowledge','registrations'];
+        var localArrs=['members','shop','activities','news','tips','knowledge','registrations','photos'];
         for(var a=0;a<localArrs.length;a++){
           var key=localArrs[a];
           var localArr=localCopy[key]||[];
@@ -958,6 +972,7 @@ var API = {
 
   // ===== News =====
   getNews: function(){return this._data.news||[];},
+  getPhotos: function(){return this._data.photos||[];},
   addNews: function(item){
     item.id=this._nextId++;
     item.created_at=new Date().toISOString();item.updatedAt=Date.now();
@@ -1242,8 +1257,9 @@ function showUploadHero(){
     '<button class="btn btn-gold" style="width:100%;margin-top:12px" onclick="submitAddHero()">添加</button>');
   var picker = $('heroPhotoPicker');
   var html = '';
-  for(var i = 0; i < PHOTOS.length; i++){
-    html += '<div style="cursor:pointer;border:2px solid transparent;border-radius:8px;overflow:hidden" onclick="document.getElementById(\'heroUrl\').value=PHOTOS[' + i + '].url;this.parentElement.querySelectorAll(\'div\').forEach(function(d){d.style.border=\'2px solid transparent\'});this.style.border=\'2px solid var(--gold)\'"><img src="' + photoUrl(PHOTOS[i].url) + '" style="width:100%;height:60px;object-fit:cover" loading="lazy"></div>';
+  var _hp2=getAllPhotos();
+  for(var i = 0; i < _hp2.length; i++){
+    html += '<div style="cursor:pointer;border:2px solid transparent;border-radius:8px;overflow:hidden" onclick="document.getElementById(\'heroUrl\').value=_hp2[' + i + '].url;this.parentElement.querySelectorAll(\'div\').forEach(function(d){d.style.border=\'2px solid transparent\'});this.style.border=\'2px solid var(--gold)\'"><img src="' + photoUrl(PHOTOS[i].url) + '" style="width:100%;height:60px;object-fit:cover" loading="lazy"></div>';
   }
   picker.innerHTML = html;
 }
@@ -1285,7 +1301,7 @@ function renderHome(){
   // Stats
   var members=API.getMembers();
   var acts=API.getActivities();
-  var photos=PHOTOS.length;
+  var photos=getAllPhotos().length;
   $('statsRow').innerHTML=
     '<div class="stat-card"><div class="num">'+members.length+'</div><div class="label">\u6210\u5458</div></div>'+
     '<div class="stat-card"><div class="num">'+acts.length+'</div><div class="label">\u6d3b\u52a8</div></div>'+
@@ -1295,8 +1311,9 @@ function renderHome(){
   $('aboutCard').innerHTML='<div class="card-title">'+esc(s.club_name)+'</div><div class="card-desc">'+esc(s.club_desc)+'</div>';
   // Gallery preview (4 photos)
   var html='';
-  for(var i=0;i<Math.min(4,PHOTOS.length);i++){
-    var p=PHOTOS[i];
+  var _hp=getAllPhotos();
+  for(var i=0;i<Math.min(4,_hp.length);i++){
+    var p=_hp[i];
     html+='<div class="photo-card" onclick="openPhoto('+i+')"><img src="'+photoUrl(p.url)+'" alt="'+esc(p.title)+'" loading="lazy"><div class="photo-info"><div class="title">'+esc(p.title)+'</div><div class="author">'+esc(p.author)+'</div></div></div>';
   }
   $('homeGallery').innerHTML=html;
@@ -1310,11 +1327,41 @@ function renderHome(){
   $('homeNews').innerHTML=html||'<div class="empty">\u6682\u65e0\u8d44\u8baf</div>';
 }
 
+var galleryFilter='all';
+function getAllPhotos(){
+  var dp=API.getPhotos();
+  if(dp&&dp.length)return dp;
+  return PHOTOS;
+}
+function initPhotos(){
+  if(!API._data.photos||API._data.photos.length===0){
+    API._data.photos=PHOTOS.map(function(p,i){p.id=p.id||(900001+i);p.updatedAt=p.updatedAt||1;return p;});
+    API._saveLocal();
+  }
+}
 function renderGallery(){
-  var html=PHOTOS.map(function(p,i){
-    return '<div class="photo-card" onclick="openPhoto('+i+')"><img src="'+photoUrl(p.url)+'" alt="'+esc(p.title)+'" loading="lazy"><div class="photo-info"><div class="title">'+esc(p.title)+'</div><div class="author">'+esc(p.author)+'</div></div></div>';
+  var bar=$('galleryAdminBar');
+  if(bar)bar.style.display=isAdmin()?'flex':'none';
+  var photos=getAllPhotos();
+  if(galleryFilter!=='all'){
+    photos=photos.filter(function(p){return p.category===galleryFilter;});
+  }
+  var delMode=isAdmin()&&state._photoDelMode;
+  var html=photos.map(function(p,i){
+    var realIdx=getAllPhotos().indexOf(p);
+    var card='<div class="photo-card" onclick="openPhoto('+realIdx+')"><img src="'+photoUrl(p.url)+'" alt="'+esc(p.title)+'" loading="lazy"><div class="photo-info"><div class="title">'+esc(p.title)+'</div><div class="author">'+esc(p.author)+'</div></div>';
+    if(delMode)card+='<div class="photo-del show" onclick="event.stopPropagation();deletePhoto('+p.id+')">&times;</div>';
+    card+='</div>';
+    return card;
   }).join('');
-  $('fullGallery').innerHTML=html;
+  $('fullGallery').innerHTML=html||'<div style="text-align:center;color:var(--gray);padding:40px">暂无作品</div>';
+}
+function filterGallery(cat){
+  galleryFilter=cat;
+  var tabs=document.querySelectorAll('.gallery-tab');
+  tabs.forEach(function(t){t.classList.remove('active');});
+  event.target.classList.add('active');
+  renderGallery();
 }
 
 function renderMembers(){
@@ -1553,9 +1600,10 @@ function addShopItem(){
   body+='<button class="btn btn-gold" style="width:100%;height:44px;font-size:15px;margin-top:8px" onclick="submitShopItem()">\u53d1\u5e03\u5546\u54c1</button>';
   openModal(body);
   var picker=$('shopPhotoPicker');
-  if(picker&&typeof PHOTOS!=='undefined'){
+  if(picker){
     var phtml='';
-    for(var i=0;i<PHOTOS.length;i++){
+    var _sp=getAllPhotos();
+    for(var i=0;i<_sp.length;i++){
       phtml+='<div style="cursor:pointer;border:2px solid transparent;border-radius:6px;overflow:hidden" onclick="selectShopImg(this,'+i+')"><img src="'+photoUrl(PHOTOS[i].url)+'" style="width:100%;height:40px;object-fit:cover"></div>';
     }
     picker.innerHTML=phtml;
@@ -1930,8 +1978,68 @@ function manualSync(){
 }
 
 // ===== Photo Viewer =====
+function showUploadPhoto(){
+  var body='<h3>上传作品 <span class="modal-close" onclick="closeModal()">&times;</span></h3>';
+  body+='<div id="photoPreview" style="width:100%;height:160px;background:var(--dark3);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;overflow:hidden"><span style="color:var(--gray);font-size:13px">点击下方按钮上传图片</span></div>';
+  body+='<input type="file" id="photoFileInput" accept="image/*" style="display:none" onchange="handlePhotoFile(this)">';
+  body+='<button class="btn btn-ghost btn-sm" style="width:100%;margin-bottom:8px" onclick="document.getElementById(\'photoFileInput\').click()">\u{1F4E5} 上传本地图片</button>';
+  body+='<div class="form-group"><label>图片URL（可选）</label><input id="photoUrl" placeholder="粘贴图片链接" oninput="previewPhoto(this.value)"></div>';
+  body+='<div class="form-group"><label>作品标题</label><input id="photoTitle" placeholder="如：光影黄昏"></div>';
+  body+='<div class="form-group"><label>作者</label><input id="photoAuthor" placeholder="如：叶蓓"></div>';
+  body+='<div class="form-group"><label>分类</label><select id="photoCategory"><option>人像纪实</option><option>自然风光</option><option>建筑风光</option><option>主题拍摄</option></select></div>';
+  body+='<button class="btn btn-gold" style="width:100%;margin-top:8px" onclick="submitPhoto()">发布作品</button>';
+  openModal(body);
+}
+function handlePhotoFile(input){
+  var file=input.files[0];
+  if(!file)return;
+  if(file.size>5*1024*1024){showToast('图片不能超过5MB',true);return;}
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var dataUrl=e.target.result;
+    $('photoUrl').value=dataUrl;
+    previewPhoto(dataUrl);
+  };
+  reader.readAsDataURL(file);
+}
+function previewPhoto(url){
+  var prev=$('photoPreview');
+  if(!prev)return;
+  if(url){prev.innerHTML='<img src="'+url+'" style="width:100%;height:100%;object-fit:cover">';}
+  else{prev.innerHTML='<span style="color:var(--gray);font-size:13px">点击下方按钮上传图片</span>';}
+}
+function submitPhoto(){
+  var url=$('photoUrl').value.trim();
+  var title=$('photoTitle').value.trim();
+  var author=$('photoAuthor').value.trim();
+  var cat=$('photoCategory').value;
+  if(!url){showToast('请上传图片或输入URL',true);return;}
+  if(!title){showToast('请输入作品标题',true);return;}
+  if(!author){showToast('请输入作者姓名',true);return;}
+  if(!API._data.photos)API._data.photos=[];
+  API._data.photos.push({id:Date.now(),title:title,author:author,url:url,category:cat,updatedAt:Date.now()});
+  API._saveLocal();API._writeRemote();
+  closeModal();renderGallery();
+  showToast('作品已发布');
+}
+function showDeletePhotos(){
+  state._photoDelMode=!state._photoDelMode;
+  if(state._photoDelMode)showToast('点击作品右上角删除按钮');
+  else showToast('已退出管理模式');
+  renderGallery();
+}
+function deletePhoto(id){
+  if(!confirm('确认删除该作品？'))return;
+  if(!API._data.photos)API._data.photos=[];
+  API._data._deleted=API._data._deleted||{};
+  API._data._deleted[id]=Date.now();
+  API._data.photos=API._data.photos.filter(function(p){return p.id!==id;});
+  API._saveLocal();API._writeRemote();
+  renderGallery();
+  showToast('作品已删除');
+}
 function openPhoto(idx){
-  var p=PHOTOS[idx];
+  var p=getAllPhotos()[idx];
   if(!p)return;
   openModal('<div style="text-align:center">'+
     '<span class="modal-close" onclick="closeModal()" style="position:absolute;top:8px;right:12px;font-size:24px;color:#fff;z-index:10">&times;</span>'+
@@ -1943,6 +2051,7 @@ function openPhoto(idx){
 
 // ===== Init =====
 API._init();
+initPhotos();
 try{
   $('loginBg').style.backgroundImage='url("'+photoUrl(HERO_PHOTO)+'")';
 }catch(e){console.error('Bg error:',e);}
