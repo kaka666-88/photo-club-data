@@ -586,7 +586,7 @@ var API = {
   },
 
   _init: function(){
-    var DATA_VERSION=2;
+    var DATA_VERSION=3;
     var savedVer=parseInt(localStorage.getItem('photoClubDataVer')||'0',10);
     if(savedVer!==DATA_VERSION){
       localStorage.removeItem('photoClubData');
@@ -676,7 +676,7 @@ var API = {
     var remoteDel=remoteData._deleted||{};
     var deleted=this._mergeDeleted(localDel, remoteDel);
     merged._deleted=deleted;
-    var arrays=['members','shop','activities','news','tips','knowledge','registrations','photos'];
+    var arrays=['members','shop','activities','news','tips','knowledge','registrations'];
     for(var a=0;a<arrays.length;a++){
       var key=arrays[a];
       var localArr=localData[key]||[];
@@ -704,6 +704,7 @@ var API = {
       phMerged.push(rec);
     }
     merged.pointsHistory=phMerged;
+    merged.photos=localData.photos||[];
     var allItems=[].concat(merged.members||[],merged.activities||[],merged.news||[],merged.tips||[],merged.knowledge||[],merged.shop||[]);
     var maxId=0;
     for(var m=0;m<allItems.length;m++){
@@ -743,7 +744,7 @@ var API = {
       var needWrite=false;
       if(this._hasToken()){
         // If local had items not in remote, or local has newer updatedAt on any item
-        var localArrs=['members','shop','activities','news','tips','knowledge','registrations','photos'];
+        var localArrs=['members','shop','activities','news','tips','knowledge','registrations'];
         for(var a=0;a<localArrs.length;a++){
           var key=localArrs[a];
           var localArr=localCopy[key]||[];
@@ -831,7 +832,7 @@ var API = {
           if(rawText&&rawText.trim()){try{remoteData=JSON.parse(rawText);}catch(e){remoteData=null;}}
         }
         var localData=JSON.parse(JSON.stringify(this._data));
-        delete localData.sessions;
+        delete localData.sessions;delete localData.photos;
         if(!localData.members||localData.members.length===0){console.warn('Skip write: no members');return false;}
         var merged;
         if(remoteData){
