@@ -586,7 +586,7 @@ var API = {
   },
 
   _init: function(){
-    var DATA_VERSION=3;
+    var DATA_VERSION=4;
     var savedVer=parseInt(localStorage.getItem('photoClubDataVer')||'0',10);
     if(savedVer!==DATA_VERSION){
       localStorage.removeItem('photoClubData');
@@ -676,7 +676,7 @@ var API = {
     var remoteDel=remoteData._deleted||{};
     var deleted=this._mergeDeleted(localDel, remoteDel);
     merged._deleted=deleted;
-    var arrays=['members','shop','activities','news','tips','knowledge','registrations'];
+    var arrays=['members','shop','activities','news','tips','knowledge','registrations','photos'];
     for(var a=0;a<arrays.length;a++){
       var key=arrays[a];
       var localArr=localData[key]||[];
@@ -704,7 +704,7 @@ var API = {
       phMerged.push(rec);
     }
     merged.pointsHistory=phMerged;
-    merged.photos=localData.photos||[];
+    
     var allItems=[].concat(merged.members||[],merged.activities||[],merged.news||[],merged.tips||[],merged.knowledge||[],merged.shop||[]);
     var maxId=0;
     for(var m=0;m<allItems.length;m++){
@@ -744,7 +744,7 @@ var API = {
       var needWrite=false;
       if(this._hasToken()){
         // If local had items not in remote, or local has newer updatedAt on any item
-        var localArrs=['members','shop','activities','news','tips','knowledge','registrations'];
+        var localArrs=['members','shop','activities','news','tips','knowledge','registrations','photos'];
         for(var a=0;a<localArrs.length;a++){
           var key=localArrs[a];
           var localArr=localCopy[key]||[];
@@ -832,7 +832,7 @@ var API = {
           if(rawText&&rawText.trim()){try{remoteData=JSON.parse(rawText);}catch(e){remoteData=null;}}
         }
         var localData=JSON.parse(JSON.stringify(this._data));
-        delete localData.sessions;delete localData.photos;
+        delete localData.sessions;
         if(!localData.members||localData.members.length===0){console.warn('Skip write: no members');return false;}
         var merged;
         if(remoteData){
@@ -1990,6 +1990,27 @@ function manualSync(){
 }
 
 // ===== Photo Viewer =====
+function uploadPhotoToGithub(file, cb){
+  var c=API.ghCfg();
+  var fileName='upload_'+Date.now()+'_'+encodeURIComponent(file.name);
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var b64=e.target.result.split(',')[1];
+    var body=JSON.stringify({message:'Upload photo: '+file.name,content:b64,encoding:'base64',branch:c.branch});
+    fetch('https://api.github.com/repos/'+c.owner+'/'+c.repo+'/contents/photos/'+fileName,{
+      method:'PUT',
+      headers:{'Authorization':'Bearer '+c.token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+      body:body
+    }).then(function(r){return r.json();}).then(function(d){
+      if(d.content&&d.content.download_url){
+        cb(d.content.download_url);
+      }else{
+        cb('https://raw.githubusercontent.com/'+c.owner+'/'+c.repo+'/'+c.branch+'/photos/'+fileName);
+      }
+    }).catch(function(e){console.error('Upload error:',e);cb(null);});
+  };
+  reader.readAsDataURL(file);
+}
 function showUploadPhoto(){
   var body='<h3>上传作品 <span class="modal-close" onclick="closeModal()">&times;</span></h3>';
   body+='<div id="photoPreview" style="width:100%;height:160px;background:var(--dark3);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;overflow:hidden"><span style="color:var(--gray);font-size:13px">点击下方按钮上传图片</span></div>';
@@ -2006,11 +2027,20 @@ function handlePhotoFile(input){
   var file=input.files[0];
   if(!file)return;
   if(file.size>5*1024*1024){showToast('图片不能超过5MB',true);return;}
+  $('photoPreview').innerHTML='<span style="color:var(--gold);font-size:13px">上传中...</span>';
   var reader=new FileReader();
   reader.onload=function(e){
-    var dataUrl=e.target.result;
-    $('photoUrl').value=dataUrl;
-    previewPhoto(dataUrl);
+    previewPhoto(e.target.result);
+    uploadPhotoToGithub(file,function(url){
+      if(url){
+        $('photoUrl').value=url;
+        $('photoPreview').innerHTML='<img src="'+url+'" style="width:100%;height:100%;object-fit:cover">';
+        showToast('图片已上传到云端');
+      }else{
+        showToast('上传失败，请重试',true);
+        $('photoPreview').innerHTML='<span style="color:var(--gray);font-size:13px">上传失败，请重试</span>';
+      }
+    });
   };
   reader.readAsDataURL(file);
 }
