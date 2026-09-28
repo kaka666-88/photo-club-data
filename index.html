@@ -250,10 +250,12 @@ input,textarea,select{font-family:inherit;outline:none}
     <div class="card" id="aboutCard"></div>
     <div class="section-title">精选作品 <span class="more" onclick="switchPage('gallery')">查看全部 ></span></div>
     <div class="gallery-grid" id="homeGallery"></div>
-    <div class="section-title">最新活动 <span class="more" onclick="switchPage('activities')">查看全部 ></span></div>
+    <div class="section-title">社团活动 <span class="more" onclick="switchPage('activities')">查看全部 ></span></div>
     <div id="homeActivities"></div>
     <div class="section-title">摄影资讯 <span class="more" onclick="switchPage('news')">查看全部 ></span></div>
     <div id="homeNews"></div>
+    <div class="section-title">社团周边展示<span id="homeShopAdmin" style="display:none;margin-left:auto"><button class="btn btn-gold btn-sm" style="font-size:11px;padding:4px 8px" onclick="addShopItem()">+ 上传</button></span></div>
+    <div id="homeShop" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px"></div>
   </div>
 </div>
 
@@ -1289,6 +1291,22 @@ function renderHome(){
   var news=API.getNews().slice(0,2);
   html=news.map(function(n){return renderNewsCard(n);}).join('');
   $('homeNews').innerHTML=html||'<div class="empty">\u6682\u65e0\u8d44\u8baf</div>';
+  // Shop preview
+  var shopItems=API._data.shop||[];
+  var shopHtml='';
+  var shopPreview=shopItems.slice(0,4);
+  for(var si=0;si<shopPreview.length;si++){
+    var it=shopPreview[si];
+    shopHtml+='<div style="background:var(--dark2);border-radius:12px;overflow:hidden;border:1px solid var(--dark3);cursor:pointer" onclick="switchPage(\'shop\')">';
+    shopHtml+='<div style="height:120px;background:var(--dark3);position:relative">';
+    if(it.img){shopHtml+='<img src="'+it.img+'" style="width:100%;height:100%;object-fit:cover">';}
+    else{shopHtml+='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><span style="font-size:36px;opacity:.3">\u{1F4F7}</span></div>';}
+    shopHtml+='<div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.8));padding:4px 8px"><span style="color:var(--gold);font-size:14px;font-weight:700">'+it.points+' \u79ef\u5206</span></div>';
+    shopHtml+='</div><div style="padding:8px"><div style="font-size:13px;font-weight:600;line-height:1.3">'+esc(it.name)+'</div></div></div>';
+  }
+  $('homeShop').innerHTML=shopHtml||'<div class="empty">\u6682\u65e0\u5468\u8fb9</div>';
+  var shopAdmin=$('homeShopAdmin');
+  if(shopAdmin)shopAdmin.style.display=isAdmin()?'inline':'none';
 }
 
 var galleryFilter='all';
@@ -1633,11 +1651,19 @@ function handleShopFile(input){
   var file=input.files[0];
   if(!file)return;
   if(file.size>5*1024*1024){showToast('\u56fe\u7247\u4e0d\u80fd\u8d85\u8fc75MB',true);return;}
+  $('shopImgPreview').innerHTML='<span style="color:var(--gold);font-size:13px">上传中...</span>';
   var reader=new FileReader();
   reader.onload=function(e){
-    var dataUrl=e.target.result;
-    $('shopImg').value=dataUrl;
-    previewShopImg(dataUrl);
+    previewShopImg(e.target.result);
+    uploadPhotoToGithub(file,function(url){
+      if(url){
+        $('shopImg').value=url;
+        previewShopImg(url);
+        showToast('图片已上传');
+      }else{
+        showToast('上传失败，请重试',true);
+      }
+    });
   };
   reader.readAsDataURL(file);
 }
