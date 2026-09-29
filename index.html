@@ -245,7 +245,6 @@ input,textarea,select{font-family:inherit;outline:none}
     </div>
   </div>
   <div class="section">
-    <div class="stats-row" id="statsRow"></div>
     <div class="section-title">社团简介</div>
     <div class="card" id="aboutCard"></div>
     <div class="section-title">精选作品 <span class="more" onclick="switchPage('gallery')">查看全部 ></span></div>
@@ -413,44 +412,38 @@ var CLOUD_CONFIG = (function(){
 
 // ===== Photos =====
 var PHOTOS = [
-  {title:"中国建筑之美",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/中国建筑之美_李小强_thumb.jpg",category:"建筑风光"},
-  {title:"人物特写",author:"吕佳敏",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_吕佳敏_thumb.jpg",category:"人像纪实"},
-  {title:"人物特写",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/人物特写_李小强_thumb.jpg",category:"人像纪实"},
-  {title:"光影黄昏",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/光影黄昏_叶蓓_thumb.jpg",category:"自然风光"},
-  {title:"双朵春胭",author:"沈丽红",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/双朵春胭_沈丽红_thumb.jpg",category:"人像纪实"},
-  {title:"古镇夜景",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/古镇夜景_李小强_thumb.jpg",category:"建筑风光"},
-  {title:"吉祥如意",author:"王征",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/吉祥如意_王征_thumb.jpg",category:"主题拍摄"},
-  {title:"向阳而生",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/向阳而生_吴巍_thumb.jpg",category:"自然风光"},
-  {title:"城与天空",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/城与天空_吴巍_thumb.jpg",category:"建筑风光"},
-  {title:"夏日山野",author:"刘衡源",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/夏日山野_刘衡源_thumb.jpg",category:"自然风光"},
-  {title:"夕阳映彩霞",author:"马骏",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/夕阳映彩霞_马骏_thumb.jpg",category:"自然风光"},
-  {title:"夜色微光",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/夜色微光_吴巍_thumb.jpg",category:"主题拍摄"},
-  {title:"宛平城下",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/宛平城下_吴巍_thumb.jpg",category:"建筑风光"},
-  {title:"山花特写",author:"刘衡源",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/山花特写_刘衡源_thumb.jpg",category:"自然风光"},
-  {title:"山里人家",author:"柴津玲",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/山里人家_柴津玲_thumb.jpg",category:"人像纪实"},
-  {title:"建筑纪实",author:"李乐薇",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/建筑纪实_李乐薇_thumb.jpg",category:"建筑风光"},
-  {title:"当下",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/当下_叶蓓_thumb.jpg",category:"主题拍摄"},
-  {title:"方寸工位",author:"李乐薇",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/方寸工位_李乐薇_thumb.jpg",category:"主题拍摄"},
-  {title:"海景",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/海景_叶蓓_thumb.jpg",category:"自然风光"},
-  {title:"湖光山色",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/湖光山色_李小强_thumb.jpg",category:"自然风光"},
-  {title:"烟雨长桥",author:"王金环",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/烟雨长桥_王金环_thumb.jpg",category:"建筑风光"},
-  {title:"特写",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/特写_叶蓓_thumb.jpg",category:"人像纪实"},
-  {title:"玉渊潭樱花",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/玉渊潭樱花_李小强_thumb.jpg",category:"自然风光"},
-  {title:"盛放的生命",author:"沈丽红",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/盛放的生命_沈丽红_thumb.jpg",category:"主题拍摄"},
-  {title:"研习会现场",author:"社团",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/研习会现场_社团_thumb.jpg",category:"主题拍摄"},
-  {title:"秋日物语",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/秋日物语_李小强_thumb.jpg",category:"自然风光"},
-  {title:"窗前",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/窗前_叶蓓_thumb.jpg",category:"人像纪实"},
-  {title:"童趣",author:"李乐薇",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/童趣_李乐薇_thumb.jpg",category:"人像纪实"},
-  {title:"线下实拍",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/线下实拍_吴巍_thumb.jpg",category:"主题拍摄"},
-  {title:"线下实拍",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/线下实拍_李小强_thumb.jpg",category:"主题拍摄"},
-  {title:"线下实拍",author:"沈丽红",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/线下实拍_沈丽红_thumb.jpg",category:"主题拍摄"},
-  {title:"莲花",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/莲花_李小强_thumb.jpg",category:"自然风光"},
-  {title:"街景",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/街景_叶蓓_thumb.jpg",category:"建筑风光"},
-  {title:"赤诚",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/赤诚_叶蓓_thumb.jpg",category:"人像纪实"},
-  {title:"都市之光",author:"柴津玲",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/都市之光_柴津玲_thumb.jpg",category:"建筑风光"},
-  {title:"霞光满天",author:"沈丽红",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/霞光满天_沈丽红_thumb.jpg",category:"自然风光"},
-  {title:"青砖",author:"柴津玲",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/青砖_柴津玲_thumb.jpg",category:"建筑风光"},
-  {title:"颐和园",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/颐和园_李小强_thumb.jpg",category:"建筑风光"}
+  {title:"当下",author:"叶蓓",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_00_1.png",category:"人像纪实"},
+  {title:"七一主题活动",author:"刘衡源",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_25_1.jpg",category:"人像纪实"},
+  {title:"中式会客厅",author:"柴津玲",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_08_4.jpg",category:"人像纪实"},
+  {title:"方寸工位",author:"李乐薇",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_04_3.png",category:"人像纪实"},
+  {title:"企业景观墙",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_01_2.jpg",category:"人像纪实"},
+  {title:"AI创新中心",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_03_2.jpg",category:"人像纪实"},
+  {title:"手工兔子挂件",author:"吕佳敏",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_19_7.jpg",category:"人像纪实"},
+  {title:"手托幼猫",author:"王金环",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_13_6.jpg",category:"人像纪实"},
+  {title:"白虎",author:"柴津玲",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_07_4.jpg",category:"自然风光"},
+  {title:"夏日荷塘",author:"柴津玲",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_09_4.jpg",category:"自然风光"},
+  {title:"绿叶蜗牛",author:"王金环",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_15_6.jpg",category:"自然风光"},
+  {title:"叶上水珠",author:"王金环",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_16_6.jpg",category:"自然风光"},
+  {title:"红玫瑰",author:"沈丽红",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_26_11.jpg",category:"自然风光"},
+  {title:"盛放的生命",author:"沈丽红",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_27_11.jpg",category:"自然风光"},
+  {title:"双朵春胭",author:"沈丽红",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_31_11.jpg",category:"自然风光"},
+  {title:"虎皮鹦鹉",author:"王征",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_33_12.jpg",category:"自然风光"},
+  {title:"现代楼宇",author:"李小强",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_02_2.jpg",category:"建筑风光"},
+  {title:"都市之光",author:"柴津玲",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_05_4.jpg",category:"建筑风光"},
+  {title:"CBD建筑群",author:"柴津玲",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_06_4.jpg",category:"建筑风光"},
+  {title:"夕阳映彩霞",author:"马骏",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_10_5.jpg",category:"建筑风光"},
+  {title:"日落街景",author:"马骏",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_11_5.jpg",category:"建筑风光"},
+  {title:"林后办公楼",author:"王金环",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_17_6.jpg",category:"建筑风光"},
+  {title:"烟雨长桥",author:"王金环",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_18_6.jpg",category:"建筑风光"},
+  {title:"天安门城楼",author:"李文",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_38_15.jpg",category:"建筑风光"},
+  {title:"IBI卡通形象",author:"王金环",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_12_6.jpg",category:"主题拍摄"},
+  {title:"盲盒玩偶",author:"吕佳敏",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_20_7.jpg",category:"主题拍摄"},
+  {title:"向阳而生",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_24_8.png",category:"主题拍摄"},
+  {title:"吉祥如意",author:"王征",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_32_12.jpg",category:"主题拍摄"},
+  {title:"夜景体育场",author:"王金环",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_14_6.jpg",category:"主题拍摄"},
+  {title:"红砖建筑",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_22_8.jpg",category:"主题拍摄"},
+  {title:"大楼中庭",author:"吴巍",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_23_8.jpg",category:"主题拍摄"},
+  {title:"湖光山色",author:"吕缘情",url:"https://raw.githubusercontent.com/kaka666-88/photo-club-data/main/photos/gallery_34_14.jpg",category:"主题拍摄"}
 ];
 
 var HERO_PHOTO = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80";
@@ -477,7 +470,7 @@ var SEED_DATA = {
     admin_user: "admin",
     admin_pass: "admin666",
     club_name: "\u7559\u58f0\u5149\u5f71",
-    club_desc: "\u7528\u955c\u5934\u8bb0\u5f55\u4e16\u754c\uff0c\u7528\u5149\u5f71\u8bb2\u8ff0\u6545\u4e8b"
+    club_desc: "留声光影社团是IBI国联股份集团人力资源部面向企业内部开放的学习、分享型组织，旨在通过摄影、摄像的方式帮助公司伙伴们在记录工作瞬间、生活点滴的同时，找到自己的兴趣爱好、结识志趣相同的朋友，发现自己更多的可能。"
   },
   sessions: {},
   members: [
@@ -527,8 +520,6 @@ var SEED_DATA = {
   shop: [
     {id:100001,name:"光影明信片",desc:"精选社团作品印制",points:50,img:"",updatedAt:1},
     {id:100002,name:"留声光影马克杯",desc:"限量定制保温杯",points:80,img:"",updatedAt:1},
-    {id:100003,name:"社团帆布包","desc":"棉麻材质印花logo",points:100,img:"",updatedAt:1},
-    {id:100004,name:"摄影短巾",desc:"超细纤维明信半帽巾",points:60,img:"",updatedAt:1},
     {id:100005,name:"光影手贴纸贴","desc":"可拆贴手贴本","points":40,img:"",updatedAt:1},
     {id:100006,name:"社团贴纸套装","desc":"6款不同主题贴纸",points:70,img:"",updatedAt:1}
   ],
@@ -599,7 +590,7 @@ var API = {
   },
 
   _init: function(){
-    var DATA_VERSION=4;
+    var DATA_VERSION=6;
     var savedVer=parseInt(localStorage.getItem('photoClubDataVer')||'0',10);
     if(savedVer!==DATA_VERSION){
       localStorage.removeItem('photoClubData');
@@ -846,6 +837,18 @@ var API = {
         }
         var localData=JSON.parse(JSON.stringify(this._data));
         delete localData.sessions;
+        // Strip any base64 data from being written to cloud
+        var _stripB64=function(obj){
+          if(!obj||typeof obj!=='object')return;
+          if(Array.isArray(obj)){for(var i=0;i<obj.length;i++){
+            if(typeof obj[i]==='string'&&obj[i].indexOf('data:')===0){obj[i]='';}
+            else if(typeof obj[i]==='object'){_stripB64(obj[i]);}
+          }}else{for(var k in obj){
+            if(typeof obj[k]==='string'&&obj[k].indexOf('data:')===0){obj[k]='';}
+            else if(typeof obj[k]==='object'){_stripB64(obj[k]);}
+          }}
+        };
+        _stripB64(localData);
         if(!localData.members||localData.members.length===0){console.warn('Skip write: no members');return false;}
         var merged;
         if(remoteData){
@@ -1265,13 +1268,6 @@ function deleteHeroSlide(idx){
 function renderHome(){
   // Hero carousel handled by initHeroCarousel
   // Stats
-  var members=API.getMembers();
-  var acts=API.getActivities();
-  var photos=getAllPhotos().length;
-  $('statsRow').innerHTML=
-    '<div class="stat-card"><div class="num">'+members.length+'</div><div class="label">\u6210\u5458</div></div>'+
-    '<div class="stat-card"><div class="num">'+acts.length+'</div><div class="label">\u6d3b\u52a8</div></div>'+
-    '<div class="stat-card"><div class="num">'+photos+'</div><div class="label">\u4f5c\u54c1</div></div>';
   // About
   var s=API._data.settings;
   $('aboutCard').innerHTML='<div class="card-title">'+esc(s.club_name)+'</div><div class="card-desc">'+esc(s.club_desc)+'</div>';
