@@ -1277,6 +1277,7 @@ function renderHome(){
   }
   $('homeGallery').innerHTML=html;
   // Activities preview
+  var acts=API.getActivities();
   var acts2=acts.slice(0,2);
   html=acts2.map(function(a){return renderActivityCard(a);}).join('');
   $('homeActivities').innerHTML=html||'<div class="empty">\u6682\u65e0\u6d3b\u52a8</div>';
