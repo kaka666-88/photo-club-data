@@ -3,7 +3,7 @@
     "admin_user": "admin",
     "admin_pass": "admin666",
     "club_name": "留声光影",
-    "club_desc": "留声光影社团是IBI国联股份集团人力资源部面向企业内部开放的学习、分享型组织，旨在通过摄影、摄像的方式帮助公司伙伴们在记录工作瞬间、生活点滴的同时，找到自己的兴趣爱好、结识志趣相同的朋友，发现自己更多的可能。"
+    "club_desc": "用镜头记录世界，用光影讲述故事"
   },
   "_deleted": {
     "100002": 1790582192780,
@@ -212,7 +212,7 @@
       "source": "摄影世界",
       "url": "https://www.sohu.com",
       "image": "",
-      "created_at": 1790318545473,
+      "created_at": 1790413515899,
       "updatedAt": 1
     },
     {
@@ -222,7 +222,7 @@
       "source": "国家地理",
       "url": "https://www.nationalgeographic.com",
       "image": "",
-      "created_at": 1790404945473,
+      "created_at": 1790499915899,
       "updatedAt": 1
     },
     {
@@ -232,7 +232,7 @@
       "source": "佳能中国",
       "url": "https://www.canon.com.cn",
       "image": "",
-      "created_at": 1790491345473,
+      "created_at": 1790586315899,
       "updatedAt": 1
     },
     {
@@ -242,7 +242,7 @@
       "source": "富士数码",
       "url": "https://www.fujifilm.com",
       "image": "",
-      "created_at": 1790534545473,
+      "created_at": 1790629515899,
       "updatedAt": 1
     },
     {
@@ -252,7 +252,7 @@
       "source": "中国摄影报",
       "url": "https://www.cpanet.cn",
       "image": "",
-      "created_at": 1790556145473,
+      "created_at": 1790651115899,
       "updatedAt": 1
     }
   ],
