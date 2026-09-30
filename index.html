@@ -841,6 +841,12 @@ var API = {
         }
         var localData=JSON.parse(JSON.stringify(this._data));
         delete localData.sessions;
+        // Guard: strip base64 payloads so data.json never bloats
+        var _strip=function(o){
+          if(Array.isArray(o)){for(var i=0;i<o.length;i++)_strip(o[i]);return;}
+          if(o&&typeof o==='object'){for(var k in o){var v=o[k];if(typeof v==='string'&&(v.indexOf('data:')===0||(v.length>500&&v.indexOf('http')!==0))){o[k]='';}else{_strip(v);}}}
+        };
+        _strip(this._data);
         if(!localData.members||localData.members.length===0){console.warn('Skip write: no members');return false;}
         var merged;
         if(remoteData){
@@ -850,6 +856,7 @@ var API = {
           return false;
         }
         delete merged.sessions;
+        _strip(merged);
         var contentStr=JSON.stringify(merged,null,2);
         var contentB64=this._encodeBase64(contentStr);
         var body=JSON.stringify({message:'Sync '+new Date().toISOString(),content:contentB64,sha:sha||undefined,branch:c.branch});
