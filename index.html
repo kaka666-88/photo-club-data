@@ -598,7 +598,7 @@ var API = {
   },
 
   _init: function(){
-    var DATA_VERSION=4;
+    var DATA_VERSION=7;
     var savedVer=parseInt(localStorage.getItem('photoClubDataVer')||'0',10);
     if(savedVer!==DATA_VERSION){
       localStorage.removeItem('photoClubData');
@@ -639,7 +639,7 @@ var API = {
       var item=all[i];
       if(!item)continue;
       var key=item[idKey];
-      if(key===undefined||key===null)key='__noid_'+i;
+      if(key===undefined||key===null)key=item.title||item.name||('__noid_'+i);
       if(seen[key])continue;
       seen[key]=true;
       var lv=null, rv=null;
