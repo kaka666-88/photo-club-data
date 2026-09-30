@@ -525,11 +525,7 @@ var SEED_DATA = {
   ],
   shop: [
     {id:100001,name:"光影明信片",desc:"精选社团作品印制",points:50,img:"",updatedAt:1},
-    {id:100002,name:"留声光影马克杯",desc:"限量定制保温杯",points:80,img:"",updatedAt:1},
-    {id:100003,name:"社团帆布包","desc":"棉麻材质印花logo",points:100,img:"",updatedAt:1},
-    {id:100004,name:"摄影短巾",desc:"超细纤维明信半帽巾",points:60,img:"",updatedAt:1},
-    {id:100005,name:"光影手贴纸贴","desc":"可拆贴手贴本","points":40,img:"",updatedAt:1},
-    {id:100006,name:"社团贴纸套装","desc":"6款不同主题贴纸",points:70,img:"",updatedAt:1}
+    {id:100002,name:"留声光影马克杯",desc:"限量定制保温杯",points:80,img:"",updatedAt:1}
   ],
   photos: []
 };
@@ -598,7 +594,7 @@ var API = {
   },
 
   _init: function(){
-    var DATA_VERSION=7;
+    var DATA_VERSION=8;
     var savedVer=parseInt(localStorage.getItem('photoClubDataVer')||'0',10);
     if(savedVer!==DATA_VERSION){
       localStorage.removeItem('photoClubData');
